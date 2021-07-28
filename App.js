@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
   },
 });
 
+
+// generic notif view
 function NotifScreen() {
   return (
     <View style={styles.container}>
@@ -28,24 +30,27 @@ function NotifScreen() {
 }
 
 function Map() {
-  const [locationResult, setLocation] = useState(null)
+  // states and modifiers
   const [mapRegion, setRegion] = useState(null)
   const [hasLocationPermissions, setLocationPermission] = useState(false)
 
+  // do after render
   useEffect(() => {
     const getLocationAsync = async () => {
+
+      // check permissions
       let { status } = await Location.requestForegroundPermissionsAsync();
       if ('granted' === status) {
         setLocationPermission(true);
 
+        // get location
         let { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
-        setLocation(JSON.stringify({ latitude, longitude }))
 
-        // Center the map on the location we just fetched.
+        // initial region set (happens once per app load)
         setRegion({ latitude, longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 });
       }
     }
-
+    // wait for permissions
     if (hasLocationPermissions === false) {
       getLocationAsync()
     }
@@ -56,15 +61,11 @@ function Map() {
     return (<NotifScreen />);
   }
 
-  if (locationResult === null) {
-    global.e = "Loading";
-    return (<NotifScreen />);
-  }
-
   if (mapRegion === null) {
-    global.e = "Error: Invalid Map Region";
+    global.e = "Loading Local Area";
     return (<NotifScreen />);
   }
+  
   return (
     <MapView
       style={styles.container}
