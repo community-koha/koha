@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function NotifScreen(e) {
+function NotifScreen() {
   return (
     <View style={styles.container}>
-      <Text>{e}</Text>
+      <Text>{global.e}</Text>
     </View>
   );
 }
@@ -35,32 +35,35 @@ function Map() {
   useEffect(() => {
     const getLocationAsync = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if ('granted' !== status) {
-        setLocation('Permission to access location was denied')
-      } else {
+      if ('granted' === status) {
         setLocationPermission(true);
+
+        let { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
+        setLocation(JSON.stringify({ latitude, longitude }))
+
+        // Center the map on the location we just fetched.
+        setRegion({ latitude, longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 });
       }
-
-      let { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
-      setLocation(JSON.stringify({ latitude, longitude }))
-
-      // Center the map on the location we just fetched.
-      setRegion({ latitude, longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 });
     }
 
-    getLocationAsync()
+    if (hasLocationPermissions === false) {
+      getLocationAsync()
+    }
   })
 
-  if (locationResult === null) {
-    NotifScreen("Loading")
+  if (hasLocationPermissions === false) {
+    global.e = "Error: Please Enable Location Permissions";
+    return (<NotifScreen />);
   }
 
-  if (hasLocationPermissions === false) {
-    NotifScreen("Location Permissions not granted")
+  if (locationResult === null) {
+    global.e = "Loading";
+    return (<NotifScreen />);
   }
 
   if (mapRegion === null) {
-    NotifScreen("Invalid Map Region")
+    global.e = "Error: Invalid Map Region";
+    return (<NotifScreen />);
   }
   return (
     <MapView
