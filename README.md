@@ -1,5 +1,7 @@
 # Koha App
 
+[![Node.js CI](https://github.com/koha-app/koha/actions/workflows/node.js.yml/badge.svg)](https://github.com/koha-app/koha/actions/workflows/node.js.yml)
+
 **Dev instructions:**
 
 Make sure normal things are installed (read: `node`, `npm` etc.)
