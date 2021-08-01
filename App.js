@@ -6,6 +6,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 
+import MapViewScreen from './app/screens/MapViewScreen';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -19,61 +21,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-// generic notif view
-function NotifScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>{global.e}</Text>
-    </View>
-  );
-}
-
-function Map() {
-  // states and modifiers
-  const [mapRegion, setRegion] = useState(null)
-  const [hasLocationPermissions, setLocationPermission] = useState(false)
-
-  // do after render
-  useEffect(() => {
-    const getLocationAsync = async () => {
-
-      // check permissions
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if ('granted' === status) {
-        setLocationPermission(true);
-
-        // get location
-        let { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({})
-
-        // initial region set (happens once per app load)
-        setRegion({ latitude, longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 });
-      }
-    }
-    // wait for permissions
-    if (hasLocationPermissions === false) {
-      getLocationAsync()
-    }
-  })
-
-  if (hasLocationPermissions === false) {
-    global.e = "Error: Please Enable Location Permissions";
-    return (<NotifScreen />);
-  }
-
-  if (mapRegion === null) {
-    global.e = "Loading Local Area";
-    return (<NotifScreen />);
-  }
-  
-  return (
-    <MapView
-      style={styles.container}
-      region={mapRegion}
-    >
-    </MapView>
-  );
-}
 
 function Listings() {
   return (
@@ -103,7 +50,7 @@ function MyTabs() {
     >
       <Tab.Screen
         name="Map"
-        component={Map}
+        component={MapViewScreen}
         options={{
           tabBarLabel: 'Area Map',
           tabBarIcon: ({ color }) => (
