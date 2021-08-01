@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import MapViewScreen from './app/screens/MapViewScreen';
 import CreateNewListingScreen from './app/screens/CreateNewListingScreen';
+import ListViewScreen from './app/screens/ListViewScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,15 +20,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
 });
-
-
-function Listings() {
-  return (
-    <View style={styles.container}>
-      <Text>Listings WIP</Text>
-    </View>
-  );
-}
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -51,7 +43,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="Listings"
-        component={Listings}
+        component={ListViewScreen}
         options={{
           tabBarLabel: 'Listings',
           tabBarIcon: ({ color }) => (
