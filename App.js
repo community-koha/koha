@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import MapView from 'react-native-maps';
-import * as Location from 'expo-location';
 
 import MapViewScreen from './app/screens/MapViewScreen';
+import CreateNewListingScreen from './app/screens/CreateNewListingScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,14 +25,6 @@ function Listings() {
   return (
     <View style={styles.container}>
       <Text>Listings WIP</Text>
-    </View>
-  );
-}
-
-function Create() {
-  return (
-    <View style={styles.container}>
-      <Text>Create WIP</Text>
     </View>
   );
 }
@@ -70,7 +61,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="Create"
-        component={Create}
+        component={CreateNewListingScreen}
         options={{
           tabBarLabel: 'New Listing',
           tabBarIcon: ({ color }) => (
