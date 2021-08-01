@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 function CreateNewListingScreen() {
     return (
