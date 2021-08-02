@@ -3,6 +3,8 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 
+import Colours from '../config/colours.js';
+
 // generic notif view
 function NotifScreen() {
   return (
@@ -61,7 +63,7 @@ function MapViewScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: Colours.white,
         alignItems: 'center',
         justifyContent: 'center',
       },

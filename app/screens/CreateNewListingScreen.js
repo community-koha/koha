@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+import Colours from '../config/colours.js';
+
 function CreateNewListingScreen() {
     return (
       <View style={styles.container}>
@@ -12,7 +14,7 @@ function CreateNewListingScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: Colours.white,
         alignItems: 'center',
         justifyContent: 'center',
     }
