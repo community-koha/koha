@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import Colours from '../config/colours.js';
+
 function WelcomeScreen(props) {
     return (
         <View style = {styles.background}>
@@ -13,7 +15,7 @@ function WelcomeScreen(props) {
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: "#fff"
+        backgroundColor: Colours.white
     }
 })
 export default WelcomeScreen;

@@ -5,6 +5,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import Colours from '../config/colours.js';
+
 import MapViewScreen from './MapViewScreen';
 import CreateNewListingScreen from './CreateNewListingScreen';
 import ListViewScreen from './ListViewScreen';
@@ -16,9 +18,9 @@ function NavBar() {
       <NavigationContainer>
         <Tab.Navigator
             initialRouteName="Map"
-            activeColor="#FF8782"
+            activeColor={Colours.active}
             labelStyle={{ fontSize: 12 }}
-            style={{ backgroundColor: '#fff' }}
+            style={{ backgroundColor: Colours.black }}
         >
             <Tab.Screen
                 name="Map"
