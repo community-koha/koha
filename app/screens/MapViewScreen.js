@@ -4,7 +4,6 @@ import MapView, { google } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import Colours from '../config/colours.js';
-import NavBar from './NavBar.js';
 
 // generic notif view
 function NotifScreen() {
