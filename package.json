@@ -5,7 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.5",
@@ -19,6 +20,7 @@
     "firebase": "^8.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-google-maps": "^9.4.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-maps": "0.28.0",
@@ -27,10 +29,12 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "^0.17.1"
+    "react-native-web": "^0.17.1",
+    "react-native-web-maps": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "@expo/webpack-config": "^0.14.0"
   },
   "private": true
 }
