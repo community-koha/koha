@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "244543529302",
+    "firebase_url": "https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "communitykohaapp",
+    "storage_bucket": "communitykohaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244543529302:android:e868024788766ea4e7f6f7",
+        "android_client_info": {
+          "package_name": "com.koha.communitykohaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244543529302-p6dkdutiid2tv6e0l0ncq8tve8sfrom2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBGbq_bl8Xw5c4F5hOYI9t58atkijk5Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244543529302-p6dkdutiid2tv6e0l0ncq8tve8sfrom2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
