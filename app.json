@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "koha",
+    "scheme": "koha",
     "slug": "koha",
     "version": "1.0.0",
     "orientation": "portrait",
