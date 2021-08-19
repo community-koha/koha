@@ -17,32 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.koha.communitykohaapp",
-      "googleServicesFile": "./app/GoogleService-Info.plist",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.koha.communitykohaapp",
-      "googleServicesFile": "./app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./app/assets/favicon.png",
-      "config": {
-        "firebase": {
-          "apiKey": "AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI",
-          "authDomain": "communitykohaapp.firebaseapp.com",
-          "databaseURL": "https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app",
-          "projectId": "communitykohaapp",
-          "storageBucket": "communitykohaapp.appspot.com",
-          "messagingSenderId": "244543529302",
-          "appId": "1:244543529302:web:cfdf8da305dd0951e7f6f7",
-          "measurementId": "G-YV1GZSDFN1"
-        }
-      }
+      "favicon": "./app/assets/favicon.png"
     }
   }
 }
