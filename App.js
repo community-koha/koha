@@ -1,7 +1,7 @@
 import React from 'react';
 
 import NavBar from './app/screens/NavBar';
-import FBLogin from './app/screens/FBLogin';
+import Login from './app/screens/Login';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -34,38 +34,30 @@ if (!firebase.apps.length) {
 // For OAuth
 WebBrowser.maybeCompleteAuthSession();
 
-var isSignedIn;
+var routeName;
 if (firebase.auth().currentUser) {
-	isSignedIn = true;
+	routeName = 'Nav';
 } else {
-	isSignedIn = false;
+	routeName = 'Login';
 }
 
 const Stack = createStackNavigator();
 
 export default function App() {
-	return isSignedIn ? (
-		<>
-			<NavigationContainer>
-				<NavBar></NavBar>
-			</NavigationContainer>
-		</>
-	) : (
-		<>
-			<NavigationContainer>
-				<Stack.Navigator initialRouteName="FBLogin">
-					<Stack.Screen
-						name="Nav"
-						component={NavBar}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name="FBLogin"
-						component={FBLogin}
-						options={{ headerShown: false }}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</>
+	return (
+		<NavigationContainer>
+			<Stack.Navigator initialRouteName={routeName}>
+				<Stack.Screen
+					name="Nav"
+					component={NavBar}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="Login"
+					component={Login}
+					options={{ headerShown: false }}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
 	);
 }
