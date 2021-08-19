@@ -7,11 +7,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import * as WebBrowser from 'expo-web-browser';
-import * as Facebook from 'expo-auth-session/providers/facebook';
-import { ResponseType } from 'expo-auth-session';
-import { View, StyleSheet, Button, TabBarIOS } from 'react-native';
-
-import Colours from './app/config/colours.js';
 
 import firebase from 'firebase/app';
 import 'firebase';

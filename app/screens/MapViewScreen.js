@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import MapView, { google } from 'react-native-maps';
+import { StyleSheet, Text, View } from 'react-native';
+import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import Colours from '../config/colours.js';

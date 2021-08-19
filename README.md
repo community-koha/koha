@@ -11,6 +11,15 @@ Make sure normal things are installed (read: `node`, `npm` etc.)
 3. `expo start` in the project directory to run the server
 4. use the GUI to manage flow (log in on *Expo Go* with Android/iOS)
 
+**Build instructions:**
+
+*WIP*
+
 **Recommendations:**
 - use *VS Code* + *React Native tools* + *Expo tools*
 - commit your code (with cli, Git client, *Github Desktop* or *VS Code*, whatever, just do it)
+
+**Troubleshooting:**
+- Fix bundler cache issues with `expo r -c`
+- Make sure to `npm i` after pulling to fix any updated dependencies
+- Expo Go does not work with FB Auth on non-authorised Expo accounts ([see here](https://github.com/koha-app/koha/pull/18#issuecomment-901666014))
