@@ -21,6 +21,6 @@ export default {
         fontSize: height*0.03,
         borderRadius: 3,
         borderWidth: 1,
-	borderColor: Colours.black
+        borderColor: Colours.black
     },
 }
