@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-import colours from "./colours";
+import Colours from "./colours";
 
 var {height, width} = Dimensions.get('window');
 export default {
@@ -11,7 +11,7 @@ export default {
     },
     container:
     {
-        backgroundColor: colours.white,
+        backgroundColor: Colours.white,
         alignItems: 'center'
     },
     button:

@@ -42,24 +42,24 @@ const styles = StyleSheet.create({
 	},
 	logo: {
 		resizeMode: 'contain',
-		top: height*0.1,
-		width: width*0.75,
-		height: height*0.2
+		top: Gui.screen.height*0.1,
+		width: Gui.screen.width*0.75,
+		height: Gui.screen.height*0.2
 	},
 	name: {
-		paddingTop: height*0.175,
-		fontSize: height*0.06,
+		paddingTop: Gui.screen.height*0.175,
+		fontSize: Gui.screen.height*0.06,
 		textAlign: 'center',
 	},
 	login: {
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.button.width,
-		height: Gui.screen.height,
-		borderRadius: Gui.screen.borderRadius,
-		borderWidth: Gui.screen.borderWidth,
-		borderColor: Gui.screen.borderColor,
-		marginBottom: height*0.025,
+		height: Gui.button.height,
+		borderRadius: Gui.button.borderRadius,
+		borderWidth: Gui.button.borderWidth,
+		borderColor: Gui.button.borderColor,
+		marginBottom: Gui.screen.height*0.025,
 	},
 	loginText: {
 		fontSize: Gui.button.fontSize,
