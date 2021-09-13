@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Colours from '../config/colours.js';
+import Gui from '../config/gui.js';
 
-import { Dimensions, View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 
 function Home({navigation}) {
 	return(
@@ -28,18 +28,17 @@ function Home({navigation}) {
 	);
 }
 
-var {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colours.white,
+		backgroundColor: Gui.container.backgroundColor,
 		alignItems: 'center',
 	},
 	buttons: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: height*0.4,
-		width: width*0.75,
+		height: Gui.screen.height*0.4,
+		width: Gui.screen.width*0.75,
 	},
 	logo: {
 		resizeMode: 'contain',
@@ -55,15 +54,15 @@ const styles = StyleSheet.create({
 	login: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: width*0.75,
-		height: height*0.05,
-		borderRadius:3,
-		borderWidth: 1,
-		borderColor: Colours.black,
+		width: Gui.button.width,
+		height: Gui.screen.height,
+		borderRadius: Gui.screen.borderRadius,
+		borderWidth: Gui.screen.borderWidth,
+		borderColor: Gui.screen.borderColor,
 		marginBottom: height*0.025,
 	},
 	loginText: {
-		fontSize: height*0.03,
+		fontSize: Gui.button.fontSize,
 		fontWeight: 'bold',
 	},
 });
