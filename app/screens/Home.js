@@ -1,12 +1,14 @@
 import React from 'react';
 
+import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 
 function Home({navigation}) {
 	return(
 		<View style={styles.container}>
+			<StatusBar backgroundColor={Colours.statusbar} />
 			<Image
 				style={styles.logo}
 				source={require('../assets/home_logo.png')}
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
 	},
 	logo: {
 		resizeMode: 'contain',
-		top: Gui.screen.height*0.1,
+		top: Gui.screen.height*0.07,
 		width: Gui.screen.width*0.75,
 		height: Gui.screen.height*0.2
 	},

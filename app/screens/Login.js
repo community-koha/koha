@@ -5,7 +5,7 @@ import Colours from '../config/colours.js';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import * as Google from 'expo-auth-session/providers/google';
 import { ResponseType } from 'expo-auth-session';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button, StatusBar } from 'react-native';
 
 import firebase from 'firebase/app';
 import 'firebase';
@@ -42,6 +42,7 @@ function Login({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<StatusBar backgroundColor={Colours.statusbar} />
 			<Button
 				disabled={!fbRequest}
 				title="Login with Facebook"
