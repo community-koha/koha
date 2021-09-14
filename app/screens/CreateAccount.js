@@ -38,9 +38,7 @@ function CreateAccount({navigation}) {
         switch(true)
         { 
             case (name === ""):
-                act(() => {
-                    setError("Please enter your name");
-                });                
+                setError("Please enter your name");                
                 return false;
 
             case (dob == 0):
