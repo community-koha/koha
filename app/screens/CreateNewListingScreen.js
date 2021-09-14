@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Platform, StatusBar, ScrollView, Button, TextInput } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import Colours from '../config/colours.js';
 
 function CreateNewListingScreen() {
-  
+  const [userType, setUserType] = useState(null);
+  const [donationType, setDonationType] = useState(null);
+  const [listingTitle, setListingTitle] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [subCategory, setSubCategory] = useState(null);
+  const [quantity, setQuantity] = useState(null);
+  const [expiryDate, setExpiryDate] = useState(null);
+  const [collectionMethod, setCollectionMethod] = useState(null);
+
   return (
     <View style={styles.background}>
       <ScrollView style={styles.scrollView}>
