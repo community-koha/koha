@@ -5,18 +5,13 @@ import Login from './app/screens/Login';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import * as WebBrowser from 'expo-web-browser';
-
 import firebase from 'firebase/app';
-import 'firebase';
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',
 	authDomain: 'communitykohaapp.firebaseapp.com',
-	databaseURL:
-		'https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app',
+	databaseURL:'https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app',
 	projectId: 'communitykohaapp',
 	storageBucket: 'communitykohaapp.appspot.com',
 	messagingSenderId: '244543529302',
