@@ -3,6 +3,24 @@ import { StyleSheet, View, Text, Platform, StatusBar, ScrollView, Button, TextIn
 import { Ionicons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import Colours from '../config/colours.js';
 
+import firebase from 'firebase/app';
+
+function SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate)  {
+  
+  const dbh = firebase.firestore();
+  dbh.collection("listings").add({
+    userType: userType,
+    donationType: donationType,
+    listingTitle: listingTitle,
+    description: description,
+    location: location,
+    category: category,
+    subCategory: subCategory,
+    quantity: quantity,
+    expiryDate: expiryDate
+  })
+}
+
 function CreateNewListingScreen() {
   const [userType, setUserType] = useState(null);
   const [donationType, setDonationType] = useState(null);
@@ -60,7 +78,8 @@ function CreateNewListingScreen() {
           onChangeText = {(val) => setCollectionMethod(val)}
         />
         <View style={styles.buttonContainer}>
-        <View style={styles.button}><Button title="Submit" onPress={SubmitForm}/>
+        <View style={styles.button}><Button title="Submit" onPress={SubmitForm(
+          userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)}/>
           </View>
           <View style={styles.button}><Text>Cancel</Text>
           </View>
