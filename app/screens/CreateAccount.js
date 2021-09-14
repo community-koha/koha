@@ -53,6 +53,14 @@ function CreateAccount({navigation}) {
                 setError("Please enter your username");
                 return false;
 
+            case (password == ""):
+                setError("Please enter a password");
+                return false;
+
+            case (confirm == ""):
+                setError("Please enter your password again");
+                return false;
+
             case (password != confirm):
                 setError("Your passwords do not match");
                 return false;
