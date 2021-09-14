@@ -6,6 +6,7 @@ import Gui from '../config/gui.js';
 import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { act } from 'react-test-renderer';
 
 
 function CreateAccount({navigation}) {
@@ -38,24 +39,26 @@ function CreateAccount({navigation}) {
         switch(true)
         { 
             case (name === ""):
-                setError("Please enter your name");
-                return;
+                act(() => {
+                    setError("Please enter your name");
+                });                
+                return false;
 
             case (dob == 0):
                 setError("Please enter your date of birth");
-                return;
+                return false;
 
             case (email == ""):
                 setError("Please enter your email");
-                return;
+                return false;
 
             case (username == ""):
                 setError("Please enter your username");
-                return;
+                return false;
 
             case (password != confirm):
                 setError("Your passwords do not match");
-                return;
+                return false;
         }
         dob = ConvertDate(dob)
 
@@ -68,7 +71,8 @@ function CreateAccount({navigation}) {
         console.log("Username: " + username);
         console.log("Password Length: " + password.length);
         console.log("Confirm Length: " + confirm.length);
-        console.log("Passwords Match: " + (password == confirm));        
+        console.log("Passwords Match: " + (password == confirm));
+        return true;   
     }
 
 	return (
