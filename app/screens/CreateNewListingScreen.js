@@ -78,7 +78,7 @@ function CreateNewListingScreen() {
           onChangeText = {(val) => setCollectionMethod(val)}
         />
         <View style={styles.buttonContainer}>
-        <View style={styles.button}><Button title="Submit" onPress={SubmitForm(
+        <View style={styles.button}><Button title="Submit" onPress={() => SubmitForm(
           userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)}/>
           </View>
           <View style={styles.button}><Text>Cancel</Text>
@@ -88,7 +88,6 @@ function CreateNewListingScreen() {
     </View>
   );
 }
-
 
 
 const styles = StyleSheet.create({
