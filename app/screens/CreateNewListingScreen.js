@@ -5,7 +5,7 @@ import Colours from '../config/colours.js';
 
 import firebase from 'firebase/app';
 
-function SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate)  {
+function SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)  {
   
   const dbh = firebase.firestore();
   dbh.collection("listings").add({
@@ -17,7 +17,8 @@ function SubmitForm(userType, donationType, listingTitle, description, location,
     category: category,
     subCategory: subCategory,
     quantity: quantity,
-    expiryDate: expiryDate
+    expiryDate: expiryDate,
+    collectionMethod: collectionMethod
   })
 }
 
