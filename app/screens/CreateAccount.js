@@ -6,7 +6,6 @@ import Gui from '../config/gui.js';
 import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { act } from 'react-test-renderer';
 
 
 function CreateAccount({navigation}) {

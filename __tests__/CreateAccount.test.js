@@ -44,7 +44,5 @@ describe('<CreateAccount />', () =>
 
         // Create Account Button Text
         expect(tree.children[1].children[0].children[13].children[0].type).toEqual('Text')
-
-        console.log(tree.children[1].children[0].children[13].props.onClick())
     });
 });
