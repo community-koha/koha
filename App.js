@@ -1,7 +1,9 @@
 import React from 'react';
 
 import NavBar from './app/screens/NavBar';
+import Home from './app/screens/Home';
 import Login from './app/screens/Login';
+import CreateAccount from './app/screens/CreateAccount';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -33,7 +35,7 @@ var routeName;
 if (firebase.auth().currentUser) {
 	routeName = 'Nav';
 } else {
-	routeName = 'Login';
+	routeName = 'Home';
 }
 
 const Stack = createStackNavigator();
@@ -48,8 +50,18 @@ export default function App() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
+					name="Home"
+					component={Home}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
 					name="Login"
 					component={Login}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="CreateAccount"
+					component={CreateAccount}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>
