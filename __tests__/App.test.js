@@ -3,8 +3,6 @@ import renderer from 'react-test-renderer';
 
 import App from '../App.js';
 
-jest.useFakeTimers();
-
 describe('<App />', () =>
 {
     it("Testing started", () => expect(1).toEqual(1));
