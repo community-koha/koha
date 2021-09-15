@@ -3,10 +3,12 @@ import renderer from 'react-test-renderer';
 
 import CreateAccount from '../app/screens/CreateAccount.js';
 
+jest.useFakeTimers();
+
 describe('<CreateAccount />', () =>
 {
     it("Testing started", () => expect(1).toEqual(1));
-    it('Children check', async () => 
+    it('Children check', () => 
     {
         const tree = renderer.create(<CreateAccount />).toJSON();
         expect(tree.children.length).toEqual(2);
