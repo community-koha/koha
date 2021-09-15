@@ -5,5 +5,8 @@ export default {
     white: '#fff',
     statusbar: '#000',
     red: '#ff0000',
-    placeholder: '#999'
+    placeholder: '#999',
+
+    // Koha brand colors
+    koha_green: '#747837'
 }

@@ -29,6 +29,7 @@
     "react-google-maps": "^9.4.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-animation-library": "0.0.8",
+    "react-native-dropdown-picker": "^5.1.25",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-maps": "0.28.0",
