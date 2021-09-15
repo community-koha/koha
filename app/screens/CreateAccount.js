@@ -38,24 +38,32 @@ function CreateAccount({navigation}) {
         switch(true)
         { 
             case (name === ""):
-                setError("Please enter your name");
-                return;
+                setError("Please enter your name");                
+                return false;
 
             case (dob == 0):
                 setError("Please enter your date of birth");
-                return;
+                return false;
 
             case (email == ""):
                 setError("Please enter your email");
-                return;
+                return false;
 
             case (username == ""):
                 setError("Please enter your username");
-                return;
+                return false;
+
+            case (password == ""):
+                setError("Please enter a password");
+                return false;
+
+            case (confirm == ""):
+                setError("Please enter your password again");
+                return false;
 
             case (password != confirm):
                 setError("Your passwords do not match");
-                return;
+                return false;
         }
         dob = ConvertDate(dob)
 
@@ -68,8 +76,12 @@ function CreateAccount({navigation}) {
         console.log("Username: " + username);
         console.log("Password Length: " + password.length);
         console.log("Confirm Length: " + confirm.length);
-        console.log("Passwords Match: " + (password == confirm));        
+        console.log("Passwords Match: " + (password == confirm));
+        return true;   
     }
+
+    let icon = <MaterialCommunityIcons name="arrow-left" size={Gui.screen.height*0.05} color={Colours.black} style={styles.headerIcon} />;
+    if (process.env.JEST_WORKER_ID !== undefined) { icon = ""; }
 
 	return (
         <View style={styles.container}>
@@ -79,7 +91,7 @@ function CreateAccount({navigation}) {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Home')}
                     style={styles.backButton}>
-                    <MaterialCommunityIcons name="arrow-left" size={Gui.screen.height*0.05} color={Colours.black} style={styles.headerIcon} />
+                    {icon}
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.scroll}>
