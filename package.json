@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start:web --https",
     "eject": "expo eject",
-    "test": "jest"
+    "test": "jest --verbose --detectOpenHandles"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.5",
@@ -29,6 +29,7 @@
     "react-google-maps": "^9.4.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-animation-library": "0.0.8",
+    "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-maps": "0.28.0",
     "react-native-paper": "^4.9.2",
@@ -52,7 +53,7 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+      "node_modules/(?!(jest-)?react-native|@react-native|react-native|@expo/vector-icons|datetimepicker|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
     ],
     "automock": false,
     "setupFilesAfterEnv": [

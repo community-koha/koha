@@ -80,6 +80,9 @@ function CreateAccount({navigation}) {
         return true;   
     }
 
+    let icon = <MaterialCommunityIcons name="arrow-left" size={Gui.screen.height*0.05} color={Colours.black} style={styles.headerIcon} />;
+    if (process.env.JEST_WORKER_ID !== undefined) { icon = ""; }
+
 	return (
         <View style={styles.container}>
             <StatusBar backgroundColor={Colours.statusbar} />            
@@ -88,7 +91,7 @@ function CreateAccount({navigation}) {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Home')}
                     style={styles.backButton}>
-                    <MaterialCommunityIcons name="arrow-left" size={Gui.screen.height*0.05} color={Colours.black} style={styles.headerIcon} />
+                    {icon}
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.scroll}>

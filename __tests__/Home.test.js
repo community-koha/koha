@@ -3,8 +3,6 @@ import renderer from 'react-test-renderer';
 
 import Home from '../app/screens/Home.js';
 
-jest.useFakeTimers();
-
 describe('<Home />', () =>
 {
     it("Testing started", () => expect(1).toEqual(1));
