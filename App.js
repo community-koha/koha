@@ -4,6 +4,7 @@ import NavBar from './app/screens/NavBar';
 import Home from './app/screens/Home';
 import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
+import MapViewScreen from './app/screens/MapViewScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -52,6 +53,11 @@ export default function App() {
 				<Stack.Screen
 					name="Home"
 					component={Home}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="Map"
+					component={MapViewScreen}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen

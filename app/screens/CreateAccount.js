@@ -24,14 +24,11 @@ function CreateAccount({navigation}) {
     }
 
     function ConvertDate(seconds) {
-        if (seconds != null)
-        {
-            var local = new Date(seconds)
-            var date = new Date(local.getTime());
-            return ((date.getDate()<10) ? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth()+1<10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1)) + "/" + date.getFullYear() 
-        }
-        return "01/01/1970"
-    }
+        if (seconds == null) {seconds = Date.now()}    
+        var local = new Date(seconds)
+        var date = new Date(local.getTime());
+        return ((date.getDate()<10) ? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth()+1<10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1)) + "/" + date.getFullYear() 
+      };
 
     function SubmitData(name='', dob=0, email='', username='', password='', confirm='') {
         setError("");
