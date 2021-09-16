@@ -58,6 +58,9 @@ function ListingDetailScreen({route, navigation}){
                     })
                 }
             </View>
+            <View>
+                <Button style={styles.button} title="Go Back" onPress={() => navigation.navigate('ListViewScreen')}></Button>
+            </View>
         </ScrollView>
     )
 }
@@ -67,6 +70,11 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingBottom: 22
        },
-    
+    button:{
+        height: 45,
+        width: '80%',
+        color: Colours.white,
+        marginTop: 50,
+        }
 })
   export default ListingDetailScreen;
