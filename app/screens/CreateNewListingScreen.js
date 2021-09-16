@@ -3,12 +3,15 @@ import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollV
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LogBox } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 
 import firebase from 'firebase/app';
 import colours from '../config/colours.js';
+
+const GOOGLE_MAP_API_KEY='';
 
 function SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)  {
   const dbh = firebase.firestore();
@@ -31,19 +34,19 @@ function CreateNewListingScreen({navigation}) {
   useEffect(() => { LogBox.ignoreLogs(['VirtualizedLists should never be nested']); }, [])
 
   const [userType, setUserType] = useState(null);
-  const [donationType, setOpenDonationType] = useState(null);
+  const [donationType, setDonationType] = useState(null);
   const [listingTitle, setListingTitle] = useState(null);
   const [description, setDescription] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({"lat": 0,"lng": 0});
   const [category, setCategory] = useState(null);
-  const [subCategory, setSubcategory] = useState(null);
+  const [subcategory, setSubcategory] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [expiryDate, setExpiryDate] = useState(null);
+  const [expiryDate, setExpiryDate] = useState(Date(Date.now()));
   const [collectionMethod, setCollectionMethod] = useState(null);
 
   const [showDate, setShowDate] = useState(false);
   const [openUserType, setOpenUserType] = useState(false);
-  const [openItemType, setOpenItemType] = useState(false);
+  const [openDonationType, setOpenDonationType] = useState(false);
   const [openCategoryType, setOpenCategoryType] = useState(false);
   const [openSubcategoryType, setOpenSubcategoryType] = useState(false);
   const [openCollectionType, setOpenCollectionType] = useState(false);
@@ -52,14 +55,22 @@ function CreateNewListingScreen({navigation}) {
     { value: 'business', label: 'A Business' },
     { value: 'individual', label: 'An Individual' }
   ]);
-  const [typeItems, setTypeItems] = useState([
+  const [donationItems, setDonationTypeItems] = useState([
     { value: 'food', label: 'Food' },
     { value: 'essential_item', label: 'Essential Items' }
   ]);
-  const [categoryItems, setCategoryItems] = useState([
+  const [categoryFood, setCategoryFood] = useState([
     { value: 'fruit', label: 'Fruit' },
     { value: 'canned', label: 'Canned Goods' },
     { value: 'cooked', label: 'Cooked Meals' },
+    { value: 'misc', label: 'Miscellaneous' },
+  ]);
+  const [categoryItems, setCategoryItems] = useState([
+    { value: 'baby', label: 'Baby Items' },
+    { value: 'bedding', label: 'Bedding' },
+    { value: 'heating', label: 'Heating' },
+    { value: 'school', label: 'School Items' },
+    { value: 'clothing', label: 'Clothing' },
     { value: 'misc', label: 'Miscellaneous' },
   ]);
   const [subcategoryItems, setSubcategoryItems] = useState([
@@ -69,7 +80,7 @@ function CreateNewListingScreen({navigation}) {
     { value: '04', label: 'Subcategory #4' },
   ]);
   const [collectionItems, setCollectionItems] = useState([
-    { value: 'walk', label: 'Pick-Up' },
+    { value: 'pick_up', label: 'Pick Up' },
     { value: 'delivery', label: 'Delivery' }
   ]);
 
@@ -120,26 +131,69 @@ function CreateNewListingScreen({navigation}) {
   };
 
   function ConvertDate(seconds) {
-    if (seconds != null)
-    {
-      var local = new Date(seconds)
-      var date = new Date(local.getTime());
-      return ((date.getDate()<10) ? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth()+1<10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1)) + "/" + date.getFullYear() 
-    }
-    return "01/01/1970"
+    if (seconds == null) {seconds = Date.now()}    
+    var local = new Date(seconds)
+    var date = new Date(local.getTime());
+    return ((date.getDate()<10) ? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth()+1<10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1)) + "/" + date.getFullYear() 
   };
 
+  function GoBack()  {
+    // Go back to the map page
+    navigation.navigate('Map')
+  }
+
+  function CheckInput(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)  {
+    console.log("")
+    console.log("Checking")
+    switch(true)
+    { 
+        case (!userType in ['business','individual']):               
+            return false;
+
+        case (!donationType in ['food','essential_item']):
+            return false;
+
+        case (listingTitle in ["",null]):
+            return false;
+
+        case (description in ["",null]):
+            return false;
+
+        case (location["lat"] == 0 || location["lng"] == 0):
+            return false;
+
+        case (donationType == "food" && !category in ['fruit','canned','cooked','misc']):
+            return false;
+
+        case (donationType == "essential_item" && !category in ['baby','bedding','heating','school','clothing','misc']):
+          return false;
+
+        case (quantity == null || quantity <= 0 ):
+          return false;
+
+        case (expiryDate == null):
+          return false;
+
+        case (!collectionMethod in ['pick_up','delivery']):
+            return false;
+    }
+    
+    console.log("Pass")
+    SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)
+  }
+
   return (
-  <View style={styles.container}>
+  <View style={styles.container} keyboardShouldPersistTaps="always">
     <StatusBar backgroundColor={Colours.statusbar} />            
     <View>
         <Text style={styles.headerText}>CREATE NEW LISTING</Text>
     </View>
-    <ScrollView style={styles.scroll}>
+    <ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
         <Text style={styles.inputTitleFirst}>I am...</Text>
         <DropDownPicker
             open={openUserType}
             items={typeUserItems}
+            value={userType}
             setOpen={(val) => userTypeOpened(val)}
             setValue={(val) => setUserType(val)}
             showArrowIcon={true}
@@ -152,10 +206,11 @@ function CreateNewListingScreen({navigation}) {
             style={styles.inputText}/>
         <Text style={styles.inputTitle} >I'm giving...</Text>
         <DropDownPicker
-            open={openItemType}
-            items={typeItems}
+            open={openDonationType}
+            items={donationItems}
+            value={donationType}
             setOpen={(val) => donationTypeOpened(val)}
-            setValue={(val) => setOpenDonationType(val)}
+            setValue={(val) => setDonationType(val)}
             showArrowIcon={true}
             showTickIcon={false}
             zIndex={4000}
@@ -173,16 +228,40 @@ function CreateNewListingScreen({navigation}) {
         <TextInput
             onChangeText={val => setDescription(val)}
             placeholder=' Description'
-            style={styles.inputText}/>
-        <Text style={styles.inputTitle} >Pickup Location</Text>
-        <TextInput
-            onChangeText={val => setLocation(val)}
-            placeholder=' Location'
-            style={styles.inputText}/>
+            multiline={true}
+            numberOfLines={4}
+            textBreakStrategy={"simple"}
+            style={styles.inputTextDescription}/>
+        <Text style={styles.inputTitle} >Location</Text>
+        <GooglePlacesAutocomplete
+            placeholder='Search...'
+            onFail={error => console.error(error)}
+            fetchDetails={true}
+            onFail={(data, details) => console.error(data, details)}
+            onNotFound={(data, details) => console.error(data, details)}
+            onPress={(data, details) => setLocation(details["geometry"]["location"])}
+            query={{
+                key: GOOGLE_MAP_API_KEY,
+                language: 'en',
+                components: 'country:nz',
+            }}
+            styles={{
+              textInputContainer: styles.textInputContainer,
+              textInput: styles.textInput,
+              listView: styles.listView,
+              //separator: styles.separator,
+              //poweredContainer: styles.poweredContainer,
+              //description: styles.description,
+              //row: styles.row,
+              //powered: styles.powered,
+            }}
+            zIndex={8000}
+            debounce={200}/>
         <Text style={styles.inputTitle} >Listing Category</Text>
         <DropDownPicker
             open={openCategoryType}
-            items={categoryItems}
+            items={(donationType=="food") ? categoryFood:categoryItems}
+            value={category}
             setOpen={(val) => categoryOpened(val)}
             setValue={(val) => setCategory(val)}
             showArrowIcon={true}
@@ -193,15 +272,16 @@ function CreateNewListingScreen({navigation}) {
             dropDownContainerStyle={styles.dropDownBody}
             textStyle={styles.dropDownText}
             style={styles.inputText}/>
-        <Text style={styles.inputTitle} >Listing Sub-Category</Text>
+        <Text style={styles.inputTitle} >Listing Subcategory</Text>
         <DropDownPicker
             open={openSubcategoryType}
             items={subcategoryItems}
+            value={subcategory}
             setOpen={(val) => subcategoryOpened(val)}
             setValue={(val) => setSubcategory(val)}
             showArrowIcon={true}
             showTickIcon={false}
-            zIndex={3000}
+            zIndex={2000}
             placeholder="Select..."
             placeholderStyle={styles.dropDownPlaceholderText}
             dropDownContainerStyle={styles.dropDownBody}
@@ -236,11 +316,12 @@ function CreateNewListingScreen({navigation}) {
         <DropDownPicker
             open={openCollectionType}
             items={collectionItems}
+            value={collectionMethod}
             setOpen={(val) => collectionOpened(val)}
             setValue={(val) => setCollectionMethod(val)}
             showArrowIcon={true}
             showTickIcon={false}
-            zIndex={3000}
+            zIndex={1000}
             placeholder="Select..."
             placeholderStyle={styles.dropDownPlaceholderText}
             dropDownContainerStyle={styles.dropDownBody}
@@ -248,12 +329,12 @@ function CreateNewListingScreen({navigation}) {
             style={styles.inputText}/>
         <TouchableOpacity
             style={styles.submit}
-            onPress={() => SubmitForm(userType, donationType, listingTitle, description, location, category, subCategory, quantity, expiryDate, collectionMethod)}>
+            onPress={() => CheckInput(userType, donationType, listingTitle, description, location, category, subcategory, quantity, expiryDate, collectionMethod)}>
             <Text style={styles.submitText}>CREATE LISTING</Text>
         </TouchableOpacity>
         <TouchableOpacity
             style={styles.cancel}
-            onPress={() => navigation.navigate('Map')}>
+            onPress={() => GoBack()}>
             <Text style={styles.cancelText}>CANCEL</Text>
         </TouchableOpacity>
         <View style={styles.end}/>
@@ -324,12 +405,68 @@ const styles = StyleSheet.create({
     fontSize: Gui.screen.height*0.03,
 		width: Gui.screen.width*0.8
   },
+  textInputContainer: {
+    marginLeft: Gui.screen.width*0.1,
+		height: Gui.screen.height*0.055,
+		width: Gui.screen.width*0.8,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: Colours.black
+	},
+  textInput: {
+		textAlign: 'left',
+    textAlignVertical: 'top',
+    fontSize: Gui.screen.height*0.025,
+    height: Gui.screen.height*0.05,
+    color: Colours.black,
+	},
+  listView: {
+    marginTop: 1,
+    marginLeft: Gui.screen.width*0.1,
+    width: Gui.screen.width*0.8,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: Colours.black,
+	},
+  separator: {
+    height: 1,
+    backgroundColor: Colours.placeholder
+	},
+  poweredContainer: {
+    height: Gui.screen.height*0.045,
+    borderColor: Colours.placeholder,
+    borderTopWidth: 1,
+  },
+  powered: {
+    marginTop: -Gui.screen.height*0.02,
+  },
+  description: {
+    flexShrink: 1,
+    marginLeft: Gui.screen.width*0.01,
+    fontSize: Gui.screen.height*0.025,
+  },
+  row: {
+    padding: 0,
+    height: Gui.screen.height*0.045,
+  },
   inputText: {
     textAlign: 'left',
     textAlignVertical: 'center',
     marginLeft: Gui.screen.width*0.1,
     fontSize: Gui.screen.height*0.03,
 		height: Gui.screen.height*0.05,
+		width: Gui.screen.width*0.8,
+    color: Colours.black,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: Colours.black
+	},
+  inputTextDescription: {
+    textAlign: 'left',
+    textAlignVertical: 'top',
+    marginLeft: Gui.screen.width*0.1,
+    fontSize: Gui.screen.height*0.03,
+		height: Gui.screen.height*0.15,
 		width: Gui.screen.width*0.8,
     color: Colours.black,
     borderRadius: 3,
