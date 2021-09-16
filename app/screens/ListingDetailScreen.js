@@ -8,6 +8,8 @@ import firebase from 'firebase/app';
 function ListingDetailScreen({route, navigation}){
     const {listingId} = route.params;
 
+    const [loading, setLoading] = useState(true);
+    const [listings, setListings] = useState([]);
   
     return (
         <ScrollView>
