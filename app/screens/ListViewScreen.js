@@ -7,44 +7,42 @@ import firebase from 'firebase/app';
 
 
 function ListViewScreen(){
-    
+    const navigation = useNavigation();
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [listings, setListings] = useState([]); // Initial empty array of users
   
     useEffect(() => {
-        const subscriber = firebase.firestore()
-          .collection('listings')
-          .onSnapshot(querySnapshot => {
-              const listings = [];
-        
-              querySnapshot.forEach(documentSnapshot => {
-                listings.push({
-                  ...documentSnapshot.data(),
-                  key: documentSnapshot.id,
-                });
+      const subscriber = firebase.firestore()
+        .collection('listings')
+        .onSnapshot(querySnapshot => {
+            const listings = [];
+      
+            querySnapshot.forEach(documentSnapshot => {
+              listings.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
               });
-        
-              setListings(listings);
-              setLoading(false);
             });
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
-      }, []);
-    
-      if (loading) {
-        return <ActivityIndicator />;
-      }
-    
+      
+            setListings(listings);
+            setLoading(false);
+          });
+  
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }, []);
+  
+    if (loading) {
+      return <ActivityIndicator />;
     }
     return (
-        <View style={styles.container}>
-        {
-            listings.map((item, i) => {
+            <View style={styles.container}>
+            {
+                listings.map((item, i) => {
                 return (
                     <ListItem key={i} bottomDivider onPress={() => navigation.navigate
                         ('ListingDetailScreen', {
-                            listingId: item.key
+                          listingId: item.key
                         })}>
                         <ListItem.Content>
                             <ListItem.Title>{item.listingTitle}</ListItem.Title>
@@ -55,9 +53,9 @@ function ListViewScreen(){
                     
                 );
                 })
-        }
-        </View>
-    )
+            }
+            </View>
+        )
 }
 
 const styles = StyleSheet.create({
