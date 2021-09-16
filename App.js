@@ -5,6 +5,8 @@ import Home from './app/screens/Home';
 import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
 import MapViewScreen from './app/screens/MapViewScreen';
+import ListViewScreen from './app/screens/ListViewScreen';
+import ListingDetailScreen from './app/screens/ListingDetailScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -68,6 +70,16 @@ export default function App() {
 				<Stack.Screen
 					name="CreateAccount"
 					component={CreateAccount}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="ListViewScreen"
+					component={ListViewScreen}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="ListingDetailScreen"
+					component={ListingDetailScreen}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

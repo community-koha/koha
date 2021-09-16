@@ -7,34 +7,33 @@ import firebase from 'firebase/app';
 
 function ListingDetailScreen({route, navigation}){
     const {listingId} = route.params;
-
     const [loading, setLoading] = useState(true);
     const [listings, setListings] = useState([]);
   
     useEffect(() => {
-        const subscriber = firebase.firestore()
-          .collection('listings')
-          .onSnapshot(querySnapshot => {
-              const listings = [];
-        
-              querySnapshot.forEach(documentSnapshot => {
-                listings.push({
-                  ...documentSnapshot.data(),
-                  key: documentSnapshot.id,
-                });
+      const subscriber = firebase.firestore()
+        .collection('listings')
+        .onSnapshot(querySnapshot => {
+            const listings = [];
+      
+            querySnapshot.forEach(documentSnapshot => {
+              listings.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
               });
-        
-              setListings(listings);
-              setLoading(false);
             });
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
-      }, []);
-    
-      if (loading) {
-        return <ActivityIndicator />;
-      }
+      
+            setListings(listings);
+            setLoading(false);
+          });
+  
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }, []);
+  
+    if (loading) {
+      return <ActivityIndicator />;
+    }
 
     return (
         <ScrollView>
@@ -51,18 +50,18 @@ function ListingDetailScreen({route, navigation}){
                                 <ListItem.Subtitle>Collection Method: {item.collectionMethod}</ListItem.Subtitle>
                                 <ListItem.Subtitle>Category: {item.category}</ListItem.Subtitle>
                                 <ListItem.Subtitle>Sub Category{item.subCategory}</ListItem.Subtitle>
-                                
                             </ListItem.Content>
                         </ListItem>
                     );
                     })
                 }
+            
             </View>
             <View>
                 <Button style={styles.button} title="Go Back" onPress={() => navigation.navigate('ListViewScreen')}></Button>
             </View>
         </ScrollView>
-    )
+        )
 }
 
 const styles = StyleSheet.create({
@@ -75,6 +74,6 @@ const styles = StyleSheet.create({
         width: '80%',
         color: Colours.white,
         marginTop: 50,
-        }
+    }
 })
   export default ListingDetailScreen;
