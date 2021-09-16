@@ -38,9 +38,28 @@ function ListingDetailScreen({route, navigation}){
 
     return (
         <ScrollView>
-            
-            </ScrollView>
-        )
+            <View style={styles.container}>
+                {
+                listings.map((item, i) => {
+                    return (
+                        <ListItem key={i} >
+                            <ListItem.Content>
+                                <ListItem.Title>{item.listingTitle}</ListItem.Title>
+                                <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Location: {item.location}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Quantity: {item.quantity}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Collection Method: {item.collectionMethod}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Category: {item.category}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Sub Category{item.subCategory}</ListItem.Subtitle>
+                                
+                            </ListItem.Content>
+                        </ListItem>
+                    );
+                    })
+                }
+            </View>
+        </ScrollView>
+    )
 }
 
 const styles = StyleSheet.create({
