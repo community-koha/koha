@@ -38,10 +38,26 @@ function ListViewScreen(){
     
     }
     return (
-            <View style={styles.container}>
-            
-            </View>
-        )
+        <View style={styles.container}>
+        {
+            listings.map((item, i) => {
+                return (
+                    <ListItem key={i} bottomDivider onPress={() => navigation.navigate
+                        ('ListingDetailScreen', {
+                            listingId: item.key
+                        })}>
+                        <ListItem.Content>
+                            <ListItem.Title>{item.listingTitle}</ListItem.Title>
+                            <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+                            
+                        </ListItem.Content>
+                    </ListItem>
+                    
+                );
+                })
+        }
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -49,7 +65,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingBottom: 22
        }
-    
 })
 
 export default ListViewScreen;
