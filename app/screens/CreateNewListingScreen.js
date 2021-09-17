@@ -39,7 +39,7 @@ function CreateNewListingScreen({navigation}) {
   const [donationType, setDonationType] = useState(null);
   const [listingTitle, setListingTitle] = useState(null);
   const [description, setDescription] = useState(null);
-  const [location, setLocation] = useState({"lat": 0,"lng": 0});
+  const [location, setLocation] = useState({"lat": 0,"lng": 0,"name": ''});
   const [category, setCategory] = useState(null);
   const [subcategory, setSubcategory] = useState(null);
   const [quantity, setQuantity] = useState(null);
@@ -241,7 +241,7 @@ function CreateNewListingScreen({navigation}) {
             fetchDetails={true}
             onFail={(data, details) => console.error(data, details)}
             onNotFound={(data, details) => console.error(data, details)}
-            onPress={(data, details) => setLocation(details["geometry"]["location"])}
+            onPress={(data, details) => setLocation({"lat": details["geometry"]["location"]["lat"],"lng": details["geometry"]["location"]["lng"],"name": data["description"]})}
             query={{
                 key: GOOGLE_MAP_API_KEY,
                 language: 'en',
