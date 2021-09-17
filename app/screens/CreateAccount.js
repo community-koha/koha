@@ -3,32 +3,41 @@ import React, { useState } from 'react';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 
-import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from "react-datepicker";
 
 
 function CreateAccount({navigation}) {
+    const [web, setWeb] = useState(Platform.OS === 'web')
     const [error, setError] = useState('');
     const [name, setName] = useState('');
-    const [dob, setDob] = useState(Date.now());
+    const [dob, setDob] = useState(ConvertDate(Date.now()));
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
     const [showDate, setShowDate] = useState(false);
 
-    function setDate(date) {
-        setShowDate(false);
-        setDob(date["nativeEvent"]["timestamp"]);
-    }
-
     function ConvertDate(seconds) {
         if (seconds == null) {seconds = Date.now()}    
         var local = new Date(seconds)
         var date = new Date(local.getTime());
         return ((date.getDate()<10) ? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth()+1<10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1)) + "/" + date.getFullYear() 
-      };
+    };
+
+    function setDate(date) {
+        setShowDate(false);
+        if (web)
+        {
+            setDob(date);
+        }
+        else
+        {
+            setDob(ConvertDate(date["nativeEvent"]["timestamp"]));
+        }
+    }
 
     function SubmitData(name='', dob=0, email='', username='', password='', confirm='') {
         setError("");
@@ -95,50 +104,74 @@ function CreateAccount({navigation}) {
                 <Text style={styles.inputTitle}>Name</Text>
                 <TextInput
                     onChangeText={name => setName(name)}
-                    placeholder=' Name'
+                    placeholder='Name'
                     autoCompleteType="name"
                     style={styles.inputText}/>
-                <Text style={styles.inputTitle} >Date of Birth</Text>
-                <TouchableOpacity
-                    style={styles.date}
-                    onPress={() => setShowDate(true)}>
-                    <Text style={styles.dateText}>{ConvertDate(dob)}</Text>
-                </TouchableOpacity>
+                <Text style={styles.inputTitle}>Date of Birth</Text>
                 {
-                    showDate
+                    web
+                    &&
+                    (
+                    <DatePicker
+                        selected={new Date(Date.now())}
+                        onChange={(val) => setDate(ConvertDate(val))}
+                        maxDate={Date.now()}
+                        dateFormat="dd/MM/yyyy"
+                        zIndex={5000}
+                        customInput={
+                        <TouchableOpacity
+                            style={styles.date}
+                            onPress={() => setShowDate(true)}>
+                            <Text style={styles.dateText}>{dob}</Text>
+                        </TouchableOpacity>}/>
+                    )
+                }
+                {
+                    !web
+                    &&
+                    (
+                        <TouchableOpacity
+                            style={styles.date}
+                            onPress={() => setShowDate(true)}>
+                            <Text style={styles.dateText}>{dob}</Text>
+                        </TouchableOpacity>
+                    )
+                }
+                {
+                    !web && showDate
                     &&
                     (
                         <DateTimePicker
                             mode="date"
                             dateFormat="day month year"
                             maximumDate={Date.now()}
-                            value={new Date()}
-                            onChange={(date) => setDate(date)}
+                            value={new Date(Date.now())}
+                            onChange={(val) => setDate(val)}
                         />
                     )
                 }
                 <Text style={styles.inputTitle}>Email Address</Text>
                 <TextInput
                     onChangeText={email => setEmail(email)}
-                    placeholder=' Email'
+                    placeholder='Email'
                     keyboardType='email-address'
                     autoCompleteType="email"
                     style={styles.inputText}/>
                 <Text style={styles.inputTitle}>Username</Text>
                 <TextInput
                     onChangeText={username => setUsername(username)}
-                    placeholder=' Username'
+                    placeholder='Username'
                     style={styles.inputText}/>
                 <Text style={styles.inputTitle}>Password</Text>
                 <TextInput                    
                     onChangeText={password => setPassword(password)}
-                    placeholder=' Password'
+                    placeholder='Password'
                     style={styles.inputText}
                     secureTextEntry={true}/>
                 <Text style={styles.inputTitle}>Confirm Password</Text>
                 <TextInput
                     onChangeText={confirm => setConfirm(confirm)}
-                    placeholder=' Confirm Password'
+                    placeholder='Confirm Password'
                     style={styles.inputText}
                     secureTextEntry={true}/>
                 <View style={styles.errorView}> 
@@ -237,43 +270,6 @@ const styles = StyleSheet.create({
 	},
     dateText: {
         fontSize: Gui.screen.height*0.03
-	},
-    inputTextDay: {
-        textAlign: 'left',
-        textAlignVertical: 'center',
-        marginTop: Gui.screen.height*0.005,
-        marginLeft: Gui.screen.width*0.1,
-        fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.2,
-        color: Colours.black,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: Colours.black
-	},
-    inputTextMonth: {
-        textAlign: 'left',
-        textAlignVertical: 'center',
-        marginTop: Gui.screen.height*0.005,
-        fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.2,
-        color: Colours.black,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: Colours.black
-	},
-    inputTextYear: {
-        textAlign: 'left',
-        textAlignVertical: 'center',
-        marginTop: Gui.screen.height*0.005,
-        fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.4,
-        color: Colours.black,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: Colours.black
 	},
     errorView: {
         flexDirection:'row',
