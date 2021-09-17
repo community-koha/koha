@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, StatusBar, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LogBox } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -33,6 +34,7 @@ function CreateNewListingScreen({navigation}) {
   // This warning can be ignored since our lists are small
   useEffect(() => { LogBox.ignoreLogs(['VirtualizedLists should never be nested']); }, [])
 
+  const [web, setWeb] = useState(Platform.OS === 'web')
   const [userType, setUserType] = useState(null);
   const [donationType, setDonationType] = useState(null);
   const [listingTitle, setListingTitle] = useState(null);
@@ -41,7 +43,7 @@ function CreateNewListingScreen({navigation}) {
   const [category, setCategory] = useState(null);
   const [subcategory, setSubcategory] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [expiryDate, setExpiryDate] = useState(Date(Date.now()));
+  const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
   const [collectionMethod, setCollectionMethod] = useState(null);
 
   const [showDate, setShowDate] = useState(false);
@@ -127,7 +129,7 @@ function CreateNewListingScreen({navigation}) {
 
   function setDate(date) {
     setShowDate(false);
-    setExpiryDate(date["nativeEvent"]["timestamp"]);
+    setExpiryDate(date);
   };
 
   function ConvertDate(seconds) {
@@ -196,7 +198,7 @@ function CreateNewListingScreen({navigation}) {
             value={userType}
             setOpen={(val) => userTypeOpened(val)}
             setValue={(val) => setUserType(val)}
-            showArrowIcon={true}
+            showArrowIcon={!web}
             showTickIcon={false}
             zIndex={5000}
             placeholder="Select..."
@@ -211,7 +213,7 @@ function CreateNewListingScreen({navigation}) {
             value={donationType}
             setOpen={(val) => donationTypeOpened(val)}
             setValue={(val) => setDonationType(val)}
-            showArrowIcon={true}
+            showArrowIcon={!web}
             showTickIcon={false}
             zIndex={4000}
             placeholder="Select..."
@@ -222,12 +224,12 @@ function CreateNewListingScreen({navigation}) {
         <Text style={styles.inputTitle} >Listing Title</Text>
         <TextInput
             onChangeText={val => setListingTitle(val)}
-            placeholder=' Title'
+            placeholder='Title'
             style={styles.inputText}/>
         <Text style={styles.inputTitle} >Listing Description</Text>
         <TextInput
             onChangeText={val => setDescription(val)}
-            placeholder=' Description'
+            placeholder='Description'
             multiline={true}
             numberOfLines={4}
             textBreakStrategy={"simple"}
@@ -244,6 +246,10 @@ function CreateNewListingScreen({navigation}) {
                 key: GOOGLE_MAP_API_KEY,
                 language: 'en',
                 components: 'country:nz',
+            }}
+            requestUrl={{
+              useOnPlatform: 'web',
+              url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
             }}
             styles={{
               textInputContainer: styles.textInputContainer,
@@ -264,7 +270,7 @@ function CreateNewListingScreen({navigation}) {
             value={category}
             setOpen={(val) => categoryOpened(val)}
             setValue={(val) => setCategory(val)}
-            showArrowIcon={true}
+            showArrowIcon={!web}
             showTickIcon={false}
             zIndex={3000}
             placeholder="Select..."
@@ -279,7 +285,7 @@ function CreateNewListingScreen({navigation}) {
             value={subcategory}
             setOpen={(val) => subcategoryOpened(val)}
             setValue={(val) => setSubcategory(val)}
-            showArrowIcon={true}
+            showArrowIcon={!web}
             showTickIcon={false}
             zIndex={2000}
             placeholder="Select..."
@@ -289,18 +295,43 @@ function CreateNewListingScreen({navigation}) {
             style={styles.inputText}/>
         <Text style={styles.inputTitle} >Quantity</Text>
         <TextInput
-            onChangeText={val => setQuantity(val)}
-            placeholder=' Quantity'
+            value={quantity}
+            onChangeText={val => setQuantity(val.replace(/\D/,''))}
+            placeholder='Quantity'
             keyboardType='numeric'
             style={styles.inputText}/>
         <Text style={styles.inputTitle} >Expiry Date</Text>
-        <TouchableOpacity
-            style={styles.date}
-            onPress={() => setShowDate(true)}>
-            <Text style={styles.dateText}>{ConvertDate(expiryDate)}</Text>
-        </TouchableOpacity>
         {
-            showDate
+            web
+            &&
+            (
+            <DatePicker
+                selected={new Date(Date.now())}
+                onChange={(val) => setDate(ConvertDate(val))}
+                minDate={Date.now()}
+                dateFormat="dd/MM/yyyy"
+                zIndex={9000}
+                customInput={
+                <TouchableOpacity
+                    style={styles.date}
+                    onPress={() => setShowDate(true)}>
+                    <Text style={styles.dateText}>{expiryDate}</Text>
+                </TouchableOpacity>}/>
+            )
+        }
+        {
+            !web
+            &&
+            (
+                <TouchableOpacity
+                    style={styles.date}
+                    onPress={() => setShowDate(true)}>
+                    <Text style={styles.dateText}>{expiryDate}</Text>
+                </TouchableOpacity>
+            )
+        }
+        {
+            !web && showDate
             &&
             (
                 <DateTimePicker
@@ -308,7 +339,7 @@ function CreateNewListingScreen({navigation}) {
                     dateFormat="day month year"
                     minimumDate={Date.now()}
                     value={new Date(Date.now())}
-                    onChange={(val) => setDate(val)}
+                    onChange={(val) => setDate(ConvertDate(val["nativeEvent"]["timestamp"]))}
                 />
             )
         }
@@ -319,7 +350,7 @@ function CreateNewListingScreen({navigation}) {
             value={collectionMethod}
             setOpen={(val) => collectionOpened(val)}
             setValue={(val) => setCollectionMethod(val)}
-            showArrowIcon={true}
+            showArrowIcon={!web}
             showTickIcon={false}
             zIndex={1000}
             placeholder="Select..."
@@ -351,12 +382,12 @@ const styles = StyleSheet.create({
 	},
   scroll: {
     backgroundColor: Colours.white,
-    marginTop: Gui.screen.height*0.03,
+    marginTop: Gui.screen.height*0.01,
   },
   headerText: {
     textAlign: 'left',
     textAlignVertical: 'center',
-    top: Gui.screen.height*0.02,
+    marginTop: Gui.screen.height*0.02,
     marginLeft: Gui.screen.width*0.1,
     fontSize: Gui.screen.height*0.03,
 		height: Gui.screen.height*0.05,
@@ -490,43 +521,6 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: Gui.screen.height*0.03
 	},
-  inputTextDay: {
-    textAlign: 'left',
-    textAlignVertical: 'center',
-    marginTop: Gui.screen.height*0.005,
-    marginLeft: Gui.screen.width*0.1,
-    fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.2,
-    color: Colours.black,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: Colours.black
-	},
-  inputTextMonth: {
-    textAlign: 'left',
-    textAlignVertical: 'center',
-    marginTop: Gui.screen.height*0.005,
-    fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.2,
-    color: Colours.black,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: Colours.black
-	},
-  inputTextYear: {
-    textAlign: 'left',
-    textAlignVertical: 'center',
-    marginTop: Gui.screen.height*0.005,
-    fontSize: Gui.screen.height*0.03,
-		height: Gui.screen.height*0.05,
-		width: Gui.screen.width*0.4,
-    color: Colours.black,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: Colours.black
-	},
   errorView: {
     flexDirection:'row',
     marginLeft: Gui.screen.width*0.1,
@@ -547,7 +541,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
 	},
   submit: {
-    marginTop: Gui.screen.width*0.1,
+    marginTop: Gui.screen.width*0.05,
     marginLeft: Gui.screen.width*0.1,
     marginBottom: -Gui.screen.height*0.02,        
 		justifyContent: 'center',
@@ -560,7 +554,7 @@ const styles = StyleSheet.create({
 		borderColor: Colours.koha_green,
 	},
   cancel: {
-    marginTop: Gui.screen.width*0.1,
+    marginTop: Gui.screen.width*0.05,
     marginLeft: Gui.screen.width*0.1,
     marginBottom: -Gui.screen.height*0.02,        
 		justifyContent: 'center',

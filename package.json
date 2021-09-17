@@ -25,6 +25,7 @@
     "expo-web-browser": "^9.2.0",
     "firebase": "8.2.3",
     "react": "16.13.1",
+    "react-datepicker": "^3.8.0",
     "react-dom": "16.13.1",
     "react-google-maps": "^9.4.5",
     "react-google-places-autocomplete": "^3.3.2",
