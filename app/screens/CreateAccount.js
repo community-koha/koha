@@ -29,14 +29,7 @@ function CreateAccount({navigation}) {
 
     function setDate(date) {
         setShowDate(false);
-        if (web)
-        {
-            setDob(date);
-        }
-        else
-        {
-            setDob(ConvertDate(date["nativeEvent"]["timestamp"]));
-        }
+        setDob(date);
     }
 
     function SubmitData(name='', dob=0, email='', username='', password='', confirm='') {
@@ -47,7 +40,7 @@ function CreateAccount({navigation}) {
                 setError("Please enter your name");                
                 return false;
 
-            case (dob == 0):
+            case (dob == ""):
                 setError("Please enter your date of birth");
                 return false;
 
@@ -71,7 +64,6 @@ function CreateAccount({navigation}) {
                 setError("Your passwords do not match");
                 return false;
         }
-        dob = ConvertDate(dob)
 
         // TODO
 
@@ -146,7 +138,7 @@ function CreateAccount({navigation}) {
                             dateFormat="day month year"
                             maximumDate={Date.now()}
                             value={new Date(Date.now())}
-                            onChange={(val) => setDate(val)}
+                            onChange={(val) => setDate(ConvertDate(val["nativeEvent"]["timestamp"]))}
                         />
                     )
                 }
