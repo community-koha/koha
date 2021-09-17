@@ -45,7 +45,7 @@ function ListingDetailScreen({route, navigation}){
                             <ListItem.Content>
                                 <ListItem.Title>{item.listingTitle}</ListItem.Title>
                                 <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-                                <ListItem.Subtitle>Location: {item.location}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Location: {item.location["name"]} ({item.location["lat"]},{item.location["lng"]})</ListItem.Subtitle>
                                 <ListItem.Subtitle>Quantity: {item.quantity}</ListItem.Subtitle>
                                 <ListItem.Subtitle>Collection Method: {item.collectionMethod}</ListItem.Subtitle>
                                 <ListItem.Subtitle>Category: {item.category}</ListItem.Subtitle>
