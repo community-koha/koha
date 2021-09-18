@@ -13,6 +13,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as WebBrowser from 'expo-web-browser';
 import firebase from 'firebase/app';
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',
 	authDomain: 'communitykohaapp.firebaseapp.com',

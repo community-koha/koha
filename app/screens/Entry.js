@@ -17,12 +17,12 @@ function Entry({navigation}) {
 				<TouchableOpacity
 					style={[styles.button, styles.loginButton]}
 					onPress={() => navigation.navigate('Login')}>
-					<Text style={styles.loginText}>LOG IN</Text>
+					<Text style={styles.buttonText}>LOG IN</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={[styles.button, styles.signupButton]}
 					onPress={() => navigation.navigate('CreateAccount')}>
-					<Text style={styles.loginText}>CREATE ACCOUNT</Text>
+					<Text style={styles.buttonText}>CREATE ACCOUNT</Text>
 				</TouchableOpacity>	
 			</View>
 		</View>
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
 		width: Gui.button.width,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
-		borderWidth: Gui.button.borderWidth,
 		borderColor: Gui.button.borderColour,
 		borderRadius: Gui.button.borderRadius,
 		marginBottom: Gui.button.spacing
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
 	signupButton: {
 		backgroundColor: Colours.koha_blue
 	},
-	loginText: {
+	buttonText: {
 		fontSize: Gui.button.fontSize,
 		color: Gui.button.textColour
 	},
