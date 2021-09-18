@@ -51,7 +51,7 @@ function Login({ navigation }) {
 			if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
 				navigation.navigate('Nav');
 			} else {
-				navigation.navigate('UserTypeScreen');
+				navigation.navigate('UserType');
 			}
 		}
 	}, [gResponse]);
