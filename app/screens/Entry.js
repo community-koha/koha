@@ -5,26 +5,26 @@ import Gui from '../config/gui.js';
 
 import { View, StyleSheet, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 
-function Home({navigation}) {
+function Entry({navigation}) {
 	return(
 		<View style={styles.container}>
 			<StatusBar backgroundColor={Colours.statusbar} />
 			<Image
 				style={styles.logo}
-				source={require('../assets/home_logo.png')}
+				source={require('../assets/logo.png')}
 			/>
-			<Text style={styles.name}>Community{"\n"}Koha</Text>
 			<View style={styles.buttons}>
 				<TouchableOpacity
-					style={styles.login}
+					style={[styles.button, styles.loginButton]}
 					onPress={() => navigation.navigate('Login')}>
-					<Text style={styles.loginText}>LOG IN</Text>
+					<Text style={styles.buttonText}>LOG IN</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.login}
+					style={[styles.button, styles.signupButton]}
 					onPress={() => navigation.navigate('CreateAccount')}>
-					<Text style={styles.loginText}>CREATE ACCOUNT</Text>
+					<Text style={styles.buttonText}>CREATE ACCOUNT</Text>
 				</TouchableOpacity>	
+				
 			</View>
 		</View>
 	);
@@ -36,37 +36,39 @@ const styles = StyleSheet.create({
 		backgroundColor: Gui.container.backgroundColor,
 		alignItems: 'center',
 	},
+	logo: {
+		resizeMode: 'contain',
+		top: Gui.screen.height*0.18,
+		width: Gui.screen.width*0.6,
+		height: Gui.screen.height*0.3
+	},
 	buttons: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: Gui.screen.height*0.4,
+		top: Gui.screen.height*0.08,
+		height: Gui.screen.height*0.5,
 		width: Gui.screen.width*0.75,
 	},
-	logo: {
-		resizeMode: 'contain',
-		top: Gui.screen.height*0.07,
-		width: Gui.screen.width*0.75,
-		height: Gui.screen.height*0.2
-	},
-	name: {
-		paddingTop: Gui.screen.height*0.175,
-		fontSize: Gui.screen.height*0.06,
-		textAlign: 'center',
-	},
-	login: {
+	button: {
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.button.width,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
-		borderWidth: Gui.button.borderWidth,
-		borderColor: Gui.button.borderColor,
-		marginBottom: Gui.screen.height*0.025,
+		borderColor: Gui.button.borderColour,
+		borderRadius: Gui.button.borderRadius,
+		marginBottom: Gui.button.spacing
 	},
-	loginText: {
+	loginButton: {
+		backgroundColor: Colours.koha_navy
+	},
+	signupButton: {
+		backgroundColor: Colours.koha_blue
+	},
+	buttonText: {
 		fontSize: Gui.button.fontSize,
-		fontWeight: 'bold',
+		color: Gui.button.textColour
 	},
 });
 
-export default Home;
+export default Entry;

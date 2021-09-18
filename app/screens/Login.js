@@ -1,11 +1,19 @@
 import React from 'react';
 
 import Colours from '../config/colours.js';
+import Gui from '../config/gui.js';
 
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import * as Google from 'expo-auth-session/providers/google';
 import { ResponseType } from 'expo-auth-session';
-import { View, StyleSheet, Button, StatusBar } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Text,
+	Image,
+	TouchableOpacity,
+	StatusBar,
+} from 'react-native';
 
 import firebase from 'firebase/app';
 import 'firebase';
@@ -27,7 +35,11 @@ function Login({ navigation }) {
 			const credential =
 				firebase.auth.FacebookAuthProvider.credential(access_token);
 			firebase.auth().signInWithCredential(credential);
-			navigation.navigate('Nav');
+			if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
+				navigation.navigate('Nav');
+			} else {
+				navigation.navigate('UserType');
+			}
 		}
 	}, [fbResponse]);
 
@@ -36,27 +48,38 @@ function Login({ navigation }) {
 			const { id_token } = gResponse.params;
 			const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
 			firebase.auth().signInWithCredential(credential);
-			navigation.navigate('Nav');
+			if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
+				navigation.navigate('Nav');
+			} else {
+				navigation.navigate('UserTypeScreen');
+			}
 		}
 	}, [gResponse]);
 
 	return (
 		<View style={styles.container}>
 			<StatusBar backgroundColor={Colours.statusbar} />
-			<Button
-				disabled={!fbRequest}
-				title="Login with Facebook"
-				onPress={() => {
-					fbPromptAsync();
-				}}
-			/>
-			<Button
-				disabled={!gRequest}
-				title="Login with Google"
-				onPress={() => {
-					gPromptAsync();
-				}}
-			/>
+			<Image style={styles.logo} source={require('../assets/logo.png')} />
+			<View style={styles.buttons}>
+				<TouchableOpacity
+					disabled={!fbRequest}
+					style={[styles.button, styles.fbButton]}
+					onPress={() => {
+						fbPromptAsync();
+					}}
+				>
+					<Text style={styles.buttonText}>LOGIN WITH FACEBOOK</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					disabled={!gRequest}
+					style={[styles.button, styles.googleButton]}
+					onPress={() => {
+						gPromptAsync();
+					}}
+				>
+					<Text style={styles.buttonText}>LOGIN WITH GOOGLE</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
 	);
 }
@@ -64,9 +87,41 @@ function Login({ navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colours.white,
+		backgroundColor: Gui.container.backgroundColor,
 		alignItems: 'center',
+	},
+	logo: {
+		resizeMode: 'contain',
+		top: Gui.screen.height * 0.18,
+		width: Gui.screen.width * 0.6,
+		height: Gui.screen.height * 0.3,
+	},
+	buttons: {
 		justifyContent: 'center',
+		alignItems: 'center',
+		top: Gui.screen.height * 0.08,
+		height: Gui.screen.height * 0.5,
+		width: Gui.screen.width * 0.75,
+	},
+	button: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: Gui.button.width,
+		height: Gui.button.height,
+		borderRadius: Gui.button.borderRadius,
+		borderColor: Gui.button.borderColour,
+		borderRadius: Gui.button.borderRadius,
+		marginBottom: Gui.button.spacing,
+	},
+	fbButton: {
+		backgroundColor: Colours.koha_navy,
+	},
+	googleButton: {
+		backgroundColor: Colours.koha_peach,
+	},
+	buttonText: {
+		fontSize: Gui.button.fontSize,
+		color: Gui.button.textColour,
 	},
 });
 

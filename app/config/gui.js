@@ -11,16 +11,21 @@ export default {
     },
     container:
     {
-        backgroundColor: Colours.white,
+        backgroundColor: Colours.koha_white,
         alignItems: 'center'
     },
     button:
     {
         height: height*0.05,
         width: width*0.75,
-        fontSize: height*0.03,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: Colours.black
+
+        fontSize: height*0.025,
+
+        borderRadius: height*0.012,
+        borderColour: Colours.transparent,
+
+        spacing: height*0.025,
+
+        textColour: Colours.white
     },
 }

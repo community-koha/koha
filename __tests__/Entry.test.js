@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import Home from '../app/screens/Home.js';
+import Entry from '../app/screens/Entry.js';
 
-describe('<Home />', () =>
+describe('<Entry />', () =>
 {
     it("Testing started", () => expect(1).toEqual(1));
     it('Children check', () => 

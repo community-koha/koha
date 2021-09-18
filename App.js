@@ -1,9 +1,10 @@
 import React from 'react';
 
 import NavBar from './app/screens/NavBar';
-import Home from './app/screens/Home';
+import Entry from './app/screens/Entry';
 import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
+import UserTypeScreen from './app/screens/UserTypeScreen';
 import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
@@ -12,6 +13,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as WebBrowser from 'expo-web-browser';
 import firebase from 'firebase/app';
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',
@@ -36,9 +40,14 @@ WebBrowser.maybeCompleteAuthSession();
 
 var routeName;
 if (firebase.auth().currentUser) {
-	routeName = 'Nav';
-} else {
-	routeName = 'Home';
+	if (firebase.auth().currentUser.displayName.substring(1,2) == '|') {
+	routeName = 'UserType'
+	}
+	else {
+		routeName = 'Nav'
+	}
+}  else {
+	routeName = 'Entry';
 }
 
 const Stack = createStackNavigator();
@@ -53,8 +62,8 @@ export default function App() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
-					name="Home"
-					component={Home}
+					name="Entry"
+					component={Entry}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
@@ -70,6 +79,11 @@ export default function App() {
 				<Stack.Screen
 					name="CreateAccount"
 					component={CreateAccount}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="UserType"
+					component={UserTypeScreen}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
