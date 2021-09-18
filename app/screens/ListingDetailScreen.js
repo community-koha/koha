@@ -13,6 +13,7 @@ function ListingDetailScreen({route, navigation}){
     useEffect(() => {
       const subscriber = firebase.firestore()
         .collection('listings')
+        .where(firebase.firestore.FieldPath.documentId(), '==', listingId)
         .onSnapshot(querySnapshot => {
             const listings = [];
       
