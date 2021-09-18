@@ -4,6 +4,7 @@ import NavBar from './app/screens/NavBar';
 import Entry from './app/screens/Entry';
 import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
+import UserTypeScreen from './app/screens/UserTypeScreen';
 import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
@@ -39,8 +40,13 @@ WebBrowser.maybeCompleteAuthSession();
 
 var routeName;
 if (firebase.auth().currentUser) {
-	routeName = 'Nav';
-} else {
+	if (firebase.auth().currentUser.displayName.substring(1,2) == '|') {
+	routeName = 'UserType'
+	}
+	else {
+		routeName = 'Nav'
+	}
+}  else {
 	routeName = 'Entry';
 }
 
@@ -73,6 +79,11 @@ export default function App() {
 				<Stack.Screen
 					name="CreateAccount"
 					component={CreateAccount}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="UserType"
+					component={UserTypeScreen}
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen

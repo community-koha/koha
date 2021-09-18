@@ -24,6 +24,7 @@ function Entry({navigation}) {
 					onPress={() => navigation.navigate('CreateAccount')}>
 					<Text style={styles.buttonText}>CREATE ACCOUNT</Text>
 				</TouchableOpacity>	
+				
 			</View>
 		</View>
 	);
