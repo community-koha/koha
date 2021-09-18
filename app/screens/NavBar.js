@@ -11,7 +11,14 @@ import ListViewScreen from './ListViewScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
-function NavBar() {
+function NavBar({ navigation }) {
+	React.useEffect(
+		() =>
+			navigation.addListener('beforeRemove', (e) => {
+				e.preventDefault();
+			}),
+		[navigation]
+	);
 	return (
 		<Tab.Navigator
 			initialRouteName="Map"
