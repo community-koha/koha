@@ -15,12 +15,13 @@ import * as WebBrowser from 'expo-web-browser';
 import firebase from 'firebase/app';
 
 import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',
 	authDomain: 'communitykohaapp.firebaseapp.com',
-	databaseURL:'https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app',
+	databaseURL:
+		'https://communitykohaapp-default-rtdb.asia-southeast1.firebasedatabase.app',
 	projectId: 'communitykohaapp',
 	storageBucket: 'communitykohaapp.appspot.com',
 	messagingSenderId: '244543529302',
@@ -40,13 +41,12 @@ WebBrowser.maybeCompleteAuthSession();
 
 var routeName;
 if (firebase.auth().currentUser) {
-	if (firebase.auth().currentUser.displayName.substring(1,2) == '|') {
-	routeName = 'UserType'
+	if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
+		routeName = 'UserType';
+	} else {
+		routeName = 'Nav';
 	}
-	else {
-		routeName = 'Nav'
-	}
-}  else {
+} else {
 	routeName = 'Entry';
 }
 

@@ -77,7 +77,7 @@ function ListingDetailScreen({ route, navigation }) {
 				<Button
 					style={styles.button}
 					title="Go Back"
-					onPress={() => navigation.navigate('ListViewScreen')}
+					onPress={() => navigation.goBack()}
 				></Button>
 			</View>
 		</ScrollView>

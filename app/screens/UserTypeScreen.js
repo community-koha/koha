@@ -17,6 +17,13 @@ import {
 } from 'react-native';
 
 function UserTypeScreen({ navigation }) {
+	React.useEffect(
+		() =>
+			navigation.addListener('beforeRemove', (e) => {
+				e.preventDefault();
+			}),
+		[navigation]
+	);
 	return (
 		<View style={styles.container}>
 			<StatusBar backgroundColor={Colours.statusbar} />
