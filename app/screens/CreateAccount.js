@@ -87,7 +87,7 @@ function CreateAccount({navigation}) {
             <View>
                 <Text style={styles.headerText}>CREATE ACCOUNT</Text>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('Entry')}
                     style={styles.backButton}>
                     {icon}
                 </TouchableOpacity>
