@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	StyleSheet,
 	View,
@@ -7,12 +7,10 @@ import {
 	ScrollView,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
 import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
 
-function ListViewScreen() {
-	const navigation = useNavigation();
+function ListViewScreen({navigation}) {
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of users
 

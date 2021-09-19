@@ -1,17 +1,18 @@
 export default {
-	primary: '#336699',
-	active: '#ff8782',
+	default: '#1D1D1D',
 	black: '#000',
 	white: '#fff',
-	statusbar: '#000',
 	red: '#ff0000',
-	placeholder: '#999',
+	grey: '#707070',
 	transparent: '#00000000',
 
 	// Koha brand colors
 	koha_white: '#F6F1F0',
 	koha_green: '#747837',
-	koha_navy: '#4365B5',
-	koha_blue: '#97BED7',
-	koha_peach: '#FFA49D',
+	koha_navy: '#5866B0',
+	koha_lightblue: '#9DB7D2',
+	koha_peach: '#EF4856',
+	koha_yellow: '#D2922C',
+	koha_beige: '#F0E5D7',
+	koha_pink: '#F7A49A'
 };

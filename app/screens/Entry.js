@@ -15,7 +15,7 @@ import {
 function Entry({ navigation }) {
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.statusbar} />
+			<StatusBar backgroundColor={Colours.white} />
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<View style={styles.buttons}>
 				<TouchableOpacity
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_navy,
 	},
 	signupButton: {
-		backgroundColor: Colours.koha_blue,
+		backgroundColor: Colours.koha_lightblue,
 	},
 	buttonText: {
 		fontSize: Gui.button.fontSize,
