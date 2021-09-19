@@ -3,7 +3,7 @@ export default {
 	black: '#000',
 	white: '#fff',
 	red: '#ff0000',
-	placeholder: '#707070',
+	grey: '#707070',
 	transparent: '#00000000',
 
 	// Koha brand colors
