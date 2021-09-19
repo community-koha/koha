@@ -15,14 +15,11 @@ export default {
 	button: {
 		height: height * 0.05,
 		width: width * 0.75,
-
-		fontSize: height * 0.025,
-
+		fontSize: height * 0.018,
+		letterSpacing: 50,
 		borderRadius: height * 0.012,
 		borderColour: Colours.transparent,
-
 		spacing: height * 0.025,
-
 		textColour: Colours.white,
 	},
 };
