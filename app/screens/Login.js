@@ -53,14 +53,14 @@ function Login({ navigation }) {
 			if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
 				navigation.navigate('Nav');
 			} else {
-				navigation.navigate('UserTypeScreen');
+				navigation.navigate('UserType');
 			}
 		}
 	}, [gResponse]);
 
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.statusbar} />
+			<StatusBar backgroundColor={Colours.white} />
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<View style={styles.buttons}>
 				<TouchableOpacity

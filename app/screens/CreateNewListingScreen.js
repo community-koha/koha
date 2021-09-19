@@ -19,7 +19,6 @@ import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 
 import firebase from 'firebase/app';
-import colours from '../config/colours.js';
 
 const GOOGLE_MAP_API_KEY = 'AIzaSyChU1018ckNJc2EiZ1yj9hdhyQSh3w580s';
 
@@ -237,7 +236,7 @@ function CreateNewListingScreen({ navigation }) {
 
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.statusbar} />
+			<StatusBar backgroundColor={Colours.white} />
 			<View>
 				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
 			</View>
@@ -473,70 +472,70 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'top',
 		marginTop: Gui.screen.height * 0.005,
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.025,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.03,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
+		color: Colours.default,
 	},
 	inputTitle: {
 		textAlign: 'left',
 		textAlignVertical: 'top',
 		marginTop: Gui.screen.height * 0.025,
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.025,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.04,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
+		color: Colours.default,
 	},
 	dropDownText: {
 		textAlign: 'left',
 		textAlignVertical: 'center',
-		fontSize: Gui.screen.height * 0.03,
-		backgroundColor: colours.white,
+		fontSize: Gui.screen.height * 0.02,
+		backgroundColor: Colours.white,
 	},
 	dropDownPlaceholderText: {
 		textAlign: 'left',
 		textAlignVertical: 'center',
-		fontSize: Gui.screen.height * 0.03,
-		color: colours.placeholder,
+		fontSize: Gui.screen.height * 0.02,
+		color: Colours.grey,
 	},
 	dropDownBody: {
 		textAlign: 'left',
 		textAlignVertical: 'center',
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
 		width: Gui.screen.width * 0.8,
 	},
 	textInputContainer: {
 		marginLeft: Gui.screen.width * 0.1,
 		height: Gui.screen.height * 0.055,
 		width: Gui.screen.width * 0.8,
-		borderRadius: 3,
+		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 	},
 	textInput: {
 		textAlign: 'left',
 		textAlignVertical: 'top',
-		fontSize: Gui.screen.height * 0.025,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.05,
-		color: Colours.black,
+		color: Colours.default,
 	},
 	listView: {
 		marginTop: 1,
 		marginLeft: Gui.screen.width * 0.1,
 		width: Gui.screen.width * 0.8,
-		borderRadius: 3,
+		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 	},
 	separator: {
 		height: 1,
-		backgroundColor: Colours.placeholder,
+		backgroundColor: Colours.grey,
 	},
 	poweredContainer: {
 		height: Gui.screen.height * 0.045,
-		borderColor: Colours.placeholder,
+		borderColor: Colours.grey,
 		borderTopWidth: 1,
 	},
 	powered: {
@@ -555,42 +554,45 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 		textAlignVertical: 'center',
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
-		borderRadius: 3,
+		color: Colours.default,
+		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
+		padding: 10,
 	},
 	inputTextDescription: {
 		textAlign: 'left',
 		textAlignVertical: 'top',
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.15,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
-		borderRadius: 3,
+		color: Colours.default,
+		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
+		padding: 10,
 	},
 	date: {
 		textAlign: 'left',
 		textAlignVertical: 'center',
 		marginTop: Gui.screen.height * 0.005,
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
-		borderRadius: 3,
+		color: Colours.default,
+		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 		fontWeight: 'normal',
+		padding: 10,
 	},
 	dateText: {
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
 	},
 	errorView: {
 		flexDirection: 'row',
@@ -614,7 +616,7 @@ const styles = StyleSheet.create({
 	submit: {
 		marginTop: Gui.screen.width * 0.05,
 		marginLeft: Gui.screen.width * 0.1,
-		marginBottom: -Gui.screen.height * 0.02,
+		marginBottom: -Gui.screen.height * 0.03,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.8,
@@ -625,9 +627,9 @@ const styles = StyleSheet.create({
 		borderColor: Colours.koha_green,
 	},
 	cancel: {
-		marginTop: Gui.screen.width * 0.05,
+		marginTop: Gui.screen.width * 0.03,
 		marginLeft: Gui.screen.width * 0.1,
-		marginBottom: -Gui.screen.height * 0.02,
+		marginBottom: -Gui.screen.height * 0.05,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.8,

@@ -105,7 +105,7 @@ function CreateAccount({ navigation }) {
 		<MaterialCommunityIcons
 			name="arrow-left"
 			size={Gui.screen.height * 0.05}
-			color={Colours.black}
+			color={Colours.default}
 			style={styles.headerIcon}
 		/>
 	);
@@ -115,7 +115,7 @@ function CreateAccount({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.statusbar} />
+			<StatusBar backgroundColor={Colours.white} />
 			<View>
 				<Text style={styles.headerText}>CREATE ACCOUNT</Text>
 				<TouchableOpacity
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.025,
 		height: Gui.screen.height * 0.03,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
+		color: Colours.default,
 	},
 	inputText: {
 		textAlign: 'left',
@@ -273,10 +273,10 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
+		color: Colours.default,
 		borderRadius: 3,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 	},
 	date: {
 		textAlign: 'left',
@@ -286,10 +286,10 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 0.8,
-		color: Colours.black,
+		color: Colours.default,
 		borderRadius: 3,
 		borderWidth: 1,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 		fontWeight: 'normal',
 	},
 	dateText: {
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
 		height: Gui.screen.height * 0.075,
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: Gui.button.borderWidth,
-		borderColor: Colours.black,
+		borderColor: Colours.default,
 	},
 	submitText: {
 		fontSize: Gui.button.fontSize,
