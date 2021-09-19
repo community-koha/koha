@@ -1,15 +1,19 @@
 import React from 'react';
 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { Button } from 'react-native-elements';
 
 import Colours from '../config/colours.js';
 
 import MapViewScreen from './MapViewScreen';
 import CreateNewListingScreen from './CreateNewListingScreen';
 import ListViewScreen from './ListViewScreen';
+import Notification from './Notification.js';
+import Profile from './Profile.js';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 function NavBar({ navigation }) {
 	React.useEffect(
@@ -20,51 +24,70 @@ function NavBar({ navigation }) {
 		[navigation]
 	);
 	return (
+		
 		<Tab.Navigator
-			initialRouteName="Map"
-			activeColor={Colours.active}
-			labelStyle={{ fontSize: 12 }}
-			style={{ backgroundColor: Colours.black }}
+			initialRouteName="Map View"
+			screenOptions={{
+				tabBarActiveTintColor: Colours.default,
+				tabBarInactiveTintColor: Colours.grey,
+				tabBarStyle: { position: 'absolute', backgroundColor: Colours.koha_beige, padding: 10 },
+				
+			}}
 		>
+			
 			<Tab.Screen
-				name="Map"
+				name="Map View"
 				component={MapViewScreen}
 				options={{
-					tabBarLabel: 'Area Map',
-					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="map" color={color} size={26} />
+					tabBarLabel: 'Map View',
+					tabBarIcon: ({color}) => (
+						<MaterialCommunityIcons name="map-search-outline" size={24} color={color} />
 					),
 				}}
 			/>
 			<Tab.Screen
-				name="Listings"
+				name="List View"
 				component={ListViewScreen}
 				options={{
-					tabBarLabel: 'Listings',
+					tabBarLabel: 'List View',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons
-							name="bulletin-board"
-							color={color}
-							size={26}
-						/>
+						<MaterialCommunityIcons name="view-list-outline" size={24} color={color} />
 					),
 				}}
 			/>
 			<Tab.Screen
-				name="Create"
+				name="Create New Listing"
 				component={CreateNewListingScreen}
 				options={{
 					tabBarLabel: 'New Listing',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons
-							name="tag-plus-outline"
-							color={color}
-							size={26}
-						/>
+						<MaterialCommunityIcons name="plus-circle-outline" size={24} color={color} />
+					),
+				}}
+			/>
+			
+			<Tab.Screen
+				name="Notification"
+				component={Notification}
+				options={{
+					tabBarLabel: 'Notification',
+					tabBarIcon: ({ color }) => (
+						<MaterialCommunityIcons name="bell-outline" size={24} color={color} />
+					),
+				}}
+			/>
+			<Tab.Screen
+				name="Profile"
+				component={Profile}
+				options={{
+					tabBarLabel: 'Profile',
+					tabBarIcon: ({ color }) => (
+						<MaterialCommunityIcons name="account-circle-outline" size={24} color={color} />
 					),
 				}}
 			/>
 		</Tab.Navigator>
+		
 	);
 }
 
