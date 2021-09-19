@@ -20,7 +20,7 @@ import Gui from '../config/gui.js';
 
 import firebase from 'firebase/app';
 
-const GOOGLE_MAP_API_KEY = 'AIzaSyChU1018ckNJc2EiZ1yj9hdhyQSh3w580s';
+const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
 	userType,
