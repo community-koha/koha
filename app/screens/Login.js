@@ -19,11 +19,11 @@ import firebase from 'firebase/app';
 import 'firebase';
 
 function Login({ navigation }) {
-	useProxy = true;
+	// useProxy = true;
 	const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
 		clientId: '388216366196238',
 		responseType: ResponseType.Token,
-		redirectUri: 'https://auth.expo.io/@needsadjustment/koha',
+		// redirectUri: 'https://auth.expo.io/@needsadjustment/koha',
 	});
 
 	const [gRequest, gResponse, gPromptAsync] = Google.useIdTokenAuthRequest({
@@ -67,7 +67,8 @@ function Login({ navigation }) {
 					disabled={!fbRequest}
 					style={[styles.button, styles.fbButton]}
 					onPress={() => {
-						fbPromptAsync({ useProxy });
+						fbPromptAsync();
+						// fbPromptAsync({ useProxy });
 					}}
 				>
 					<Text style={styles.buttonText}>LOGIN WITH FACEBOOK</Text>
