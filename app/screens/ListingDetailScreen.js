@@ -42,8 +42,9 @@ function ListingDetailScreen({ route, navigation }) {
 	}, [listingId]);
 
 	return (
-		<ScrollView>
-			<View style={styles.container}>
+		<View style={styles.container}>
+			<ScrollView>
+			
 				{loading && <ActivityIndicator />}
 				{!loading &&
 					listings.map((item, i) => {
@@ -72,22 +73,24 @@ function ListingDetailScreen({ route, navigation }) {
 							</ListItem>
 						);
 					})}
-			</View>
-			<View>
+			
+			
 				<Button
 					style={styles.button}
 					title="Go Back"
 					onPress={() => navigation.goBack()}
 				></Button>
-			</View>
-		</ScrollView>
+			
+			</ScrollView>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingBottom: 22,
+		paddingTop: '10%',
+		paddingBottom: '5%'
 	},
 	button: {
 		height: 45,

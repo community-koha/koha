@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_navy,
 	},
 	donatingButton: {
-		backgroundColor: Colours.koha_blue,
+		backgroundColor: Colours.koha_lightblue,
 	},
 	buttonText: {
 		fontSize: Gui.button.fontSize,

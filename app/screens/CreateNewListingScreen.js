@@ -167,7 +167,7 @@ function CreateNewListingScreen({ navigation }) {
 
 	function GoBack() {
 		// Go back to the map page
-		navigation.navigate('Map');
+		navigation.goBack();
 	}
 
 	function CheckInput(
@@ -449,6 +449,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
+		paddingBottom: '10%',
 	},
 	scroll: {
 		backgroundColor: Colours.white,
@@ -480,7 +481,7 @@ const styles = StyleSheet.create({
 	inputTitle: {
 		textAlign: 'left',
 		textAlignVertical: 'top',
-		marginTop: Gui.screen.height * 0.025,
+		marginTop: Gui.screen.height * 0.05,
 		marginLeft: Gui.screen.width * 0.1,
 		fontSize: Gui.screen.height * 0.02,
 		height: Gui.screen.height * 0.04,
@@ -614,9 +615,9 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 	},
 	submit: {
-		marginTop: Gui.screen.width * 0.05,
+		marginTop: Gui.screen.width * 0.1,
 		marginLeft: Gui.screen.width * 0.1,
-		marginBottom: -Gui.screen.height * 0.03,
+		marginBottom: Gui.screen.height * 0.02,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.8,
@@ -629,7 +630,7 @@ const styles = StyleSheet.create({
 	cancel: {
 		marginTop: Gui.screen.width * 0.03,
 		marginLeft: Gui.screen.width * 0.1,
-		marginBottom: -Gui.screen.height * 0.05,
+		marginBottom: Gui.screen.height * 0.05,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.8,
@@ -649,7 +650,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	end: {
-		height: Gui.screen.height * 0.0375,
+		height: '5%',
 	},
 });
 
