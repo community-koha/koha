@@ -145,7 +145,6 @@ function Login({ navigation }) {
 				}
 			})
 			firebase.auth().signInWithCredential(credential);
-			authChecker();
 		}
 		else
 		{
@@ -216,6 +215,7 @@ function Login({ navigation }) {
 								value={modalResetText}
 								placeholder="Email Address"
 								autoCompleteType='email'
+								keyboardType="email-address"
 								style={[styles.inputText, styles.modalResetInput]}
 							/>
 							<TouchableOpacity
@@ -244,6 +244,7 @@ function Login({ navigation }) {
 								onChangeText={(val) => {setEmail(val)}}
 								placeholder="Email Address"
 								autoCompleteType='email'
+								keyboardType="email-address"
 								style={styles.inputText}
 							/>
 							<TextInput
