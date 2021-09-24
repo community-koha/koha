@@ -153,7 +153,7 @@ function CreateAccount({ navigation }) {
 				animationType="slide"
 				transparent={true}
 				visible={modalVisible}
-				onRequestClose={() => {setModalResetVisible(false)}}>
+				onRequestClose={() => {setModalVisible(false)}}>
 				<View style={styles.modalCenter}>
 					<View style={styles.modalView}>
 						<View style={styles.modalViewText}>
