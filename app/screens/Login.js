@@ -29,9 +29,35 @@ function Login({ navigation }) {
 	const [submitted, setSubmitted] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalText, setModalText] = useState('');
+	const [modalResetVisible, setModalResetVisible] = useState(false);
+	const [modalResetText, setModalResetText] = useState('');
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+
+	function resetPasswordDialog()
+	{
+		setModalResetText('')
+		setModalResetVisible(true)
+		return true;
+	}
+
+	function resetPassword(resetEmail='')
+	{
+		setModalResetText('')
+		setModalResetVisible(false)
+
+		// Only send reset email to an actual email address
+		if (resetEmail != "" && resetEmail.indexOf('@') > -1)
+		{
+			firebase.auth().sendPasswordResetEmail(resetEmail).then(() => {}).catch(() => {});
+		}
+		
+		// Don't inform the user if it's successful or not
+		setModalText("A password reset request has been sent to '" + resetEmail + "'")
+		setModalVisible(true)
+		return true;
+	}
 
 	function login(email='', password='')
 	{
@@ -88,6 +114,8 @@ function Login({ navigation }) {
 
 		return true;
 	}
+
+
 	// useProxy = true;
 	const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
 		clientId: '388216366196238',
@@ -158,7 +186,7 @@ function Login({ navigation }) {
 					animationType="slide"
 					transparent={true}
 					visible={modalVisible}
-					onRequestClose={() => {setSubmitted(false)}}>
+					onRequestClose={() => {setModalVisible(false)}}>
 					<View style={styles.modalCenter}>
 						<View style={styles.modalView}>
 							<View style={styles.modalViewText}>
@@ -166,8 +194,34 @@ function Login({ navigation }) {
 							</View>
 							<TouchableOpacity
 								style={[styles.modalButton]}
-								onPress={() => { setModalVisible(false);}}>
+								onPress={() => { setModalVisible(false)}}>
 								<Text style={styles.modalButtonText}>OK</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</Modal>
+				<Modal
+					animationType="slide"
+					transparent={true}
+					visible={modalResetVisible}
+					onRequestClose={() => {setModalResetVisible(false)}}>
+					<TouchableOpacity
+						style={[styles.modalButton, styles.modalFullScreen]}
+						onPress={() => { setModalResetVisible(false);}}/>
+					<View style={styles.modalResetCenter}>
+						<View style={[styles.modalView, styles.modalResetView]}>
+							<Text style={[styles.modalText, styles.modalResetTitle]}>Account Email Address</Text>
+							<TextInput
+								onChangeText={(val) => {setModalResetText(val)}}
+								value={modalResetText}
+								placeholder="Email Address"
+								autoCompleteType='email'
+								style={[styles.inputText, styles.modalResetInput]}
+							/>
+							<TouchableOpacity
+								style={[styles.modalButton, styles.modalResetButton]}
+								onPress={() => { resetPassword(modalResetText);}}>
+								<Text style={styles.modalButtonText}>RESET PASSWORD</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -203,6 +257,11 @@ function Login({ navigation }) {
 								style={[styles.button, styles.loginButton]}
 								onPress={() => {login(email, password);}}>
 								<Text style={styles.buttonText}>LOGIN WITH EMAIL</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[styles.button, styles.resetPasswordButton]}
+								onPress={() => {resetPasswordDialog();}}>
+								<Text style={styles.buttonText}>FORGOT PASSWORD</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								disabled={!fbRequest}
@@ -276,6 +335,7 @@ const styles = StyleSheet.create({
 		marginBottom: gui.screen.height * 0
 	},
 	buttonText: {
+		textAlign: 'center',
 		fontSize: Gui.button.fontSize,
 		color: Gui.button.textColour,
 		fontWeight: 'bold',
@@ -291,15 +351,35 @@ const styles = StyleSheet.create({
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: 1,
 		borderColor: Colours.default,
-	},
+	},	
 	loginButton: {
+		width: Gui.button.width * 0.65,
 		backgroundColor: Colours.grey,
 		marginBottom: gui.screen.height * 0.05
+	},
+	resetPasswordButton: {
+		width: Gui.button.width * 0.325,
+		backgroundColor: Colours.koha_navy,
+		marginTop: -gui.screen.height * 0.1,
+		marginBottom: gui.screen.height * 0.05,
+		marginLeft: gui.screen.width * 0.5,
 	},
 	modalCenter: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	modalResetCenter: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: -Gui.screen.height * 1,
+	},
+	modalFullScreen: {
+		width: Gui.screen.width * 1,
+		height: Gui.screen.height * 1,
+		backgroundColor: Colours.transparent,
+		borderWidth: 0
 	},
 	modalView: {
 		backgroundColor: Colours.white,
@@ -319,15 +399,29 @@ const styles = StyleSheet.create({
 		shadowRadius: 16.00,
 		elevation: 24,
 	},
+	modalResetView: {
+		//justifyContent: 'normal',
+		height: Gui.screen.height * 0.275
+	},
 	modalViewText: {
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
 		height: (Gui.screen.height * 0.275) * 0.66,
-	},
+	},	
 	modalText: {		
 		textAlign: 'center',
 		fontWeight: 'bold',
 		fontSize: (Gui.screen.height * 0.275) * 0.1
+	},
+	modalResetTitle: {
+		fontSize: (Gui.screen.height * 0.275) * 0.125
+	},
+	modalResetInput: {
+		marginTop: (Gui.screen.height * 0.275) * 0.1,
+	},
+	modalResetButton: {
+		marginTop: (Gui.screen.height * 0.275) * 0.1,
+		width: Gui.screen.width * 0.65,
 	},
 	modalButton: {
 		justifyContent: 'center',
