@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import MapView, { Callout, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import Colours from '../config/colours.js';
@@ -15,13 +15,11 @@ function NotifScreen() {
 	);
 }
 
-function MapViewScreen() {
+const MapViewScreen = () => {
 	// states and modifiers
-	const [mapRegion, setRegion] = useState(null);
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
-	const [loading, setLoading] = useState(true); // Set loading to true on component mount
-	const [listings, setListings] = useState([]); // Initial empty array of users
-
+	const [mapRegion, setRegion] = useState(null);
+	
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -48,19 +46,13 @@ function MapViewScreen() {
 		if (hasLocationPermissions === false) {
 			getLocationAsync();
 		}
-	});
+		
+		return () => getLocationAsync();
+		
+	}, []);
 
-	if (hasLocationPermissions === false) {
-		global.e = 'Error: Please Enable Location Permissions';
-		return <NotifScreen />;
-	}
-
-	if (mapRegion === null) {
-		global.e = 'Loading Local Area';
-		return <NotifScreen />;
-	}
-
-
+	const [loading, setLoading] = useState(true); // Set loading to true on component mount
+	const [listings, setListings] = useState([]); // Initial empty array of users
 	//subscribe from firestore
 	useEffect(() => {
 		const subscriber = firebase
@@ -84,13 +76,48 @@ function MapViewScreen() {
 		return () => subscriber();
 	}, []);
 
+	if (hasLocationPermissions === false) {
+		global.e = 'Error: Please Enable Location Permissions';
+		return <NotifScreen />;
+	}
+
+	if (mapRegion === null) {
+		global.e = 'Loading Local Area';
+		return <NotifScreen />;
+	}
+
 	if (loading) {
 		return <ActivityIndicator />;
 	}
 
 	return (
 		<MapView style={styles.map} region={mapRegion}>
+			<Marker
+				
+				coordinate={{
+					latitude: -37.7825893,
+					longitude: 175.2527624
+				}}
+				title= "Item Test"
+				description="Test"
+
+			/>
 			
+			{/* {listings.map((item, i) => {
+				return(
+					<Marker
+						key={i}
+						coordinate={{
+							latitude: item.location.lat,
+							longitude: item.location.lng
+						}}
+						title={item.listingTitle}
+						description={item.description}
+
+					/>
+						
+				);
+			})} */}
 		</MapView>);
 }
 
