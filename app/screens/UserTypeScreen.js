@@ -26,7 +26,7 @@ function UserTypeScreen({ navigation }) {
 	);
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} />
+			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<Text style={styles.text}>I am:</Text>
 			<View style={styles.buttons}>
@@ -65,6 +65,15 @@ function UserTypeScreen({ navigation }) {
 					}}
 				>
 					<Text style={styles.buttonText}>DONATING AS A BUSINESS</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={[styles.button, styles.backButton]}
+					onPress={() => {
+						firebase.auth().signOut();
+						navigation.navigate('Entry');
+					}}
+				>
+					<Text style={styles.buttonText}>BACK</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -111,6 +120,9 @@ const styles = StyleSheet.create({
 	},
 	donatingButton: {
 		backgroundColor: Colours.koha_lightblue,
+	},
+	backButton: {
+		backgroundColor: Colours.koha_peach,
 	},
 	buttonText: {
 		fontSize: Gui.button.fontSize,
