@@ -92,18 +92,7 @@ const MapViewScreen = () => {
 
 	return (
 		<MapView style={styles.map} region={mapRegion}>
-			<Marker
-				
-				coordinate={{
-					latitude: -37.7825893,
-					longitude: 175.2527624
-				}}
-				title= "Item Test"
-				description="Test"
-
-			/>
-			
-			{/* {listings.map((item, i) => {
+			{listings.map((item, i) => {
 				return(
 					<Marker
 						key={i}
@@ -113,11 +102,9 @@ const MapViewScreen = () => {
 						}}
 						title={item.listingTitle}
 						description={item.description}
-
 					/>
-						
 				);
-			})} */}
+			})}
 		</MapView>);
 }
 
