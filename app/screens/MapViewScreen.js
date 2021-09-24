@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import Colours from '../config/colours.js';
+import firebase from 'firebase/app';
 
 // generic notif view
 function NotifScreen() {
@@ -18,6 +19,8 @@ function MapViewScreen() {
 	// states and modifiers
 	const [mapRegion, setRegion] = useState(null);
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
+	const [loading, setLoading] = useState(true); // Set loading to true on component mount
+	const [listings, setListings] = useState([]); // Initial empty array of users
 
 	// do after render
 	useEffect(() => {
@@ -57,7 +60,38 @@ function MapViewScreen() {
 		return <NotifScreen />;
 	}
 
-	return <MapView style={styles.map} region={mapRegion}></MapView>;
+
+	//subscribe from firestore
+	useEffect(() => {
+		const subscriber = firebase
+			.firestore()
+			.collection('listings')
+			.onSnapshot((querySnapshot) => {
+				const listings = [];
+
+				querySnapshot.forEach((documentSnapshot) => {
+					listings.push({
+						...documentSnapshot.data(),
+						key: documentSnapshot.id,
+					});
+				});
+
+				setListings(listings);
+				setLoading(false);
+			});
+
+		// Unsubscribe from events when no longer in use
+		return () => subscriber();
+	}, []);
+
+	if (loading) {
+		return <ActivityIndicator />;
+	}
+
+	return (
+		<MapView style={styles.map} region={mapRegion}>
+			
+		</MapView>);
 }
 
 const styles = StyleSheet.create({
