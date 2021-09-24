@@ -2,8 +2,10 @@ import React from 'react';
 
 import NavBar from './app/screens/NavBar';
 import Entry from './app/screens/Entry';
+import Splash from './app/screens/Splash';
 import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
+import VerifyEmail from './app/screens/VerifyEmail';
 import UserTypeScreen from './app/screens/UserTypeScreen';
 import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
@@ -36,65 +38,69 @@ if (!firebase.apps.length) {
 	firebase.app(); // if already initialized, use that one
 }
 
+var unsubscribe = firebase.auth().onAuthStateChanged(user =>
+{
+	console.log(user ? 'User is logged in' : 'User is logged out')
+	global.user = user
+})
+
 // For OAuth
 WebBrowser.maybeCompleteAuthSession();
 
-var routeName;
-if (firebase.auth().currentUser) {
-	if (firebase.auth().currentUser.displayName.substring(1, 2) == '|') {
-		routeName = 'UserType';
-	} else {
-		routeName = 'Nav';
-	}
-} else {
-	routeName = 'Entry';
-}
+// For fading the splash screen
+const forFade = ({ current }) => ({
+	cardStyle: {
+		opacity: current.progress,
+	},
+});
 
 const Stack = createStackNavigator();
-
 export default function App() {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator initialRouteName={routeName}>
+			<Stack.Navigator
+			initialRouteName='Splash'
+			screenOptions={{ headerShown: false }}>				
 				<Stack.Screen
-					name="Nav"
-					component={NavBar}
-					options={{ headerShown: false }}
+					name="Splash"
+					component={Splash}
+					options={{ cardStyleInterpolator: forFade }}
 				/>
 				<Stack.Screen
 					name="Entry"
 					component={Entry}
-					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="Nav"
+					component={NavBar}
 				/>
 				<Stack.Screen
 					name="Map"
 					component={MapViewScreen}
-					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
 					name="Login"
 					component={Login}
-					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
 					name="CreateAccount"
 					component={CreateAccount}
-					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="VerifyEmail"
+					component={VerifyEmail}
 				/>
 				<Stack.Screen
 					name="UserType"
 					component={UserTypeScreen}
-					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
 					name="ListViewScreen"
 					component={ListViewScreen}
-					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
 					name="ListingDetailScreen"
 					component={ListingDetailScreen}
-					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>

@@ -15,7 +15,7 @@ import {
 function Entry({ navigation }) {
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} />
+			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<View style={styles.buttons}>
 				<TouchableOpacity

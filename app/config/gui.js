@@ -19,7 +19,7 @@ export default {
 		letterSpacing: 50,
 		borderRadius: height * 0.012,
 		borderColour: Colours.transparent,
-		spacing: height * 0.025,
+		spacing: height * 0.01,
 		textColour: Colours.white,
 	},
 };

@@ -37,7 +37,7 @@ function ListViewScreen({navigation}) {
 	}, []);
 
 	if (loading) {
-		return <ActivityIndicator />;
+		return <ActivityIndicator size="small" color={Colours.activityIndicator}/>;
 	}
 	return (
 		<View style={styles.container}>

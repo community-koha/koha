@@ -5,6 +5,7 @@ export default {
 	red: '#ff0000',
 	grey: '#707070',
 	transparent: '#00000000',
+	activityIndicator: '#5866B0',
 
 	// Koha brand colors
 	koha_white: '#F6F1F0',
