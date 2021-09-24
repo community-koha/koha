@@ -236,7 +236,7 @@ function CreateNewListingScreen({ navigation }) {
 
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.white} />
+			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<View>
 				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
 			</View>
@@ -309,7 +309,7 @@ function CreateNewListingScreen({ navigation }) {
 					}}
 					requestUrl={{
 						useOnPlatform: 'web',
-						url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
+						url: 'https://thingproxy.freeboard.io/fetch/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
 					}}
 					styles={{
 						textInputContainer: styles.textInputContainer,

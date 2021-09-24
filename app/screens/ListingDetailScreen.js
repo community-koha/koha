@@ -45,7 +45,7 @@ function ListingDetailScreen({ route, navigation }) {
 		<View style={styles.container}>
 			<ScrollView>
 			
-				{loading && <ActivityIndicator />}
+				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
 				{!loading &&
 					listings.map((item, i) => {
 						return (
