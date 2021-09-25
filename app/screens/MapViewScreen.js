@@ -15,7 +15,7 @@ function NotifScreen() {
 	);
 }
 
-const MapViewScreen = () => {
+function MapViewScreen() {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
@@ -94,15 +94,15 @@ const MapViewScreen = () => {
 		<MapView style={styles.map} region={mapRegion}>
 			{listings.map((item, i) => {
 				return(
-					<Marker
+					<MapView.Marker
 						key={i}
 						coordinate={{
 							latitude: item.location.lat,
 							longitude: item.location.lng
 						}}
 						title={item.listingTitle}
-						description={item.description}
-					/>
+						description={item.description}>
+					</MapView.Marker>
 				);
 			})}
 		</MapView>);
