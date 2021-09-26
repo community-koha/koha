@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Stylesheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 
-function NewEssentialListing(){
+function NewEssentialListing({navigation}){
 
     return(
-        <View>New Essential Listing</View>
+        <View style={styles.container}>
+            <Text>New Essential Listing</Text>
+            <Button title="Back" onPress={()=>navigation.navigate("GiveKoha")}/>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center'
+    }
 })
 
 export default NewEssentialListing;

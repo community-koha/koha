@@ -9,10 +9,10 @@ function GiveKoha({navigation}){
         <View style={styles.container}>
             <View style={styles.buttonContainer}>
                 <Button title="Food" onPress={()=>navigation.navigate("NewFoodListing")}/>
-                <Button title="Essentials"/>
+                <Button title="Essentials" onPress={()=>navigation.navigate("NewEssentialListing")}/>
                 {/* Below buttons to be hidden for individual */}
-                <Button title="Event"/>
-                <Button title="Services"/>
+                <Button title="Event" onPress={()=>navigation.navigate("NewEventListing")}/>
+                <Button title="Services" onPress={()=>navigation.navigate("NewServiceListing")}/>
             </View>
         </View>
     )

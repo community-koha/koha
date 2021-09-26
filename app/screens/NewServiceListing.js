@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Stylesheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 
-function NewServiceListing(){
+function NewServiceListing({navigation}){
 
     return(
-        <View>New Service Listing</View>
+        <View style={styles.container}>
+            <Text>New Service Listing</Text>
+            <Button title="Back" onPress={()=>navigation.navigate("GiveKoha")}/>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center'
+    }
 })
 
 export default NewServiceListing;
