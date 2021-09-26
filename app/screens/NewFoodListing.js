@@ -47,7 +47,7 @@ function SubmitForm(
 	});
 }
 
-function CreateNewListingScreen({ navigation }) {
+function NewFoodListing({ navigation }) {
 	// This warning can be ignored since our lists are small
 	useEffect(() => {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -614,4 +614,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default CreateNewListingScreen;
+export default NewFoodListing;
