@@ -8,10 +8,14 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Platform,
+	Button,
+	Image,
+	ActivityIndicator
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import * as ImagePicker from 'expo-image-picker';
 import { LogBox } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -29,10 +33,10 @@ function SubmitForm(
 	description,
 	location,
 	category,
-	subCategory,
 	quantity,
 	expiryDate,
-	collectionMethod
+	collectionMethod,
+	imageUrl
 ) {
 	const dbh = firebase.firestore();
 	dbh.collection('listings').add({
@@ -42,14 +46,14 @@ function SubmitForm(
 		description: description,
 		location: location,
 		category: category,
-		subCategory: subCategory,
 		quantity: quantity,
 		expiryDate: expiryDate,
 		collectionMethod: collectionMethod,
+		image: imageUrl
 	});
 }
 
-function CreateNewListingScreen({ navigation }) {
+function NewFoodListing({ navigation }) {
 	// This warning can be ignored since our lists are small
 	useEffect(() => {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -62,16 +66,15 @@ function CreateNewListingScreen({ navigation }) {
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [category, setCategory] = useState(null);
-	const [subcategory, setSubcategory] = useState(null);
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
+	const [imageUrl, setImageUrl] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
 	const [openUserType, setOpenUserType] = useState(false);
 	const [openDonationType, setOpenDonationType] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
-	const [openSubcategoryType, setOpenSubcategoryType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
 	const [typeUserItems, setUserTypeItems] = useState([
@@ -96,12 +99,6 @@ function CreateNewListingScreen({ navigation }) {
 		{ value: 'clothing', label: 'Clothing' },
 		{ value: 'misc', label: 'Miscellaneous' },
 	]);
-	const [subcategoryItems, setSubcategoryItems] = useState([
-		{ value: '01', label: 'Subcategory #1' },
-		{ value: '02', label: 'Subcategory #2' },
-		{ value: '03', label: 'Subcategory #3' },
-		{ value: '04', label: 'Subcategory #4' },
-	]);
 	const [collectionItems, setCollectionItems] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
@@ -111,35 +108,24 @@ function CreateNewListingScreen({ navigation }) {
 		setOpenUserType(val);
 		setOpenDonationType(false);
 		setOpenCategoryType(false);
-		setOpenSubcategoryType(false);
 		setOpenCollectionType(false);
 	}
 	function donationTypeOpened(val) {
 		setOpenUserType(false);
 		setOpenDonationType(val);
 		setOpenCategoryType(false);
-		setOpenSubcategoryType(false);
 		setOpenCollectionType(false);
 	}
 	function categoryOpened(val) {
 		setOpenUserType(false);
 		setOpenDonationType(false);
 		setOpenCategoryType(val);
-		setOpenSubcategoryType(false);
-		setOpenCollectionType(false);
-	}
-	function subcategoryOpened(val) {
-		setOpenUserType(false);
-		setOpenDonationType(false);
-		setOpenCategoryType(false);
-		setOpenSubcategoryType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
 		setOpenUserType(false);
 		setOpenDonationType(false);
 		setOpenCategoryType(false);
-		setOpenSubcategoryType(false);
 		setOpenCollectionType(val);
 	}
 
@@ -177,10 +163,10 @@ function CreateNewListingScreen({ navigation }) {
 		description,
 		location,
 		category,
-		subCategory,
 		quantity,
 		expiryDate,
-		collectionMethod
+		collectionMethod,
+		imageUrl
 	) {
 		console.log('');
 		console.log('Checking');
@@ -227,11 +213,84 @@ function CreateNewListingScreen({ navigation }) {
 			description,
 			location,
 			category,
-			subCategory,
 			quantity,
 			expiryDate,
-			collectionMethod
+			collectionMethod,
+			imageUrl
 		);
+	}
+
+	const [image, setImage] = useState(null);
+	const [uploading, setUploading] = useState(false);
+	
+
+	useEffect(() => {
+		(async () => {
+		if (Platform.OS !== 'web') {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+			alert('Sorry, we need camera roll permissions to make this work!');
+			}
+		}
+		})();
+	}, []);
+
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+		mediaTypes: ImagePicker.MediaTypeOptions.All,
+		allowsEditing: true,
+		aspect: [4, 3],
+		quality: 1,
+		});
+
+		console.log(result);
+
+		if (!result.cancelled) {
+		setImage(result.uri);
+		}
+	};
+
+	const uploadImage = async () =>{
+		const blob = await new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+			  resolve(xhr.response);
+			};
+			xhr.onerror = function() {
+			  reject(new TypeError('Network request failed'));
+			};
+			xhr.responseType = 'blob';
+			xhr.open('GET', image, true);
+			xhr.send(null);
+		});
+		 
+		const ref = firebase.storage().ref().child(new Date().toISOString())
+		const snapshot = ref.put(blob)
+
+		snapshot.on(
+			firebase.storage.TaskEvent.STATE_CHANGED,
+			()=>{
+				setUploading(true)
+			},
+
+			(error) => {
+				setUploading(false)
+				console.log(error);
+				blob.close
+				return
+			},
+
+			() => {
+				snapshot.snapshot.ref.getDownloadURL().then((data)=>{
+					setImageUrl(JSON.stringify(data));
+					setUploading(false)
+					console.log("Upload successful");
+					console.log("Download URL", JSON.stringify(data));
+					blob.close
+					return data;
+				});
+			}
+		)
 	}
 
 	return (
@@ -340,22 +399,6 @@ function CreateNewListingScreen({ navigation }) {
 					textStyle={styles.dropDownText}
 					style={styles.inputText}
 				/>
-				<Text style={styles.inputTitle}>Listing Subcategory</Text>
-				<DropDownPicker
-					open={openSubcategoryType}
-					items={subcategoryItems}
-					value={subcategory}
-					setOpen={(val) => subcategoryOpened(val)}
-					setValue={(val) => setSubcategory(val)}
-					showArrowIcon={!web}
-					showTickIcon={false}
-					zIndex={2000}
-					placeholder="Select..."
-					placeholderStyle={styles.dropDownPlaceholderText}
-					dropDownContainerStyle={styles.dropDownBody}
-					textStyle={styles.dropDownText}
-					style={styles.inputText}
-				/>
 				<Text style={styles.inputTitle}>Quantity</Text>
 				<TextInput
 					value={quantity}
@@ -417,6 +460,12 @@ function CreateNewListingScreen({ navigation }) {
 					textStyle={styles.dropDownText}
 					style={styles.inputText}
 				/>
+
+				<Button title="Choose photo" onPress={pickImage}/>
+				{image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }}  />}
+				{!uploading?<Button title="Upload" onPress={uploadImage}/> : <ActivityIndicator size="large" color="#000"/>}
+				
+
 				<TouchableOpacity
 					style={styles.submit}
 					onPress={() =>
@@ -427,10 +476,10 @@ function CreateNewListingScreen({ navigation }) {
 							description,
 							location,
 							category,
-							subcategory,
 							quantity,
 							expiryDate,
-							collectionMethod
+							collectionMethod,
+							imageUrl
 						)
 					}
 				>
@@ -654,4 +703,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default CreateNewListingScreen;
+export default NewFoodListing;

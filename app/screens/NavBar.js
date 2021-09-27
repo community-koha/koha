@@ -8,10 +8,10 @@ import { Button } from 'react-native-elements';
 import Colours from '../config/colours.js';
 
 import MapViewScreen from './MapViewScreen';
-import CreateNewListingScreen from './CreateNewListingScreen';
 import ListViewScreen from './ListViewScreen';
 import Notification from './Notification.js';
 import Profile from './Profile.js';
+import GiveKoha from './GiveKoha.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,10 +56,10 @@ function NavBar({ navigation }) {
 				}}
 			/>
 			<Tab.Screen
-				name="Create New Listing"
-				component={CreateNewListingScreen}
+				name="Give Koha"
+				component={GiveKoha}
 				options={{
-					tabBarLabel: 'New Listing',
+					tabBarLabel: 'Give Koha',
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons name="plus-circle-outline" size={24} color={color} />
 					),

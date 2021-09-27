@@ -10,6 +10,11 @@ import UserTypeScreen from './app/screens/UserTypeScreen';
 import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
+import GiveKoha from './app/screens/GiveKoha';
+import NewFoodListing from './app/screens/NewFoodListing';
+import NewEssentialListing from './app/screens/NewEssentialListing';
+import NewEventListing from './app/screens/NewEventListing';
+import NewServiceListing from './app/screens/NewServiceListing';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +22,7 @@ import * as WebBrowser from 'expo-web-browser';
 import firebase from 'firebase/app';
 
 import { LogBox } from 'react-native';
+
 LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 
 const firebaseConfig = {
@@ -101,6 +107,26 @@ export default function App() {
 				<Stack.Screen
 					name="ListingDetailScreen"
 					component={ListingDetailScreen}
+				/>
+				<Stack.Screen
+					name="GiveKoha"
+					component={GiveKoha}
+				/>
+				<Stack.Screen
+					name="NewFoodListing"
+					component={NewFoodListing}
+				/>
+				<Stack.Screen
+					name="NewEssentialListing"
+					component={NewEssentialListing}
+				/>
+				<Stack.Screen
+					name="NewEventListing"
+					component={NewEventListing}
+				/>
+				<Stack.Screen
+					name="NewServiceListing"
+					component={NewServiceListing}
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>
