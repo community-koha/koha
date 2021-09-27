@@ -8,6 +8,8 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Platform,
+	Button,
+	Image,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
@@ -212,6 +214,34 @@ function NewFoodListing({ navigation }) {
 		);
 	}
 
+	const [image, setImage] = useState(null);
+
+	useEffect(() => {
+		(async () => {
+		if (Platform.OS !== 'web') {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+			alert('Sorry, we need camera roll permissions to make this work!');
+			}
+		}
+		})();
+	}, []);
+
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+		mediaTypes: ImagePicker.MediaTypeOptions.All,
+		allowsEditing: true,
+		aspect: [4, 3],
+		quality: 1,
+		});
+
+		console.log(result);
+
+		if (!result.cancelled) {
+		setImage(result.uri);
+		}
+	};
+
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
@@ -379,6 +409,10 @@ function NewFoodListing({ navigation }) {
 					textStyle={styles.dropDownText}
 					style={styles.inputText}
 				/>
+
+				<Button title="Choose photo" onPress={pickImage}/>
+				{image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }}  />}
+				
 				<TouchableOpacity
 					style={styles.submit}
 					onPress={() =>
