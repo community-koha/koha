@@ -95,8 +95,8 @@ function MapViewScreen({navigation}) {
 		<MapView
 		 provider={PROVIDER_GOOGLE}
 		 style={styles.map}
-		 region={mapRegion}
-		 options=
+		 region={mapRegion}>
+		 {/* options=
 			{{
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				disableDefaultUI: true,
@@ -121,7 +121,7 @@ function MapViewScreen({navigation}) {
 						stylers: [{visibility: "off"}]
 					}
 				]
-			}}>
+			}} */}
 		 
 			{listings.map((item, i) => {
 				return(
