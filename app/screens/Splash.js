@@ -33,7 +33,6 @@ function Splash({ navigation }) {
 		
 		var id = setInterval(() => 
 		{
-			console.log(Date.now())
 			navigation.navigate(navigationTarget)
 			clearInterval(id);
 		}, 1000);
