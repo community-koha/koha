@@ -179,7 +179,7 @@ function CreateAccount({ navigation }) {
 			<ScrollView style={styles.scroll}>
 				<Text style={styles.inputTitle}>Display Name</Text>
 				<TextInput
-					onChangeText={(name) => setName(name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))}
+					onChangeText={(name) => setName(name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()|\\]/g,""))}
 					value={name}
 					placeholder="Display Name"
 					autoCompleteType="name"
