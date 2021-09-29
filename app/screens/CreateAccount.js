@@ -100,14 +100,27 @@ function CreateAccount({ navigation }) {
 			var user = userCredential.user;
 			console.log("User '" + user.uid + "' created successfully!");
 
+			// Add the user to the users database
+			var db = firebase.firestore();
+			db.collection("users").doc(user.uid).set(
+				{
+					created: (new Date(Date.now())).toISOString(),
+					email: email,
+					dob: dob,
+					name: name,
+					uid: user.uid
+				}, {merge: true}
+			).then(() => 
+			{
+				console.log("User's displayname set to '" + name + "' successfully!")
+			}).catch((error) => {
+				console.error(error.code+": "+error.message)
+			});
+
 			user.updateProfile(
 			{
 				displayName: name,
-			}).then(function() 
-			{
-				console.log("User's displayname set to '" + name + "' successfully!")
-			}, function(error) 
-			{
+			}).catch((error) => {
 				console.error(error.code+": "+error.message)
 			});
 

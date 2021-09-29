@@ -51,7 +51,15 @@ function Profile({ navigation }){
 					setModalVisible(true)
 					setSubmitted(false)
 					return false;
-				});	
+				});
+
+				var db = firebase.firestore();
+				db.collection("users").doc(user.uid).set(
+				{
+					name: name,
+				}, {merge: true}).catch((error) => {
+					console.error(error);
+				});
 			}
 			else
 			{
@@ -63,7 +71,15 @@ function Profile({ navigation }){
 		}
 		if (email != originalEmail)
 		{
-			user.verifyBeforeUpdateEmail(email).catch((error) => {
+			user.verifyBeforeUpdateEmail(email).then(() => {
+				var db = firebase.firestore();
+				db.collection("users").doc(user.uid).set(
+				{
+					email: email,
+				}, {merge: true}).catch((error) => {
+					console.error(error);
+				});
+			}).catch((error) => {
 				console.error(error.code+": "+error.message);
 				if (error.code == "auth/requires-recent-login")
 				{
