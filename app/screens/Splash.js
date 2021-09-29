@@ -29,6 +29,18 @@ function Splash({ navigation }) {
 			{
 				navigationTarget = 'VerifyEmail';
 			}
+
+			// Add the user to the users database
+			var db = firebase.firestore();
+			db.collection("users").doc(user.uid).set(
+			{
+				created: (new Date(parseInt(user.metadata.a)).toISOString()),
+				email: user.email,
+				name: user.displayName[2,1] == "|" ? user.displayName.slice(2, 9999): user.displayName,
+				uid: user.uid,
+			}, {merge: true}).catch((error) => {
+				console.error(error);
+			});
 		}
 		
 		var id = setInterval(() => 
