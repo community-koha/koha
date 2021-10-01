@@ -61,7 +61,7 @@ function NewFoodListing({ navigation }) {
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
 	
-	const [listingType, setlistingType] = useState(null);
+	const [listingType, setlistingType] = useState('food');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
@@ -72,14 +72,9 @@ function NewFoodListing({ navigation }) {
 	const [imageUrl, setImageUrl] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
-	const [openlistingType, setOpenlistingType] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [donationItems, setlistingTypeItems] = useState([
-		{ value: 'food', label: 'Food' },
-		{ value: 'essential_item', label: 'Essential Items' },
-	]);
 	const [categoryFood, setCategoryFood] = useState([
 		{ value: 'fruit', label: 'Fruit' },
 		{ value: 'canned', label: 'Canned Goods' },
@@ -100,21 +95,11 @@ function NewFoodListing({ navigation }) {
 	]);
 
 	
-	function listingTypeOpened(val) {
-		
-		setOpenlistingType(val);
-		setOpenCategoryType(false);
-		setOpenCollectionType(false);
-	}
 	function categoryOpened(val) {
-		
-		setOpenlistingType(false);
 		setOpenCategoryType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
-		
-		setOpenlistingType(false);
 		setOpenCategoryType(false);
 		setOpenCollectionType(val);
 	}
@@ -147,7 +132,6 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
-		listingType,
 		listingTitle,
 		description,
 		location,
@@ -160,9 +144,6 @@ function NewFoodListing({ navigation }) {
 		console.log('');
 		console.log('Checking');
 		switch (true) {
-			case !listingType in ['food', 'essential_item']:
-				return false;
-
 			case listingTitle in ['', null]:
 				return false;
 
@@ -170,15 +151,6 @@ function NewFoodListing({ navigation }) {
 				return false;
 
 			case location['lat'] == 0 || location['lng'] == 0:
-				return false;
-
-			case listingType == 'food' &&
-				!category in ['fruit', 'canned', 'cooked', 'misc']:
-				return false;
-
-			case listingType == 'essential_item' &&
-				!category in
-					['baby', 'bedding', 'heating', 'school', 'clothing', 'misc']:
 				return false;
 
 			case quantity == null || quantity <= 0:
@@ -193,7 +165,6 @@ function NewFoodListing({ navigation }) {
 
 		console.log('Pass');
 		SubmitForm(
-			listingType,
 			listingTitle,
 			description,
 			location,
@@ -286,22 +257,7 @@ function NewFoodListing({ navigation }) {
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
 				
-				<Text style={styles.inputTitle}>I'm giving...</Text>
-				<DropDownPicker
-					open={openlistingType}
-					items={donationItems}
-					value={listingType}
-					setOpen={(val) => listingTypeOpened(val)}
-					setValue={(val) => setlistingType(val)}
-					showArrowIcon={!web}
-					showTickIcon={false}
-					zIndex={4000}
-					placeholder="Select..."
-					placeholderStyle={styles.dropDownPlaceholderText}
-					dropDownContainerStyle={styles.dropDownBody}
-					textStyle={styles.dropDownText}
-					style={styles.inputText}
-				/>
+				
 				<Text style={styles.inputTitle}>Listing Title</Text>
 				<TextInput
 					onChangeText={(val) => setListingTitle(val)}
@@ -356,7 +312,7 @@ function NewFoodListing({ navigation }) {
 				<Text style={styles.inputTitle}>Listing Category</Text>
 				<DropDownPicker
 					open={openCategoryType}
-					items={listingType == 'food' ? categoryFood : categoryItems}
+					items={categoryFood}
 					value={category}
 					setOpen={(val) => categoryOpened(val)}
 					setValue={(val) => setCategory(val)}
