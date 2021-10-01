@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,10 +12,25 @@ import ListViewScreen from './ListViewScreen';
 import Notification from './Notification.js';
 import Profile from './Profile.js';
 import GiveKoha from './GiveKoha.js';
+import MyKoha from './MyKoha.js';
+import firebase from 'firebase/app';
+import roles from '../config/roles.js';
 
 const Tab = createBottomTabNavigator();
 
 function NavBar({ navigation }) {
+	const [user, setUser] = useState(null);
+	const [prefix, setPrefix] = useState("My");
+	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
+	{
+		if (user)
+		{
+			setUser(user);
+			setPrefix(user.displayName[0] != roles.donateBusiness? "My":"Our");
+			unsubscribe();
+		}
+	})
+
 	React.useEffect(
 		() =>
 			navigation.addListener('beforeRemove', (e) => {
@@ -46,12 +61,12 @@ function NavBar({ navigation }) {
 				}}
 			/>
 			<Tab.Screen
-				name="List View"
-				component={ListViewScreen}
+				name={prefix+" Koha"}
+				component={MyKoha}
 				options={{
-					tabBarLabel: 'List View',
+					tabBarLabel: prefix+" Koha",
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="view-list-outline" size={24} color={color} />
+						<MaterialCommunityIcons name="gift-outline" size={24} color={color} />
 					),
 				}}
 			/>

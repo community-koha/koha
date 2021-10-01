@@ -11,6 +11,7 @@ import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
 import GiveKoha from './app/screens/GiveKoha';
+import MyKoha from './app/screens/MyKoha';
 import NewFoodListing from './app/screens/NewFoodListing';
 import NewEssentialListing from './app/screens/NewEssentialListing';
 import NewEventListing from './app/screens/NewEventListing';
@@ -111,6 +112,10 @@ export default function App() {
 				<Stack.Screen
 					name="GiveKoha"
 					component={GiveKoha}
+				/>
+				<Stack.Screen
+					name="MyKoha"
+					component={MyKoha}
 				/>
 				<Stack.Screen
 					name="NewFoodListing"
