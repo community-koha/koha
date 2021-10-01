@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, Image, Button } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	ActivityIndicator,
+	TouchableHighlight,
+	Image,
+	Button,
+} from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -16,11 +24,11 @@ function NotifScreen() {
 	);
 }
 
-function MapViewScreen({navigation}) {
+function MapViewScreen({ navigation }) {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
-	
+
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -47,9 +55,8 @@ function MapViewScreen({navigation}) {
 		if (hasLocationPermissions === false) {
 			getLocationAsync();
 		}
-		
+
 		return () => getLocationAsync();
-		
 	}, []);
 
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -92,11 +99,8 @@ function MapViewScreen({navigation}) {
 	}
 
 	return (
-		<MapView
-		 provider={PROVIDER_GOOGLE}
-		 style={styles.map}
-		 region={mapRegion}>
-		 {/* options=
+		<MapView provider={PROVIDER_GOOGLE} style={styles.map} region={mapRegion}>
+			{/* options=
 			{{
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				disableDefaultUI: true,
@@ -122,45 +126,53 @@ function MapViewScreen({navigation}) {
 					}
 				]
 			}} */}
-		 
+
 			{listings.map((item, i) => {
-				return(
+				return (
 					<MapView.Marker
 						key={i}
 						coordinate={{
 							latitude: item.location.lat,
-							longitude: item.location.lng
+							longitude: item.location.lng,
 						}}
 						title={item.listingTitle}
 						description={item.description}
 					>
-						<MapView.Callout tooltip
-							onPress={() => navigation.navigate('ListingDetailScreen', {
-								listingId: item.key,
-							})}
+						<MapView.Callout
+							tooltip
+							onPress={() =>
+								navigation.navigate('ListingDetailScreen', {
+									listingId: item.key,
+								})
+							}
 						>
 							<View>
-							<View style={styles.bubble}>
-								<View>
-									<Image style={styles.photo} source={require('../assets/logo.png')} onPress={() => navigation.navigate('ListingDetailScreen', {
-											listingId: item.key,
-										})}/>
+								<View style={styles.bubble}>
+									<View>
+										<Image
+											style={styles.photo}
+											source={require('../assets/logo.png')}
+											onPress={() =>
+												navigation.navigate('ListingDetailScreen', {
+													listingId: item.key,
+												})
+											}
+										/>
+									</View>
+									<View>
+										<Text style={styles.calloutText}>{item.listingTitle}</Text>
+										<Text style={styles.calloutText}>{item.description}</Text>
+										<Text style={styles.calloutText}>Organisation Name</Text>
+										<Text style={styles.calloutText}>View Details</Text>
+									</View>
 								</View>
-								<View>
-									<Text style={styles.calloutText}>{item.listingTitle}</Text>
-									<Text style={styles.calloutText}>{item.description}</Text>
-									<Text style={styles.calloutText}>Organisation Name</Text>
-									<Text style={styles.calloutText}>View Details</Text>
-								</View>
-								
-								
-							</View>
 							</View>
 						</MapView.Callout>
 					</MapView.Marker>
 				);
 			})}
-		</MapView>);
+		</MapView>
+	);
 }
 
 const styles = StyleSheet.create({
@@ -174,10 +186,10 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '100%',
 	},
-	calloutText:{
+	calloutText: {
 		fontSize: 16,
 	},
-	bubble:{
+	bubble: {
 		borderRadius: 10,
 		backgroundColor: Colours.white,
 		padding: 20,
@@ -187,12 +199,12 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		alignItems: 'flex-start',
 	},
-	photo:{
+	photo: {
 		height: 80,
 		width: 80,
 		justifyContent: 'flex-start',
-		marginRight: 20
-	}
+		marginRight: 20,
+	},
 });
 
 export default MapViewScreen;

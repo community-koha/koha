@@ -44,8 +44,9 @@ function ListingDetailScreen({ route, navigation }) {
 	return (
 		<View style={styles.container}>
 			<ScrollView>
-			
-				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
+				{loading && (
+					<ActivityIndicator size="small" color={Colours.activityIndicator} />
+				)}
 				{!loading &&
 					listings.map((item, i) => {
 						return (
@@ -73,14 +74,12 @@ function ListingDetailScreen({ route, navigation }) {
 							</ListItem>
 						);
 					})}
-			
-			
+
 				<Button
 					style={styles.button}
 					title="Go Back"
 					onPress={() => navigation.goBack()}
 				></Button>
-			
 			</ScrollView>
 		</View>
 	);
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: '10%',
-		paddingBottom: '5%'
+		paddingBottom: '5%',
 	},
 	button: {
 		height: 45,

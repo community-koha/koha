@@ -10,7 +10,7 @@ import {
 	Platform,
 	Button,
 	Image,
-	ActivityIndicator
+	ActivityIndicator,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
@@ -49,7 +49,7 @@ function SubmitForm(
 		quantity: quantity,
 		expiryDate: expiryDate,
 		collectionMethod: collectionMethod,
-		image: imageUrl
+		image: imageUrl,
 	});
 }
 
@@ -222,80 +222,80 @@ function NewFoodListing({ navigation }) {
 
 	const [image, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
-	
 
 	useEffect(() => {
 		(async () => {
-		if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-			if (status !== 'granted') {
-			alert('Sorry, we need camera roll permissions to make this work!');
+			if (Platform.OS !== 'web') {
+				const { status } =
+					await ImagePicker.requestMediaLibraryPermissionsAsync();
+				if (status !== 'granted') {
+					alert('Sorry, we need camera roll permissions to make this work!');
+				}
 			}
-		}
 		})();
 	}, []);
 
 	const pickImage = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
-		mediaTypes: ImagePicker.MediaTypeOptions.All,
-		allowsEditing: true,
-		aspect: [4, 3],
-		quality: 1,
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
 		});
 
 		console.log(result);
 
 		if (!result.cancelled) {
-		setImage(result.uri);
+			setImage(result.uri);
 		}
 	};
 
-	const uploadImage = async () =>{
+	const uploadImage = async () => {
 		const blob = await new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
-			xhr.onload = function() {
-			  resolve(xhr.response);
+			xhr.onload = function () {
+				resolve(xhr.response);
 			};
-			xhr.onerror = function() {
-			  reject(new TypeError('Network request failed'));
+			xhr.onerror = function () {
+				reject(new TypeError('Network request failed'));
 			};
 			xhr.responseType = 'blob';
 			xhr.open('GET', image, true);
 			xhr.send(null);
 		});
-		 
-		const ref = firebase.storage().ref().child(new Date().toISOString())
-		const snapshot = ref.put(blob)
+
+		const ref = firebase.storage().ref().child(new Date().toISOString());
+		const snapshot = ref.put(blob);
 
 		snapshot.on(
 			firebase.storage.TaskEvent.STATE_CHANGED,
-			()=>{
-				setUploading(true)
+			() => {
+				setUploading(true);
 			},
 
 			(error) => {
-				setUploading(false)
+				setUploading(false);
 				console.log(error);
-				blob.close
-				return
+				blob.close;
+				return;
 			},
 
 			() => {
-				snapshot.snapshot.ref.getDownloadURL().then((data)=>{
+				snapshot.snapshot.ref.getDownloadURL().then((data) => {
 					setImageUrl(JSON.stringify(data));
-					setUploading(false)
-					console.log("Upload successful");
-					console.log("Download URL", JSON.stringify(data));
-					blob.close
+					setUploading(false);
+					console.log('Upload successful');
+					console.log('Download URL', JSON.stringify(data));
+					blob.close;
 					return data;
 				});
 			}
-		)
-	}
+		);
+	};
 
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<View>
 				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
 			</View>
@@ -461,10 +461,15 @@ function NewFoodListing({ navigation }) {
 					style={styles.inputText}
 				/>
 
-				<Button title="Choose photo" onPress={pickImage}/>
-				{image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }}  />}
-				{!uploading?<Button title="Upload" onPress={uploadImage}/> : <ActivityIndicator size="large" color="#000"/>}
-				
+				<Button title="Choose photo" onPress={pickImage} />
+				{image && (
+					<Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+				)}
+				{!uploading ? (
+					<Button title="Upload" onPress={uploadImage} />
+				) : (
+					<ActivityIndicator size="large" color="#000" />
+				)}
 
 				<TouchableOpacity
 					style={styles.submit}

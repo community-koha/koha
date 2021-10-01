@@ -2,8 +2,6 @@ import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { Button } from 'react-native-elements';
 
 import Colours from '../config/colours.js';
 
@@ -24,24 +22,29 @@ function NavBar({ navigation }) {
 		[navigation]
 	);
 	return (
-		
 		<Tab.Navigator
 			initialRouteName="Map View"
 			screenOptions={{
 				tabBarActiveTintColor: Colours.default,
 				tabBarInactiveTintColor: Colours.grey,
-				tabBarStyle: { position: 'absolute', backgroundColor: Colours.koha_beige, padding: 10 },
-				
+				tabBarStyle: {
+					position: 'absolute',
+					backgroundColor: Colours.koha_beige,
+					padding: 10,
+				},
 			}}
 		>
-			
 			<Tab.Screen
 				name="Map View"
 				component={MapViewScreen}
 				options={{
 					tabBarLabel: 'Map View',
-					tabBarIcon: ({color}) => (
-						<MaterialCommunityIcons name="map-search-outline" size={24} color={color} />
+					tabBarIcon: ({ color }) => (
+						<MaterialCommunityIcons
+							name="map-search-outline"
+							size={24}
+							color={color}
+						/>
 					),
 				}}
 			/>
@@ -51,7 +54,11 @@ function NavBar({ navigation }) {
 				options={{
 					tabBarLabel: 'List View',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="view-list-outline" size={24} color={color} />
+						<MaterialCommunityIcons
+							name="view-list-outline"
+							size={24}
+							color={color}
+						/>
 					),
 				}}
 			/>
@@ -61,18 +68,26 @@ function NavBar({ navigation }) {
 				options={{
 					tabBarLabel: 'Give Koha',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="plus-circle-outline" size={24} color={color} />
+						<MaterialCommunityIcons
+							name="plus-circle-outline"
+							size={24}
+							color={color}
+						/>
 					),
 				}}
 			/>
-			
+
 			<Tab.Screen
 				name="Notification"
 				component={Notification}
 				options={{
 					tabBarLabel: 'Notification',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="bell-outline" size={24} color={color} />
+						<MaterialCommunityIcons
+							name="bell-outline"
+							size={24}
+							color={color}
+						/>
 					),
 				}}
 			/>
@@ -82,12 +97,15 @@ function NavBar({ navigation }) {
 				options={{
 					tabBarLabel: 'Profile',
 					tabBarIcon: ({ color }) => (
-						<MaterialCommunityIcons name="account-circle-outline" size={24} color={color} />
+						<MaterialCommunityIcons
+							name="account-circle-outline"
+							size={24}
+							color={color}
+						/>
 					),
 				}}
 			/>
 		</Tab.Navigator>
-		
 	);
 }
 

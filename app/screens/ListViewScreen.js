@@ -10,7 +10,7 @@ import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
 
-function ListViewScreen({navigation}) {
+function ListViewScreen({ navigation }) {
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of users
 
@@ -37,7 +37,7 @@ function ListViewScreen({navigation}) {
 	}, []);
 
 	if (loading) {
-		return <ActivityIndicator size="small" color={Colours.activityIndicator}/>;
+		return <ActivityIndicator size="small" color={Colours.activityIndicator} />;
 	}
 	return (
 		<View style={styles.container}>

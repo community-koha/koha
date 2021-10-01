@@ -15,5 +15,5 @@ export default {
 	koha_peach: '#EF4856',
 	koha_yellow: '#D2922C',
 	koha_beige: '#F0E5D7',
-	koha_pink: '#F7A49A'
+	koha_pink: '#F7A49A',
 };

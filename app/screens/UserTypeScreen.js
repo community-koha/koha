@@ -26,7 +26,7 @@ function UserTypeScreen({ navigation }) {
 	);
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<Text style={styles.text}>I am:</Text>
 			<View style={styles.buttons}>
@@ -69,8 +69,18 @@ function UserTypeScreen({ navigation }) {
 				<TouchableOpacity
 					style={[styles.button, styles.backButton]}
 					onPress={() => {
-						firebase.auth().signOut();
 						navigation.navigate('Entry');
+						firebase
+							.auth()
+							.signOut()
+							.catch((error) => {
+								console.error(error.code + ': ' + error.message);
+
+								error.message = 'Failed to sign out';
+
+								setModalText(error.message);
+								setModalVisible(true);
+							});
 					}}
 				>
 					<Text style={styles.buttonText}>BACK</Text>
