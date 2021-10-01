@@ -27,7 +27,7 @@ import firebase from 'firebase/app';
 const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
-	userType,
+	
 	donationType,
 	listingTitle,
 	description,
@@ -40,7 +40,7 @@ function SubmitForm(
 ) {
 	const dbh = firebase.firestore();
 	dbh.collection('listings').add({
-		userType: userType,
+		
 		donationType: donationType,
 		listingTitle: listingTitle,
 		description: description,
@@ -60,7 +60,7 @@ function NewFoodListing({ navigation }) {
 	}, []);
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	const [userType, setUserType] = useState(null);
+	
 	const [donationType, setDonationType] = useState(null);
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
@@ -72,15 +72,10 @@ function NewFoodListing({ navigation }) {
 	const [imageUrl, setImageUrl] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
-	const [openUserType, setOpenUserType] = useState(false);
 	const [openDonationType, setOpenDonationType] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [typeUserItems, setUserTypeItems] = useState([
-		{ value: 'business', label: 'A Business' },
-		{ value: 'individual', label: 'An Individual' },
-	]);
 	const [donationItems, setDonationTypeItems] = useState([
 		{ value: 'food', label: 'Food' },
 		{ value: 'essential_item', label: 'Essential Items' },
@@ -104,26 +99,21 @@ function NewFoodListing({ navigation }) {
 		{ value: 'delivery', label: 'Delivery' },
 	]);
 
-	function userTypeOpened(val) {
-		setOpenUserType(val);
-		setOpenDonationType(false);
-		setOpenCategoryType(false);
-		setOpenCollectionType(false);
-	}
+	
 	function donationTypeOpened(val) {
-		setOpenUserType(false);
+		
 		setOpenDonationType(val);
 		setOpenCategoryType(false);
 		setOpenCollectionType(false);
 	}
 	function categoryOpened(val) {
-		setOpenUserType(false);
+		
 		setOpenDonationType(false);
 		setOpenCategoryType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
-		setOpenUserType(false);
+		
 		setOpenDonationType(false);
 		setOpenCategoryType(false);
 		setOpenCollectionType(val);
@@ -157,7 +147,6 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
-		userType,
 		donationType,
 		listingTitle,
 		description,
@@ -171,9 +160,6 @@ function NewFoodListing({ navigation }) {
 		console.log('');
 		console.log('Checking');
 		switch (true) {
-			case !userType in ['business', 'individual']:
-				return false;
-
 			case !donationType in ['food', 'essential_item']:
 				return false;
 
@@ -207,7 +193,6 @@ function NewFoodListing({ navigation }) {
 
 		console.log('Pass');
 		SubmitForm(
-			userType,
 			donationType,
 			listingTitle,
 			description,
@@ -300,22 +285,7 @@ function NewFoodListing({ navigation }) {
 				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
-				<Text style={styles.inputTitleFirst}>I am...</Text>
-				<DropDownPicker
-					open={openUserType}
-					items={typeUserItems}
-					value={userType}
-					setOpen={(val) => userTypeOpened(val)}
-					setValue={(val) => setUserType(val)}
-					showArrowIcon={!web}
-					showTickIcon={false}
-					zIndex={5000}
-					placeholder="Select..."
-					placeholderStyle={styles.dropDownPlaceholderText}
-					dropDownContainerStyle={styles.dropDownBody}
-					textStyle={styles.dropDownText}
-					style={styles.inputText}
-				/>
+				
 				<Text style={styles.inputTitle}>I'm giving...</Text>
 				<DropDownPicker
 					open={openDonationType}
@@ -470,7 +440,6 @@ function NewFoodListing({ navigation }) {
 					style={styles.submit}
 					onPress={() =>
 						CheckInput(
-							userType,
 							donationType,
 							listingTitle,
 							description,
