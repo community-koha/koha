@@ -28,7 +28,7 @@ const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
 	
-	donationType,
+	listingType,
 	listingTitle,
 	description,
 	location,
@@ -41,7 +41,7 @@ function SubmitForm(
 	const dbh = firebase.firestore();
 	dbh.collection('listings').add({
 		
-		donationType: donationType,
+		listingType: listingType,
 		listingTitle: listingTitle,
 		description: description,
 		location: location,
@@ -61,7 +61,7 @@ function NewFoodListing({ navigation }) {
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
 	
-	const [donationType, setDonationType] = useState(null);
+	const [listingType, setlistingType] = useState(null);
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
@@ -72,11 +72,11 @@ function NewFoodListing({ navigation }) {
 	const [imageUrl, setImageUrl] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
-	const [openDonationType, setOpenDonationType] = useState(false);
+	const [openlistingType, setOpenlistingType] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [donationItems, setDonationTypeItems] = useState([
+	const [donationItems, setlistingTypeItems] = useState([
 		{ value: 'food', label: 'Food' },
 		{ value: 'essential_item', label: 'Essential Items' },
 	]);
@@ -100,21 +100,21 @@ function NewFoodListing({ navigation }) {
 	]);
 
 	
-	function donationTypeOpened(val) {
+	function listingTypeOpened(val) {
 		
-		setOpenDonationType(val);
+		setOpenlistingType(val);
 		setOpenCategoryType(false);
 		setOpenCollectionType(false);
 	}
 	function categoryOpened(val) {
 		
-		setOpenDonationType(false);
+		setOpenlistingType(false);
 		setOpenCategoryType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
 		
-		setOpenDonationType(false);
+		setOpenlistingType(false);
 		setOpenCategoryType(false);
 		setOpenCollectionType(val);
 	}
@@ -147,7 +147,7 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
-		donationType,
+		listingType,
 		listingTitle,
 		description,
 		location,
@@ -160,7 +160,7 @@ function NewFoodListing({ navigation }) {
 		console.log('');
 		console.log('Checking');
 		switch (true) {
-			case !donationType in ['food', 'essential_item']:
+			case !listingType in ['food', 'essential_item']:
 				return false;
 
 			case listingTitle in ['', null]:
@@ -172,11 +172,11 @@ function NewFoodListing({ navigation }) {
 			case location['lat'] == 0 || location['lng'] == 0:
 				return false;
 
-			case donationType == 'food' &&
+			case listingType == 'food' &&
 				!category in ['fruit', 'canned', 'cooked', 'misc']:
 				return false;
 
-			case donationType == 'essential_item' &&
+			case listingType == 'essential_item' &&
 				!category in
 					['baby', 'bedding', 'heating', 'school', 'clothing', 'misc']:
 				return false;
@@ -193,7 +193,7 @@ function NewFoodListing({ navigation }) {
 
 		console.log('Pass');
 		SubmitForm(
-			donationType,
+			listingType,
 			listingTitle,
 			description,
 			location,
@@ -288,11 +288,11 @@ function NewFoodListing({ navigation }) {
 				
 				<Text style={styles.inputTitle}>I'm giving...</Text>
 				<DropDownPicker
-					open={openDonationType}
+					open={openlistingType}
 					items={donationItems}
-					value={donationType}
-					setOpen={(val) => donationTypeOpened(val)}
-					setValue={(val) => setDonationType(val)}
+					value={listingType}
+					setOpen={(val) => listingTypeOpened(val)}
+					setValue={(val) => setlistingType(val)}
 					showArrowIcon={!web}
 					showTickIcon={false}
 					zIndex={4000}
@@ -356,7 +356,7 @@ function NewFoodListing({ navigation }) {
 				<Text style={styles.inputTitle}>Listing Category</Text>
 				<DropDownPicker
 					open={openCategoryType}
-					items={donationType == 'food' ? categoryFood : categoryItems}
+					items={listingType == 'food' ? categoryFood : categoryItems}
 					value={category}
 					setOpen={(val) => categoryOpened(val)}
 					setValue={(val) => setCategory(val)}
@@ -440,7 +440,7 @@ function NewFoodListing({ navigation }) {
 					style={styles.submit}
 					onPress={() =>
 						CheckInput(
-							donationType,
+							listingType,
 							listingTitle,
 							description,
 							location,
