@@ -26,6 +26,9 @@ function GiveKoha({navigation}){
                 <Button title="Essentials" onPress={()=>navigation.navigate("NewEssentialListing")}/>
                 {ShowBusinessOptions({navigation})}
             </View>
+            <View>
+                <Button title="Go Back" onPress={()=>navigation.goBack()}/>
+            </View>
         </View>
     )
 }
