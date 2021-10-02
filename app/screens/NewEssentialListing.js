@@ -242,7 +242,7 @@ function NewEssentialListing({navigation}){
 			<View>
 				<Text style={styles.headerText}>NEW ESSENTIAL ITEM</Text>
 			</View>
-			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
+			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
 				
 				
 				<Text style={styles.inputTitle}>Title</Text>

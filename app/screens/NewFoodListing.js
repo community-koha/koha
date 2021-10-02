@@ -279,7 +279,7 @@ function NewFoodListing({ navigation }) {
 			<View>
 				<Text style={styles.headerText}>NEW FOOD</Text>
 			</View>
-			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
+			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
 				
 				
 				<Text style={styles.inputTitle}>Title</Text>
