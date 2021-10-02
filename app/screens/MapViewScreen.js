@@ -134,17 +134,23 @@ function MapViewScreen({navigation}) {
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
 				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchBar}
-						value={keyword}
-						placeholder="Search listings"
-						onChangeText={(val) => setKeyword(val)}
-						/>
+					<View style={styles.searchBar}>
+						<TextInput
+							style={styles.searchInput}
+							value={keyword}
+							placeholder="Search listings"
+							onChangeText={(val) => setKeyword(val)}
+							/>
+						<MaterialIcons
+							name="search"
+							size={26}
+							style={{padding: 12}}
+							onPress={() => Search(keyword, listings)}/>
+					</View>
+					
 					
 					<View style={styles.iconContainer}>
-						<Button
-							title='search'
-							onPress={() => Search(keyword, listings)}/>
+						
 						<MaterialCommunityIcons name="view-list-outline"
 							size={30}
 							color={Colours.default}
@@ -218,12 +224,21 @@ const styles = StyleSheet.create({
 		padding: 20,
 	},
 	searchBar:{
-		fontSize: 16,
-		padding: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		borderRadius: 10,
 		borderColor: Colours.grey,
 		borderWidth: 0.5,
 		width: gui.screen.width * 0.9,
+	},
+	searchInput:{
+		fontSize: 16,
+		padding: 12,
+		borderRadius: 10,
+		borderColor: Colours.grey,
+		borderWidth: 0,
+		width: '85%'
 	},
 	iconContainer:{
 		flexDirection: 'row',
