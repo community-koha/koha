@@ -13,6 +13,10 @@
 		"ios": {
 			"supportsTablet": true
 		},
+		"androidNavigationBar": {
+			"barStyle": "dark-content",
+			"backgroundColor": "#F0E5D7"
+		},
 		"android": {
 			"package": "com.communitykoha.koha",
 			"versionCode": 1,

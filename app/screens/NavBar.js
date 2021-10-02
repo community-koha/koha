@@ -25,6 +25,7 @@ function NavBar({ navigation }) {
 		<Tab.Navigator
 			initialRouteName="Map View"
 			screenOptions={{
+				headerShown: false,
 				tabBarActiveTintColor: Colours.default,
 				tabBarInactiveTintColor: Colours.grey,
 				tabBarStyle: {
