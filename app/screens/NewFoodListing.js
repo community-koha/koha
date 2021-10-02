@@ -36,11 +36,11 @@ function SubmitForm(
 	quantity,
 	expiryDate,
 	collectionMethod,
-	imageUrl
+	imageFileName
 ) {
 	const dbh = firebase.firestore();
+	
 	dbh.collection('listings').add({
-		
 		listingType: listingType,
 		listingTitle: listingTitle,
 		description: description,
@@ -49,7 +49,7 @@ function SubmitForm(
 		quantity: quantity,
 		expiryDate: expiryDate,
 		collectionMethod: collectionMethod,
-		image: imageUrl
+		imageFileName: imageFileName
 	});
 }
 
@@ -69,7 +69,7 @@ function NewFoodListing({ navigation }) {
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
-	const [imageUrl, setImageUrl] = useState(null);
+	const [imageFileName, setimageFileName] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
@@ -132,6 +132,7 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
+		listingType,
 		listingTitle,
 		description,
 		location,
@@ -139,7 +140,7 @@ function NewFoodListing({ navigation }) {
 		quantity,
 		expiryDate,
 		collectionMethod,
-		imageUrl
+		imageFileName
 	) {
 		console.log('');
 		console.log('Checking');
@@ -161,10 +162,15 @@ function NewFoodListing({ navigation }) {
 
 			case !collectionMethod in ['pick_up', 'delivery']:
 				return false;
+
+			case imageFileName in ['', null]:
+				return false;
 		}
 
 		console.log('Pass');
+		
 		SubmitForm(
+			listingType,
 			listingTitle,
 			description,
 			location,
@@ -172,7 +178,7 @@ function NewFoodListing({ navigation }) {
 			quantity,
 			expiryDate,
 			collectionMethod,
-			imageUrl
+			imageFileName
 		);
 	}
 
@@ -237,11 +243,11 @@ function NewFoodListing({ navigation }) {
 			},
 
 			() => {
-				snapshot.snapshot.ref.getDownloadURL().then((data)=>{
-					setImageUrl(JSON.stringify(data));
+				snapshot.snapshot.ref.getMetadata().then((data)=>{
+					setimageFileName(data.name);
 					setUploading(false)
 					console.log("Upload successful");
-					console.log("Download URL", JSON.stringify(data));
+					console.log("Filename", data.name);
 					blob.close
 					return data;
 				});
@@ -404,7 +410,7 @@ function NewFoodListing({ navigation }) {
 							quantity,
 							expiryDate,
 							collectionMethod,
-							imageUrl
+							imageFileName
 						)
 					}
 				>
