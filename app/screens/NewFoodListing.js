@@ -33,6 +33,7 @@ function SubmitForm(
 	description,
 	location,
 	category,
+	allergen,
 	quantity,
 	expiryDate,
 	collectionMethod,
@@ -47,6 +48,7 @@ function SubmitForm(
 		description: description,
 		location: location,
 		category: category,
+		allergen: allergen,
 		quantity: quantity,
 		expiryDate: expiryDate,
 		collectionMethod: collectionMethod,
@@ -67,6 +69,7 @@ function NewFoodListing({ navigation }) {
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [category, setCategory] = useState(null);
+	const [allergen, setAllergen] = useState(null);
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
@@ -74,22 +77,27 @@ function NewFoodListing({ navigation }) {
 
 	const [showDate, setShowDate] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
+	const [openAllergenType, setOpenAllergenType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
 	const [categoryFood, setCategoryFood] = useState([
 		{ value: 'fruit', label: 'Fruit' },
-		{ value: 'canned', label: 'Canned Goods' },
+		{ value: 'vegetables', label: 'Vegetables' },
+		{ value: 'dry_goods', label: 'Dry Goods' },
 		{ value: 'cooked', label: 'Cooked Meals' },
+		{ value: 'bakery', label: 'Bakery Items' },
+		{ value: 'dairy', label: 'Dairy' },
 		{ value: 'misc', label: 'Miscellaneous' },
 	]);
-	const [categoryItems, setCategoryItems] = useState([
-		{ value: 'baby', label: 'Baby Items' },
-		{ value: 'bedding', label: 'Bedding' },
-		{ value: 'heating', label: 'Heating' },
-		{ value: 'school', label: 'School Items' },
-		{ value: 'clothing', label: 'Clothing' },
-		{ value: 'misc', label: 'Miscellaneous' },
+
+	const [categoryAllergen, setCategoryAllergen] = useState([
+		{ value: 'gluten', label: 'Gluten' },
+		{ value: 'peanuts', label: 'Peanuts' },
+		{ value: 'seafood', label: 'Seafood' },
+		{ value: 'dairy', label: 'Dairy' },
+		{ value: 'eggs', label: 'Eggs' },
 	]);
+	
 	const [collectionItems, setCollectionItems] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
@@ -98,10 +106,17 @@ function NewFoodListing({ navigation }) {
 	
 	function categoryOpened(val) {
 		setOpenCategoryType(val);
+		setOpenAllergenType(false);
+		setOpenCollectionType(false);
+	}
+	function allergenOpened(val) {
+		setOpenCategoryType(false);
+		setOpenAllergenType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
 		setOpenCategoryType(false);
+		setOpenAllergenType(false);
 		setOpenCollectionType(val);
 	}
 
@@ -177,6 +192,7 @@ function NewFoodListing({ navigation }) {
 			description,
 			location,
 			category,
+			allergen,
 			quantity,
 			expiryDate,
 			collectionMethod,
@@ -266,18 +282,18 @@ function NewFoodListing({ navigation }) {
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
 				
 				
-				<Text style={styles.inputTitle}>Listing Title</Text>
+				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
 					onChangeText={(val) => setListingTitle(val)}
 					placeholder="Title"
 					style={styles.inputText}
 				/>
-				<Text style={styles.inputTitle}>Listing Description</Text>
+				<Text style={styles.inputTitle}>Description</Text>
 				<TextInput
 					onChangeText={(val) => setDescription(val)}
 					placeholder="Description"
 					multiline={true}
-					numberOfLines={4}
+					numberOfLines={3}
 					textBreakStrategy={'simple'}
 					style={styles.inputTextDescription}
 				/>
@@ -317,13 +333,29 @@ function NewFoodListing({ navigation }) {
 					zIndex={8000}
 					debounce={200}
 				/>
-				<Text style={styles.inputTitle}>Listing Category</Text>
+				<Text style={styles.inputTitle}>Category</Text>
 				<DropDownPicker
 					open={openCategoryType}
 					items={categoryFood}
 					value={category}
 					setOpen={(val) => categoryOpened(val)}
 					setValue={(val) => setCategory(val)}
+					showArrowIcon={!web}
+					showTickIcon={false}
+					zIndex={5000}
+					placeholder="Select..."
+					placeholderStyle={styles.dropDownPlaceholderText}
+					dropDownContainerStyle={styles.dropDownBody}
+					textStyle={styles.dropDownText}
+					style={styles.inputText}
+				/>
+				<Text style={styles.inputTitle}>Allergen</Text>
+				<DropDownPicker
+					open={openAllergenType}
+					items={categoryAllergen}
+					value={allergen}
+					setOpen={(val) => allergenOpened(val)}
+					setValue={(val) => setAllergen(val)}
 					showArrowIcon={!web}
 					showTickIcon={false}
 					zIndex={3000}
