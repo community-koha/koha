@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, TextInput, Image, TouchableWithoutFeedback, Button, Keyboard } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { SearchBar } from 'react-native-elements';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -22,7 +21,7 @@ function MapViewScreen({navigation}) {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
-	const [search, setSearch] = useState('');
+	const [keyword, setKeyword] = useState('');
 
 	
 	// do after render
@@ -116,6 +115,20 @@ function MapViewScreen({navigation}) {
 		}
 	]
 
+	function Search(keyword, listings){
+		const filteredList = []
+		listings.forEach(function(item) {
+			if (item.listingTitle.includes(keyword)){
+				filteredList.push(item)
+			}
+			if (item.description.includes(keyword)){
+				filteredList.push(item)
+			}
+		})
+		if (filteredList.length != 0){
+			setListings(filteredList);
+		}
+	}
 	
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -123,10 +136,15 @@ function MapViewScreen({navigation}) {
 				<View style={styles.searchContainer}>
 					<TextInput
 						style={styles.searchBar}
-						value={search}
+						value={keyword}
 						placeholder="Search listings"
+						onChangeText={(val) => setKeyword(val)}
 						/>
+					
 					<View style={styles.iconContainer}>
+						<Button
+							title='search'
+							onPress={() => Search(keyword, listings)}/>
 						<MaterialCommunityIcons name="view-list-outline"
 							size={30}
 							color={Colours.default}
@@ -140,10 +158,10 @@ function MapViewScreen({navigation}) {
 					
 				</View>
 				<MapView
-				provider={PROVIDER_GOOGLE}
-				style={styles.map}
-				region={mapRegion}
-				customMapStyle={mapStyle}>
+					provider={PROVIDER_GOOGLE}
+					style={styles.map}
+					region={mapRegion}
+					customMapStyle={mapStyle}>
 				
 					{listings.map((item, i) => {
 						return(
@@ -180,6 +198,7 @@ function MapViewScreen({navigation}) {
 							</MapView.Marker>
 						);
 					})}
+					
 				</MapView>
 			</View>
 		</TouchableWithoutFeedback>
