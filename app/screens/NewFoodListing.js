@@ -277,7 +277,7 @@ function NewFoodListing({ navigation }) {
 		<View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<View>
-				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
+				<Text style={styles.headerText}>NEW FOOD</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
 				
