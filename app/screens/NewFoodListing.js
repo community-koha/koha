@@ -27,29 +27,32 @@ import firebase from 'firebase/app';
 const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
-	userType,
-	donationType,
+	userID,
+	listingType,
 	listingTitle,
 	description,
 	location,
 	category,
+	allergen,
 	quantity,
 	expiryDate,
 	collectionMethod,
-	imageUrl
+	imageFileName
 ) {
 	const dbh = firebase.firestore();
+	
 	dbh.collection('listings').add({
-		userType: userType,
-		donationType: donationType,
+		user: dbh.doc('users/' + userID),
+		listingType: listingType,
 		listingTitle: listingTitle,
 		description: description,
 		location: location,
 		category: category,
+		allergen: allergen,
 		quantity: quantity,
 		expiryDate: expiryDate,
 		collectionMethod: collectionMethod,
-		image: imageUrl
+		imageFileName: imageFileName
 	});
 }
 
@@ -60,72 +63,60 @@ function NewFoodListing({ navigation }) {
 	}, []);
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	const [userType, setUserType] = useState(null);
-	const [donationType, setDonationType] = useState(null);
+	const userID = firebase.auth().currentUser.uid;
+	const [listingType, setlistingType] = useState('food');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [category, setCategory] = useState(null);
+	const [allergen, setAllergen] = useState(null);
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
-	const [imageUrl, setImageUrl] = useState(null);
+	const [imageFileName, setimageFileName] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
-	const [openUserType, setOpenUserType] = useState(false);
-	const [openDonationType, setOpenDonationType] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
+	const [openAllergenType, setOpenAllergenType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [typeUserItems, setUserTypeItems] = useState([
-		{ value: 'business', label: 'A Business' },
-		{ value: 'individual', label: 'An Individual' },
-	]);
-	const [donationItems, setDonationTypeItems] = useState([
-		{ value: 'food', label: 'Food' },
-		{ value: 'essential_item', label: 'Essential Items' },
-	]);
 	const [categoryFood, setCategoryFood] = useState([
 		{ value: 'fruit', label: 'Fruit' },
-		{ value: 'canned', label: 'Canned Goods' },
+		{ value: 'vegetables', label: 'Vegetables' },
+		{ value: 'dry_goods', label: 'Dry Goods' },
 		{ value: 'cooked', label: 'Cooked Meals' },
+		{ value: 'bakery', label: 'Bakery Items' },
+		{ value: 'dairy', label: 'Dairy' },
 		{ value: 'misc', label: 'Miscellaneous' },
 	]);
-	const [categoryItems, setCategoryItems] = useState([
-		{ value: 'baby', label: 'Baby Items' },
-		{ value: 'bedding', label: 'Bedding' },
-		{ value: 'heating', label: 'Heating' },
-		{ value: 'school', label: 'School Items' },
-		{ value: 'clothing', label: 'Clothing' },
-		{ value: 'misc', label: 'Miscellaneous' },
+
+	const [categoryAllergen, setCategoryAllergen] = useState([
+		{ value: 'gluten', label: 'Gluten' },
+		{ value: 'peanuts', label: 'Peanuts' },
+		{ value: 'seafood', label: 'Seafood' },
+		{ value: 'dairy', label: 'Dairy' },
+		{ value: 'eggs', label: 'Eggs' },
 	]);
+	
 	const [collectionItems, setCollectionItems] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
 	]);
 
-	function userTypeOpened(val) {
-		setOpenUserType(val);
-		setOpenDonationType(false);
-		setOpenCategoryType(false);
-		setOpenCollectionType(false);
-	}
-	function donationTypeOpened(val) {
-		setOpenUserType(false);
-		setOpenDonationType(val);
-		setOpenCategoryType(false);
-		setOpenCollectionType(false);
-	}
+	
 	function categoryOpened(val) {
-		setOpenUserType(false);
-		setOpenDonationType(false);
 		setOpenCategoryType(val);
+		setOpenAllergenType(false);
+		setOpenCollectionType(false);
+	}
+	function allergenOpened(val) {
+		setOpenCategoryType(false);
+		setOpenAllergenType(val);
 		setOpenCollectionType(false);
 	}
 	function collectionOpened(val) {
-		setOpenUserType(false);
-		setOpenDonationType(false);
 		setOpenCategoryType(false);
+		setOpenAllergenType(false);
 		setOpenCollectionType(val);
 	}
 
@@ -157,8 +148,7 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
-		userType,
-		donationType,
+		listingType,
 		listingTitle,
 		description,
 		location,
@@ -166,17 +156,11 @@ function NewFoodListing({ navigation }) {
 		quantity,
 		expiryDate,
 		collectionMethod,
-		imageUrl
+		imageFileName
 	) {
 		console.log('');
 		console.log('Checking');
 		switch (true) {
-			case !userType in ['business', 'individual']:
-				return false;
-
-			case !donationType in ['food', 'essential_item']:
-				return false;
-
 			case listingTitle in ['', null]:
 				return false;
 
@@ -184,15 +168,6 @@ function NewFoodListing({ navigation }) {
 				return false;
 
 			case location['lat'] == 0 || location['lng'] == 0:
-				return false;
-
-			case donationType == 'food' &&
-				!category in ['fruit', 'canned', 'cooked', 'misc']:
-				return false;
-
-			case donationType == 'essential_item' &&
-				!category in
-					['baby', 'bedding', 'heating', 'school', 'clothing', 'misc']:
 				return false;
 
 			case quantity == null || quantity <= 0:
@@ -203,20 +178,25 @@ function NewFoodListing({ navigation }) {
 
 			case !collectionMethod in ['pick_up', 'delivery']:
 				return false;
+
+			case imageFileName in ['', null]:
+				return false;
 		}
 
 		console.log('Pass');
+		
 		SubmitForm(
-			userType,
-			donationType,
+			userID,
+			listingType,
 			listingTitle,
 			description,
 			location,
 			category,
+			allergen,
 			quantity,
 			expiryDate,
 			collectionMethod,
-			imageUrl
+			imageFileName
 		);
 	}
 
@@ -281,11 +261,11 @@ function NewFoodListing({ navigation }) {
 			},
 
 			() => {
-				snapshot.snapshot.ref.getDownloadURL().then((data)=>{
-					setImageUrl(JSON.stringify(data));
+				snapshot.snapshot.ref.getMetadata().then((data)=>{
+					setimageFileName(data.name);
 					setUploading(false)
 					console.log("Upload successful");
-					console.log("Download URL", JSON.stringify(data));
+					console.log("Filename", data.name);
 					blob.close
 					return data;
 				});
@@ -297,53 +277,23 @@ function NewFoodListing({ navigation }) {
 		<View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<View>
-				<Text style={styles.headerText}>CREATE NEW LISTING</Text>
+				<Text style={styles.headerText}>NEW FOOD</Text>
 			</View>
-			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="always">
-				<Text style={styles.inputTitleFirst}>I am...</Text>
-				<DropDownPicker
-					open={openUserType}
-					items={typeUserItems}
-					value={userType}
-					setOpen={(val) => userTypeOpened(val)}
-					setValue={(val) => setUserType(val)}
-					showArrowIcon={!web}
-					showTickIcon={false}
-					zIndex={5000}
-					placeholder="Select..."
-					placeholderStyle={styles.dropDownPlaceholderText}
-					dropDownContainerStyle={styles.dropDownBody}
-					textStyle={styles.dropDownText}
-					style={styles.inputText}
-				/>
-				<Text style={styles.inputTitle}>I'm giving...</Text>
-				<DropDownPicker
-					open={openDonationType}
-					items={donationItems}
-					value={donationType}
-					setOpen={(val) => donationTypeOpened(val)}
-					setValue={(val) => setDonationType(val)}
-					showArrowIcon={!web}
-					showTickIcon={false}
-					zIndex={4000}
-					placeholder="Select..."
-					placeholderStyle={styles.dropDownPlaceholderText}
-					dropDownContainerStyle={styles.dropDownBody}
-					textStyle={styles.dropDownText}
-					style={styles.inputText}
-				/>
-				<Text style={styles.inputTitle}>Listing Title</Text>
+			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
+				
+				
+				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
 					onChangeText={(val) => setListingTitle(val)}
 					placeholder="Title"
 					style={styles.inputText}
 				/>
-				<Text style={styles.inputTitle}>Listing Description</Text>
+				<Text style={styles.inputTitle}>Description</Text>
 				<TextInput
 					onChangeText={(val) => setDescription(val)}
 					placeholder="Description"
 					multiline={true}
-					numberOfLines={4}
+					numberOfLines={3}
 					textBreakStrategy={'simple'}
 					style={styles.inputTextDescription}
 				/>
@@ -383,13 +333,29 @@ function NewFoodListing({ navigation }) {
 					zIndex={8000}
 					debounce={200}
 				/>
-				<Text style={styles.inputTitle}>Listing Category</Text>
+				<Text style={styles.inputTitle}>Category</Text>
 				<DropDownPicker
 					open={openCategoryType}
-					items={donationType == 'food' ? categoryFood : categoryItems}
+					items={categoryFood}
 					value={category}
 					setOpen={(val) => categoryOpened(val)}
 					setValue={(val) => setCategory(val)}
+					showArrowIcon={!web}
+					showTickIcon={false}
+					zIndex={5000}
+					placeholder="Select..."
+					placeholderStyle={styles.dropDownPlaceholderText}
+					dropDownContainerStyle={styles.dropDownBody}
+					textStyle={styles.dropDownText}
+					style={styles.inputText}
+				/>
+				<Text style={styles.inputTitle}>Allergen</Text>
+				<DropDownPicker
+					open={openAllergenType}
+					items={categoryAllergen}
+					value={allergen}
+					setOpen={(val) => allergenOpened(val)}
+					setValue={(val) => setAllergen(val)}
 					showArrowIcon={!web}
 					showTickIcon={false}
 					zIndex={3000}
@@ -470,8 +436,7 @@ function NewFoodListing({ navigation }) {
 					style={styles.submit}
 					onPress={() =>
 						CheckInput(
-							userType,
-							donationType,
+							listingType,
 							listingTitle,
 							description,
 							location,
@@ -479,7 +444,7 @@ function NewFoodListing({ navigation }) {
 							quantity,
 							expiryDate,
 							collectionMethod,
-							imageUrl
+							imageFileName
 						)
 					}
 				>
