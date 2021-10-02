@@ -27,7 +27,7 @@ import firebase from 'firebase/app';
 const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
-	
+	userID,
 	listingType,
 	listingTitle,
 	description,
@@ -41,6 +41,7 @@ function SubmitForm(
 	const dbh = firebase.firestore();
 	
 	dbh.collection('listings').add({
+		user: dbh.doc('users/' + userID),
 		listingType: listingType,
 		listingTitle: listingTitle,
 		description: description,
@@ -60,7 +61,7 @@ function NewFoodListing({ navigation }) {
 	}, []);
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	
+	const userID = firebase.auth().currentUser.uid;
 	const [listingType, setlistingType] = useState('food');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
@@ -170,6 +171,7 @@ function NewFoodListing({ navigation }) {
 		console.log('Pass');
 		
 		SubmitForm(
+			userID,
 			listingType,
 			listingTitle,
 			description,
