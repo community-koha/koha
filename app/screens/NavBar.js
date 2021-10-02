@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { Button } from 'react-native-elements';
 
@@ -51,12 +51,12 @@ function NavBar({ navigation }) {
 		>
 			
 			<Tab.Screen
-				name="Map View"
+				name="Search"
 				component={MapViewScreen}
 				options={{
-					tabBarLabel: 'Map View',
+					tabBarLabel: 'Search',
 					tabBarIcon: ({color}) => (
-						<MaterialCommunityIcons name="map-search-outline" size={24} color={color} />
+						<MaterialIcons name="search" size={24} color={color} />
 					),
 				}}
 			/>
