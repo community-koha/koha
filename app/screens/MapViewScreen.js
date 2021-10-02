@@ -91,37 +91,34 @@ function MapViewScreen({navigation}) {
 		return <ActivityIndicator />;
 	}
 
+	var mapStyle = [
+		{
+			featureType: "administrative",
+			elementType: "geometry",
+			stylers: [{visibility: "off"}]
+		},
+		{
+			featureType: "poi",
+			stylers: [{visibility: "off"}]
+		},
+		{
+			featureType: "road",
+			elementType: "labels.icon",
+			stylers: [{visibility: "off"}]
+		},
+		{
+			featureType: "transit",
+			stylers: [{visibility: "off"}]
+		}
+	]
+
 	return (
+		
 		<MapView
 		 provider={PROVIDER_GOOGLE}
 		 style={styles.map}
-		 region={mapRegion}>
-		 {/* options=
-			{{
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				disableDefaultUI: true,
-				styles: 
-				[
-					{
-						featureType: "administrative",
-						elementType: "geometry",
-						stylers: [{visibility: "off"}]
-					},
-					{
-						featureType: "poi",
-						stylers: [{visibility: "off"}]
-					},
-					{
-						featureType: "road",
-						elementType: "labels.icon",
-						stylers: [{visibility: "off"}]
-					},
-					{
-						featureType: "transit",
-						stylers: [{visibility: "off"}]
-					}
-				]
-			}} */}
+		 region={mapRegion}
+		 customMapStyle={mapStyle}>
 		 
 			{listings.map((item, i) => {
 				return(
