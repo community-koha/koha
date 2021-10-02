@@ -15,7 +15,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 import { MaterialIcons } from '@expo/vector-icons';
 
-function ListViewScreen({navigation}) {
+function ListViewScreen({route, navigation}) {
+	
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of users
 	const [search, setSearch] = useState('');
@@ -41,10 +42,11 @@ function ListViewScreen({navigation}) {
 		// Unsubscribe from events when no longer in use
 		return () => subscriber();
 	}, []);
-
+	
 	if (loading) {
 		return <ActivityIndicator size="small" color={Colours.activityIndicator}/>;
 	}
+
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>

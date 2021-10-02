@@ -64,14 +64,14 @@ function MapViewScreen({navigation}) {
 			.collection('listings')
 			.onSnapshot((querySnapshot) => {
 				const listings = [];
-
+				//add all docs to listings array
 				querySnapshot.forEach((documentSnapshot) => {
 					listings.push({
 						...documentSnapshot.data(),
 						key: documentSnapshot.id,
 					});
 				});
-
+				//update listings
 				setListings(listings);
 				setLoading(false);
 			});
@@ -94,6 +94,7 @@ function MapViewScreen({navigation}) {
 		return <ActivityIndicator />;
 	}
 
+	//customize map style
 	var mapStyle = [
 		{
 			featureType: "administrative",
@@ -116,7 +117,9 @@ function MapViewScreen({navigation}) {
 	]
 
 	function Search(keyword, listings){
+		//create new array
 		const filteredList = []
+		//check each listings title and description
 		listings.forEach(function(item) {
 			if (item.listingTitle.includes(keyword)){
 				filteredList.push(item)
@@ -126,8 +129,32 @@ function MapViewScreen({navigation}) {
 			}
 		})
 		if (filteredList.length != 0){
+			//if there are matches, update listing
 			setListings(filteredList);
 		}
+	}
+
+	function FilterListingType(type){
+		
+		firebase.firestore()
+			.collection('listings')
+			// Filter results
+			.where('listingType', 'in', type)
+			.get()
+			.then(querySnapshot => {
+				const filteredList = []
+				querySnapshot.forEach((documentSnapshot) => {
+					filteredList.push({
+						...documentSnapshot.data(),
+						key: documentSnapshot.id,
+					});
+				});
+
+				if (filteredList.length != 0){
+					setListings(filteredList);
+				}
+			});
+		
 	}
 	
 	return (
@@ -147,10 +174,15 @@ function MapViewScreen({navigation}) {
 							style={{padding: 12}}
 							onPress={() => Search(keyword, listings)}/>
 					</View>
-					
+					<View style={styles.filterContainer}>
+						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>
+						<Button title="Food" onPress={() => FilterListingType(["food"])}/>
+						<Button title="Essentials" onPress={() => FilterListingType(["essentialItem"])}/>
+						<Button title="Event" onPress={() => FilterListingType(["event"])}/>
+						<Button title="Service" onPress={() => FilterListingType(["service"])}/>
+					</View>
 					
 					<View style={styles.iconContainer}>
-						
 						<MaterialCommunityIcons name="view-list-outline"
 							size={30}
 							color={Colours.default}
@@ -239,6 +271,12 @@ const styles = StyleSheet.create({
 		borderColor: Colours.grey,
 		borderWidth: 0,
 		width: '85%'
+	},
+	filterContainer:{
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingTop: 10,
 	},
 	iconContainer:{
 		flexDirection: 'row',
