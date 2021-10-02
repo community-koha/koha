@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, TextInput, Image, TouchableWithoutFeedback, Button, Keyboard } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { SearchBar } from 'react-native-elements';
 import * as Location from 'expo-location';
 
 import Colours from '../config/colours.js';
@@ -20,6 +21,8 @@ function MapViewScreen({navigation}) {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
+	const [search, setSearch] = useState('');
+
 	
 	// do after render
 	useEffect(() => {
@@ -112,52 +115,62 @@ function MapViewScreen({navigation}) {
 		}
 	]
 
+	
 	return (
-		
-		<MapView
-		 provider={PROVIDER_GOOGLE}
-		 style={styles.map}
-		 region={mapRegion}
-		 customMapStyle={mapStyle}>
-		 
-			{listings.map((item, i) => {
-				return(
-					<MapView.Marker
-						key={i}
-						coordinate={{
-							latitude: item.location.lat,
-							longitude: item.location.lng
-						}}
-						title={item.listingTitle}
-						description={item.description}
-					>
-						<MapView.Callout tooltip
-							onPress={() => navigation.navigate('ListingDetailScreen', {
-								listingId: item.key,
-							})}
-						>
-							<View>
-							<View style={styles.bubble}>
-								<View>
-									<Image style={styles.photo} source={require('../assets/logo.png')} onPress={() => navigation.navigate('ListingDetailScreen', {
-											listingId: item.key,
-										})}/>
-								</View>
-								<View>
-									<Text style={styles.calloutText}>{item.listingTitle}</Text>
-									<Text style={styles.calloutText}>{item.description}</Text>
-									<Text style={styles.calloutText}>Organisation Name</Text>
-									<Text style={styles.calloutText}>View Details</Text>
-								</View>
-								
-								
-							</View>
-							</View>
-						</MapView.Callout>
-					</MapView.Marker>
-				);
-			})}
-		</MapView>);
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<View style={styles.container}>
+				<View style={styles.searchContainer}>
+					<TextInput
+						style={styles.searchBar}
+						value={search}
+						placeholder="Search listings"
+						/>
+				</View>
+				<MapView
+				provider={PROVIDER_GOOGLE}
+				style={styles.map}
+				region={mapRegion}
+				customMapStyle={mapStyle}>
+				
+					{listings.map((item, i) => {
+						return(
+							<MapView.Marker
+								key={i}
+								coordinate={{
+									latitude: item.location.lat,
+									longitude: item.location.lng
+								}}
+								title={item.listingTitle}
+								description={item.description}
+							>
+								<MapView.Callout tooltip
+									onPress={() => navigation.navigate('ListingDetailScreen', {
+										listingId: item.key,
+									})}
+								>
+									<View>
+									<View style={styles.bubble}>
+										<View>
+											<Image style={styles.photo} source={require('../assets/logo.png')} onPress={() => navigation.navigate('ListingDetailScreen', {
+													listingId: item.key,
+												})}/>
+										</View>
+										<View>
+											<Text style={styles.calloutText}>{item.listingTitle}</Text>
+											<Text style={styles.calloutText}>{item.description}</Text>
+											<Text style={styles.calloutText}></Text>
+											<Text style={styles.calloutText}>View Details</Text>
+										</View>
+									</View>
+									</View>
+								</MapView.Callout>
+							</MapView.Marker>
+						);
+					})}
+				</MapView>
+			</View>
+		</TouchableWithoutFeedback>
+	);
 }
 
 const styles = StyleSheet.create({
@@ -165,11 +178,24 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
+
+	},
+	searchContainer:{
+		height: '21%',
+		padding: 20,
+	},
+	searchBar:{
+		fontSize: 16,
+		padding: 12,
+		borderRadius: 10,
+		borderColor: Colours.grey,
+		borderWidth: 0.5,
+		width: gui.screen.width * 0.9,
 	},
 	map: {
 		width: '100%',
-		height: '100%',
+		height: '70%',
 	},
 	calloutText:{
 		fontSize: 16,
