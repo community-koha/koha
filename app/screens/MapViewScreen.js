@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ActivityIndicator, TextInput, Image, TouchableW
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { SearchBar } from 'react-native-elements';
 import * as Location from 'expo-location';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
@@ -125,6 +126,18 @@ function MapViewScreen({navigation}) {
 						value={search}
 						placeholder="Search listings"
 						/>
+					<View style={styles.iconContainer}>
+						<MaterialCommunityIcons name="view-list-outline"
+							size={30}
+							color={Colours.default}
+							style={{margin: 5}}
+							onPress={()=> navigation.navigate('ListViewScreen')}/>
+						<MaterialCommunityIcons name="map-marker"
+							size={30}
+							color={Colours.black}
+							style={{margin: 5}}/>
+					</View>
+					
 				</View>
 				<MapView
 				provider={PROVIDER_GOOGLE}
@@ -192,6 +205,11 @@ const styles = StyleSheet.create({
 		borderColor: Colours.grey,
 		borderWidth: 0.5,
 		width: gui.screen.width * 0.9,
+	},
+	iconContainer:{
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		padding: 10,
 	},
 	map: {
 		width: '100%',
