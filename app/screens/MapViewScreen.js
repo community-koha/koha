@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, TextInput, Image, TouchableWithoutFeedback, Button, Keyboard } from 'react-native';
+import { 
+	StyleSheet,
+	Text, 
+	View, 
+	ActivityIndicator, 
+	TextInput, 
+	Image, 
+	TouchableWithoutFeedback, 
+	Button, 
+	Keyboard 
+} from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';

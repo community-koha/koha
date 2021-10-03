@@ -4,22 +4,23 @@ import {
 	View,
 	TextInput,
 	ActivityIndicator,
+	Image, 
 	ScrollView,
 	TouchableWithoutFeedback,
+	Button,
 	Keyboard
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
-import { MaterialIcons } from '@expo/vector-icons';
 
 function ListViewScreen({route, navigation}) {
 	
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of users
-	const [search, setSearch] = useState('');
+	const [keyword, setKeyword] = useState('');
 
 	useEffect(() => {
 		const subscriber = firebase
@@ -47,48 +48,104 @@ function ListViewScreen({route, navigation}) {
 		return <ActivityIndicator size="small" color={Colours.activityIndicator}/>;
 	}
 
+	function Search(keyword, listings){
+		//create new array
+		const filteredList = []
+		//check each listings title and description
+		listings.forEach(function(item) {
+			if (item.listingTitle.includes(keyword)){
+				filteredList.push(item)
+			}
+			if (item.description.includes(keyword)){
+				filteredList.push(item)
+			}
+		})
+		if (filteredList.length != 0){
+			//if there are matches, update listing
+			setListings(filteredList);
+		}
+	}
+
+	function FilterListingType(type){
+		
+		firebase.firestore()
+			.collection('listings')
+			// Filter results
+			.where('listingType', 'in', type)
+			.get()
+			.then(querySnapshot => {
+				const filteredList = []
+				querySnapshot.forEach((documentSnapshot) => {
+					filteredList.push({
+						...documentSnapshot.data(),
+						key: documentSnapshot.id,
+					});
+				});
+
+				if (filteredList.length != 0){
+					setListings(filteredList);
+				}
+			});
+		
+	}
+
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
 				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchBar}
-						value={search}
-						placeholder="Search listings"
-						/>
-					<View style={styles.iconContainer}>
-						<MaterialCommunityIcons name="view-list"
-							size={30}
-							color={Colours.default}
-							style={{margin: 5}} />
-						<MaterialCommunityIcons name="map-marker-outline"
-							size={30}
-							color={Colours.grey}
-							style={{margin: 5}}
-							onPress={()=> navigation.navigate('Map')} />
+					<View style={styles.searchBar}>
+						<TextInput
+							style={styles.searchInput}
+							value={keyword}
+							placeholder="Search listings"
+							onChangeText={(val) => setKeyword(val)}
+							/>
+						<MaterialIcons
+							name="search"
+							size={26}
+							style={{padding: 12}}
+							onPress={() => Search(keyword, listings)}/>
+					</View>
+					<View style={styles.filterContainer}>
+						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>
+						<Button title="Food" onPress={() => FilterListingType(["food"])}/>
+						<Button title="Essentials" onPress={() => FilterListingType(["essentialItem"])}/>
+						<Button title="Event" onPress={() => FilterListingType(["event"])}/>
+						<Button title="Service" onPress={() => FilterListingType(["service"])}/>
 					</View>
 					
+					<View style={styles.iconContainer}>
+						<MaterialCommunityIcons name="view-list-outline"
+							size={30}
+							color={Colours.default}
+							style={{margin: 5}}
+							onPress={()=> navigation.navigate('ListViewScreen')}/>
+						<MaterialCommunityIcons name="map-marker"
+							size={30}
+							color={Colours.black}
+							style={{margin: 5}}/>
+					</View>
 				</View>
 				<ScrollView keyboardShouldPersistTaps='handled'>
-			{listings.map((item, i) => {
-				return (
-					<ListItem
-						style={styles.list}
-						key={i}
-						bottomDivider
-						onPress={() =>
-							navigation.navigate('ListingDetailScreen', {
-								listingId: item.key,
-							})
-						}
-					>
-						<ListItem.Content>
-							<ListItem.Title>{item.listingTitle}</ListItem.Title>
-							<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-						</ListItem.Content>
-					</ListItem>
-				);
-			})}
+				{listings.map((item, i) => {
+					return (
+						<ListItem
+							style={styles.list}
+							key={i}
+							bottomDivider
+							onPress={() =>
+								navigation.navigate('ListingDetailScreen', {
+									listingId: item.key,
+								})
+							}
+						>
+							<ListItem.Content>
+								<ListItem.Title>{item.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+							</ListItem.Content>
+						</ListItem>
+					);
+				})}
 			</ScrollView>
 		</View>
 		</TouchableWithoutFeedback>
@@ -108,12 +165,27 @@ const styles = StyleSheet.create({
 		padding: 20,
 	},
 	searchBar:{
-		fontSize: 16,
-		padding: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		borderRadius: 10,
 		borderColor: Colours.grey,
 		borderWidth: 0.5,
 		width: gui.screen.width * 0.9,
+	},
+	searchInput:{
+		fontSize: 16,
+		padding: 12,
+		borderRadius: 10,
+		borderColor: Colours.grey,
+		borderWidth: 0,
+		width: '85%'
+	},
+	filterContainer:{
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingTop: 10,
 	},
 	iconContainer:{
 		flexDirection: 'row',
