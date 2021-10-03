@@ -17,10 +17,9 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
+import API from '../config/api.js';
 
 import firebase from 'firebase/app';
-
-const GOOGLE_MAP_API_KEY = '';
 
 function SubmitForm(
 	userID,
@@ -56,7 +55,7 @@ function NewEventListing({navigation}){
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
-	const [eventDate, seteventDate] = useState(ConvertDate(Date.now()));
+	const [eventDate, setEventDate] = useState(ConvertDate(Date.now()));
     const [category, setCategory] = useState(null);
 
 	const [showDate, setShowDate] = useState(false);
@@ -73,7 +72,7 @@ function NewEventListing({navigation}){
 
     function setDate(date) {
 		setShowDate(false);
-		seteventDate(date);
+		setEventDate(date);
 	}
 
 	function ConvertDate(seconds) {
@@ -138,7 +137,7 @@ function NewEventListing({navigation}){
         <View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
 			<View>
-				<Text style={styles.headerText}>NEW EVENT</Text>
+				<Text style={styles.headerText}>NEW SERVICE</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
 				
@@ -173,13 +172,13 @@ function NewEventListing({navigation}){
 						})
 					}
 					query={{
-						key: GOOGLE_MAP_API_KEY,
+						key: API.google_map,
 						language: 'en',
 						components: 'country:nz',
 					}}
 					requestUrl={{
 						useOnPlatform: 'web',
-						url: 'https://thingproxy.freeboard.io/fetch/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
+						url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
 					}}
 					styles={{
 						textInputContainer: styles.textInputContainer,
