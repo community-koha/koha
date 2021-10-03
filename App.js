@@ -10,6 +10,7 @@ import UserTypeScreen from './app/screens/UserTypeScreen';
 import MapViewScreen from './app/screens/MapViewScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
+import EditListingScreen from './app/screens/EditListingScreen';
 import GiveKoha from './app/screens/GiveKoha';
 import MyKoha from './app/screens/MyKoha';
 import NewFoodListing from './app/screens/NewFoodListing';
@@ -108,6 +109,10 @@ export default function App() {
 				<Stack.Screen
 					name="ListingDetailScreen"
 					component={ListingDetailScreen}
+				/>
+				<Stack.Screen
+					name="EditListingScreen"
+					component={EditListingScreen}
 				/>
 				<Stack.Screen
 					name="GiveKoha"
