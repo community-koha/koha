@@ -66,7 +66,7 @@ function MapViewScreen({navigation}) {
 	}, []);
 
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
-	const [listings, setListings] = useState([]); // Initial empty array of users
+	const [listings, setListings] = useState([]); // Initial empty array of listings
 	//subscribe from firestore
 	useEffect(() => {
 		const subscriber = firebase
@@ -76,10 +76,14 @@ function MapViewScreen({navigation}) {
 				const listings = [];
 				//add all docs to listings array
 				querySnapshot.forEach((documentSnapshot) => {
-					listings.push({
-						...documentSnapshot.data(),
-						key: documentSnapshot.id,
-					});
+					// Don't show listings that have been deleted or hidden from public view
+					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
+					{
+						listings.push({
+							...documentSnapshot.data(),
+							key: documentSnapshot.id,
+						});
+					}
 				});
 				//update listings
 				setListings(listings);
@@ -154,10 +158,14 @@ function MapViewScreen({navigation}) {
 			.then(querySnapshot => {
 				const filteredList = []
 				querySnapshot.forEach((documentSnapshot) => {
-					filteredList.push({
-						...documentSnapshot.data(),
-						key: documentSnapshot.id,
-					});
+					// Don't show listings that have been deleted or hidden from public view
+					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
+					{
+						filteredList.push({
+							...documentSnapshot.data(),
+							key: documentSnapshot.id,
+						});
+					}					
 				});
 
 				if (filteredList.length != 0){
@@ -209,7 +217,8 @@ function MapViewScreen({navigation}) {
 					provider={PROVIDER_GOOGLE}
 					style={styles.map}
 					region={mapRegion}
-					customMapStyle={mapStyle}>
+					customMapStyle={mapStyle}
+					options={{disableDefaultUI: true}}>
 				
 					{listings.map((item, i) => {
 						return(
