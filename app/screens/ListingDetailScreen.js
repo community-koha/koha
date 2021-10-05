@@ -27,10 +27,14 @@ function ListingDetailScreen({ route, navigation }) {
 				const listings = [];
 
 				querySnapshot.forEach((documentSnapshot) => {
-					listings.push({
-						...documentSnapshot.data(),
-						key: documentSnapshot.id,
-					});
+					// Don't show listings that have been deleted or hidden from public view
+					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
+					{
+						listings.push({
+							...documentSnapshot.data(),
+							key: documentSnapshot.id,
+						});
+					}					
 				});
 
 				setListings(listings);

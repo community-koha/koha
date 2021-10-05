@@ -82,13 +82,6 @@ function MyKoha({ navigation }) {
 					onPress={() => {setShowService(!showService)}}>
 					<Text style={showService? [styles.buttonText]: [styles.buttonText, styles.disableButton]}>SERVICES</Text>					
 				</TouchableOpacity>
-				{/*
-				<TouchableOpacity
-					style={[styles.button, styles.backButton]}
-					onPress={() => {navigation.goBack()}}>
-					<Text style={[styles.buttonText, styles.backButtonText]}>GO BACK</Text>
-				</TouchableOpacity>
-				*/}
 			</View>
 			<ScrollView style={styles.scroll}>
 				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
