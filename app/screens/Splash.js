@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
@@ -9,12 +9,14 @@ import {
 	Image,
 	StatusBar,
 	ActivityIndicator,
+	Platform,
 } from 'react-native';
 
 import firebase from 'firebase/app';
 import 'firebase';
 
 function Splash({ navigation }) {
+
 	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
 	{
 		var navigationTarget = 'Entry';
@@ -37,11 +39,11 @@ function Splash({ navigation }) {
 				created: (new Date(parseInt(user.metadata.a)).toISOString()),
 				email: user.email,
 				name: user.displayName[2,1] == "|" ? user.displayName.slice(2, 9999): user.displayName,
-				uid: user.uid,
+				uid: user.uid
 			}, {merge: true}).catch((error) => {
 				console.error(error);
 			});
-		}
+		}		
 		
 		var id = setInterval(() => 
 		{
