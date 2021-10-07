@@ -20,6 +20,7 @@ function ListingDetailScreen({ route, navigation }) {
 	const [listings, setListings] = useState([]);
 	const [watching, setWatching] = useState(false);
 	const [user, setUser] = useState(null);
+	const [type, setType] = useState('');
 
 	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
 	{
@@ -43,6 +44,7 @@ function ListingDetailScreen({ route, navigation }) {
 					// Don't show listings that have been deleted or hidden from public view
 					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
 					{
+						setType(documentSnapshot.data()["listingType"])
 						listings.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
@@ -59,7 +61,6 @@ function ListingDetailScreen({ route, navigation }) {
 	}, [listingId]);
 
 	useEffect(() => {
-		console.log(user === null? "": user["uid"])
 		if (user !== null) {
 			const subscriber = firebase
 			.firestore()
@@ -115,7 +116,7 @@ function ListingDetailScreen({ route, navigation }) {
 					<Text style={styles.backButtonText}>BACK</Text>
 				</TouchableOpacity>
 				{
-					watching
+					(['food','essentialItem'].includes(type) && watching)
 					&&
 					(
 						<TouchableOpacity
@@ -128,7 +129,7 @@ function ListingDetailScreen({ route, navigation }) {
 					)
 				}
 				{
-					!watching
+					(['food','essentialItem'].includes(type) && !watching)
 					&&
 					(
 						<TouchableOpacity
