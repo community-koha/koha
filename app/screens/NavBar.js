@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { Button } from 'react-native-elements';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 import Colours from '../config/colours.js';
 
@@ -15,6 +17,15 @@ import GiveKoha from './GiveKoha.js';
 import MyKoha from './MyKoha.js';
 import firebase from 'firebase/app';
 import roles from '../config/roles.js';
+import { Platform } from 'react-native';
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: false,
+		shouldSetBadge: false,
+	}),
+});
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +41,26 @@ function NavBar({ navigation }) {
 			unsubscribe();
 		}
 	})
+
+	// Push notifications are not avaliable on web or emulators
+	if (Platform.OS !== "web") {
+		registerForPushNotificationsAsync().then(
+			(token) => {
+				const db = firebase.firestore();
+				db.collection('users')
+					.doc(user.uid)
+					.update({
+						notificationToken: token
+					})
+					.then(() => {
+						console.log("Updated user's push notification token in database");
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			}		
+		);
+	}	
 
 	React.useEffect(
 		() =>
@@ -107,3 +138,33 @@ function NavBar({ navigation }) {
 }
 
 export default NavBar;
+
+async function registerForPushNotificationsAsync() {
+	let token;
+	if (Constants.isDevice) {
+		const { status: existingStatus } = await Notifications.getPermissionsAsync();
+		let finalStatus = existingStatus;
+		if (existingStatus !== 'granted') {
+			const { status } = await Notifications.requestPermissionsAsync();
+			finalStatus = status;
+		}
+		if (finalStatus !== 'granted') {
+			console.log("Can't get permission for push notifications")
+			return;
+		}
+		token = (await Notifications.getExpoPushTokenAsync()).data;
+	} else {
+		console.log("This is not a physical device")
+	}
+
+	if (Platform.OS === 'android') {
+		Notifications.setNotificationChannelAsync('default', {
+			name: 'default',
+			importance: Notifications.AndroidImportance.MAX,
+			vibrationPattern: [0, 250, 250, 250],
+			lightColor: '#FF231F7C',
+		});
+	}
+
+	return token;
+}

@@ -44,6 +44,7 @@ function ListingDetailScreen({ route, navigation }) {
 
 	// All listings
 	const [listingTitle, setListingTitle] = useState(null);
+	const [listingTitleOriginal, setListingTitleOriginal] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [locationOriginal, setLocationOriginal] = useState(null);
@@ -167,7 +168,71 @@ function ListingDetailScreen({ route, navigation }) {
 			console.error(error);
 			setModalText(error.message);
 			setModalVisible(true);
-		});
+		});		
+
+		// Add a notifiction for all the users watching the listing
+		var subscriber = db
+			.collection('users')
+			.where('watching', 'array-contains', listingId)
+			.onSnapshot((querySnapshot) => {
+				subscriber();
+				const watching_users = [];
+				const push_tokens = [];
+
+				querySnapshot.forEach((documentSnapshot) => {
+					watching_users.push(documentSnapshot.data()["uid"])
+					push_tokens.push(documentSnapshot.data()["notificationToken"])
+				});
+
+				console.log(watching_users)
+				console.log(watching_users.length)
+
+				watching_users.forEach((id) => {
+					console.log(id)
+					// Remove listing ID from users watching the listing
+					db.collection('users')
+						.doc(id)
+						.update({
+							watching: firebase.firestore.FieldValue.arrayRemove( listingId )
+						})
+						.then(() => {
+							console.log("Removed item from watching list");
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+					
+
+					// Add notifications for the users 
+					db.collection('notifications')
+						.doc()
+						.set({
+							uid: user["uid"],
+							title: listingTitleOriginal,
+							reason: "removed"
+						},{merge:true})
+						.then(() => {
+							console.log("Added notification to database");
+						})
+						.catch((error) => {
+							console.error(error);
+						});		
+				})
+
+				// Send push notifications
+				push_tokens.forEach((token) => {
+					console.log(token)
+
+					if (token !== null && token !== "") {
+						sendPushNotification(
+							token,
+							'A watched listing has been removed.',
+							"Your watched listing '" + listingTitleOriginal + "' has been removed by the poster. This listing will no longer appear in your watched listings."
+						)
+						console.log("Sent notification")
+					}					
+				})
+			});
 	}
 
 	function updateListing() {
@@ -405,7 +470,6 @@ function ListingDetailScreen({ route, navigation }) {
 
 	useEffect(() => {
 		setLoading(true);
-		console.log(listingId)
 		const subscriber = firebase
 			.firestore()
 			.collection('listings')
@@ -415,6 +479,7 @@ function ListingDetailScreen({ route, navigation }) {
 					setListing(documentSnapshot.data());
 					setType(documentSnapshot.data()["listingType"]);
 					setListingTitle(documentSnapshot.data()["listingTitle"]);
+					setListingTitleOriginal(documentSnapshot.data()["listingTitle"])
 					setDescription(documentSnapshot.data()["description"]);
 					setLocation(documentSnapshot.data()["location"]);
 					setLocationOriginal({
@@ -977,3 +1042,23 @@ const styles = StyleSheet.create({
 	},
 });
 export default ListingDetailScreen;
+
+async function sendPushNotification(expoPushToken, title, body) {
+	const message = {
+		to: expoPushToken,
+		sound: 'default',
+		title: title,
+		body: body,
+	};
+
+	await fetch('https://exp.host/--/api/v2/push/send', {
+		mode: 'no-cors',
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Accept-encoding': 'gzip, deflate',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(message),
+	});
+}

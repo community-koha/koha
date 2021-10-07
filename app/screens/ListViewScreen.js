@@ -20,29 +20,52 @@ function ListViewScreen({route, navigation}) {
 	
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of users
+	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
 	const [keyword, setKeyword] = useState('');
 
-	useEffect(() => {
-		const subscriber = firebase
+	useEffect(() => {		
+		// Get watched listings
+		var subscriber = firebase
 			.firestore()
-			.collection('listings')
+			.collection('users')
+			.where(firebase.firestore.FieldPath.documentId(), '==', user["uid"])
 			.onSnapshot((querySnapshot) => {
-				const listings = [];
-
 				querySnapshot.forEach((documentSnapshot) => {
-					// Don't show listings that have been deleted or hidden from public view
-					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
-					{
-						listings.push({
-							...documentSnapshot.data(),
-							key: documentSnapshot.id,
-						});
-					}
-				});
+					const watching = documentSnapshot.data()["watching"];
 
-				setListings(listings);
-				setLoading(false);
-			});
+					subscriber = firebase
+					.firestore()
+					.collection('listings')
+					.onSnapshot((querySnapshot) => {
+						const listings = [];
+						const watchedListings = [];
+
+						querySnapshot.forEach((documentSnapshot) => {
+							// Don't show listings that have been deleted or hidden from public view
+							if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
+							{
+								if (watching.includes(documentSnapshot.id)) {
+									watchedListings.push({
+										...documentSnapshot.data(),
+										key: documentSnapshot.id,
+									});
+								}
+								else
+								{
+									listings.push({
+										...documentSnapshot.data(),
+										key: documentSnapshot.id,
+									});
+								}							
+							}
+						});
+
+						setListings(listings);
+						setWatchedListings(watchedListings);
+						setLoading(false);
+					});
+				});
+			});		
 
 		// Unsubscribe from events when no longer in use
 		return () => subscriber();
@@ -70,8 +93,7 @@ function ListViewScreen({route, navigation}) {
 		}
 	}
 
-	function FilterListingType(type){
-		
+	function FilterListingType(type){		
 		firebase.firestore()
 			.collection('listings')
 			// Filter results
@@ -131,6 +153,25 @@ function ListViewScreen({route, navigation}) {
 					</View>
 				</View>
 				<ScrollView keyboardShouldPersistTaps='handled'>
+				{watchedListings.map((item, i) => {
+					return (
+						<ListItem
+							style={styles.list}
+							key={i}
+							bottomDivider
+							onPress={() =>
+								navigation.navigate('ListingDetailScreen', {
+									listingId: item.key,
+								})
+							}
+						>
+							<ListItem.Content>
+								<ListItem.Title>Liked: {item.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+							</ListItem.Content>
+						</ListItem>
+					);
+				})}
 				{listings.map((item, i) => {
 					return (
 						<ListItem
@@ -198,7 +239,7 @@ const styles = StyleSheet.create({
 	},
 	list:{
 		width: gui.screen.width * 1
-	}
+	},
 });
 
 export default ListViewScreen;

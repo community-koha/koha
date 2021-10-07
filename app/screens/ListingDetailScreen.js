@@ -6,16 +6,30 @@ import {
 	Button,
 	ActivityIndicator,
 	ScrollView,
+	TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
+import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
 
 function ListingDetailScreen({ route, navigation }) {
 	const { listingId } = route.params;
 	const [loading, setLoading] = useState(true);
 	const [listings, setListings] = useState([]);
+	const [watching, setWatching] = useState(false);
+	const [user, setUser] = useState(null);
+	const [type, setType] = useState('');
+
+	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
+	{
+		if (user)
+		{
+			unsubscribe();
+			setUser(user);
+		}
+	})
 
 	useEffect(() => {
 		setLoading(true);
@@ -30,6 +44,7 @@ function ListingDetailScreen({ route, navigation }) {
 					// Don't show listings that have been deleted or hidden from public view
 					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
 					{
+						setType(documentSnapshot.data()["listingType"])
 						listings.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
@@ -45,10 +60,89 @@ function ListingDetailScreen({ route, navigation }) {
 		return () => subscriber();
 	}, [listingId]);
 
+	useEffect(() => {
+		if (user !== null) {
+			const subscriber = firebase
+			.firestore()
+			.collection('users')
+			.where(firebase.firestore.FieldPath.documentId(), '==', user["uid"])
+			.onSnapshot((querySnapshot) => {
+				querySnapshot.forEach((documentSnapshot) => {
+					var watching_var = documentSnapshot.data()["watching"];
+
+					setWatching(watching_var !== undefined? watching_var.includes(listingId): false);
+				});
+			});
+
+			// Unsubscribe from events when no longer in use
+			return () => subscriber();
+		}
+	}, [user]);
+
+	function AddWatching(id) {
+		const db = firebase.firestore();
+		db.collection('users').doc(user["uid"]).update({
+			watching: firebase.firestore.FieldValue.arrayUnion( id )
+		})
+		.then(() => {
+			console.log("Added item to watching list");
+			setWatching(true);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+	}
+
+	function RemoveWatching(id) {
+		const db = firebase.firestore();
+		db.collection('users').doc(user["uid"]).update({
+			watching: firebase.firestore.FieldValue.arrayRemove( id )
+		})
+		.then(() => {
+			console.log("Removed item from watching list");
+			setWatching(false);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+	}
+
 	return (
 		<View style={styles.container}>
-			<ScrollView>
-			
+			<View style={styles.buttons}>
+				<TouchableOpacity
+					style={[styles.button, styles.backButton]}
+					onPress={() => {navigation.goBack()}}>
+					<Text style={styles.backButtonText}>BACK</Text>
+				</TouchableOpacity>
+				{
+					(['food','essentialItem'].includes(type) && watching)
+					&&
+					(
+						<TouchableOpacity
+							style={[styles.button, styles.watchButton]}
+							onPress={() => {
+								RemoveWatching(listingId);
+							}}>
+							<Text style={styles.backButtonText}>UNWATCH</Text>
+						</TouchableOpacity>
+					)
+				}
+				{
+					(['food','essentialItem'].includes(type) && !watching)
+					&&
+					(
+						<TouchableOpacity
+							style={[styles.button, styles.watchButton]}
+							onPress={() => {
+								AddWatching(listingId);
+							}}>
+							<Text style={styles.backButtonText}>WATCH</Text>
+						</TouchableOpacity>
+					)
+				}
+			</View>
+			<ScrollView style={styles.scroll}>				
 				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
 				{!loading &&
 					listings.map((item, i) => {
@@ -76,9 +170,7 @@ function ListingDetailScreen({ route, navigation }) {
 								</ListItem.Content>
 							</ListItem>
 						);
-					})}
-			
-			
+					})}			
 				<Button
 					style={styles.button}
 					title="Go Back"
@@ -93,14 +185,43 @@ function ListingDetailScreen({ route, navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: '10%',
-		paddingBottom: '5%'
+		backgroundColor: Colours.white,
+	},
+	scroll: {
+		width: Gui.screen.width * 1,
+		height: Gui.screen.height * 0.5,
+		backgroundColor: Colours.white,
+	},
+	buttons: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		width: Gui.screen.width * 1,
+		height: Gui.screen.height * 0.04,
+		backgroundColor: Colours.white,
+		marginTop: Gui.screen.height * 0.02,
+		marginBottom: Gui.screen.height * 0.02,
 	},
 	button: {
-		height: 45,
-		width: '80%',
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: Gui.screen.width * 0.1,
+		height: Gui.screen.height * 0.04,
+		borderRadius: 5,
+		borderWidth: 3,
+		borderColor: Colours.koha_navy,
+	},
+	backButton: {
+		backgroundColor: Colours.koha_navy,
+		width: Gui.screen.width * 0.1,
+	},
+	watchButton: {
+		borderColor: Colours.koha_green,
+		backgroundColor: Colours.koha_green,
+		marginLeft: Gui.screen.width * 0.05,
+		width: Gui.screen.width * 0.1,
+	},
+	backButtonText: {
 		color: Colours.white,
-		marginTop: 50,
 	},
 });
 export default ListingDetailScreen;
