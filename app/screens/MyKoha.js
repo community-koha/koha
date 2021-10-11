@@ -14,7 +14,8 @@ import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
 
-function MyKoha({ navigation }) {
+function MyKoha({ route, navigation }) {
+	const { message } = route.params;
 	const [loading, setLoading] = useState(true);
 	const [listings, setListings] = useState([]);
 	const [user, setUser] = useState(null);
@@ -61,6 +62,7 @@ function MyKoha({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<View style={styles.message}><Text>{message}</Text></View>
 			<View style={styles.buttons}>
 				<TouchableOpacity
 					style={showFood? [styles.button, styles.foodButton]: [styles.button, styles.foodButton, styles.disableButton]}
@@ -125,6 +127,12 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colours.white,
+	},
+	message:{
+		width: '100%',
+		backgroundColor: '#b3ff66',
+		color: '#fff',
+		padding: '3%'
 	},
 	contentView: {	
 		width: Gui.screen.width * 1,
