@@ -21,27 +21,7 @@ import API from '../config/api.js';
 
 import firebase from 'firebase/app';
 
-function SubmitForm(
-	userID,
-	listingType,
-	listingTitle,
-	description,
-	location,
-	eventDate,
-    category
-) {
-	const dbh = firebase.firestore();
-	
-	dbh.collection('listings').add({
-		user: dbh.doc('users/' + userID),
-		listingType: listingType,
-		listingTitle: listingTitle,
-		description: description,
-		location: location,
-		eventDate: eventDate,
-        category: category
-	});
-}
+
 
 function NewEventListing({navigation}){
     // This warning can be ignored since our lists are small
@@ -57,12 +37,17 @@ function NewEventListing({navigation}){
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [eventDate, setEventDate] = useState(ConvertDate(Date.now()));
     const [category, setCategory] = useState(null);
+	const [success, setSuccess] = useState(false);
 
 	const [showDate, setShowDate] = useState(false);
     const [openCategoryType, setOpenCategoryType] = useState(false);
 
     const [categoryService, setCategoryService] = useState([
-		{ value: 'community', label: 'Community Service' },
+		{ value: 'community', label: 'Community' },
+		{ value: 'domestic', label: 'Domestic' },
+		{ value: 'trades', label: 'Trades' },
+		{ value: 'health', label: 'Health' },
+		{ value: 'events', label: 'Events' },
 		{ value: 'other', label: 'Other' },
 	]);
 
@@ -119,6 +104,9 @@ function NewEventListing({navigation}){
 			case eventDate == null:
 				return false;
 
+			case !category in ['community', 'domestic', 'trades', 'health', 'events', 'other']:
+				return false;
+
 		}
 
 		console.log('Pass');
@@ -133,9 +121,50 @@ function NewEventListing({navigation}){
             category
 		);
 	}
+
+	function ShowSuccess(){
+		return(
+			<View style={styles.message}><Text style={{color: Colours.white, fontSize: 16}}>Success! New service listing has been created.</Text></View>
+		);
+	}
+
+	function ClearInput(){
+		setListingTitle(null);
+		setDescription(null);
+		setLocation({ lat: 0, lng: 0, name: '' });
+		setEventDate(ConvertDate(Date.now()));
+		setCategory(null);
+	}
+
+	function SubmitForm(
+		userID,
+		listingType,
+		listingTitle,
+		description,
+		location,
+		eventDate,
+		category
+	) {
+		const dbh = firebase.firestore();
+		
+		dbh.collection('listings').add({
+			user: dbh.doc('users/' + userID),
+			listingType: listingType,
+			listingTitle: listingTitle,
+			description: description,
+			location: location,
+			eventDate: eventDate,
+			category: category
+		});
+	
+		ClearInput();
+		setSuccess(true);
+	}
+
     return(
         <View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			{ success ? ShowSuccess() : <View></View> }
 			<View>
 				<Text style={styles.headerText}>NEW SERVICE</Text>
 			</View>
@@ -144,12 +173,14 @@ function NewEventListing({navigation}){
 				
 				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
+					value={listingTitle}
 					onChangeText={(val) => setListingTitle(val)}
 					placeholder="Title"
 					style={styles.inputText}
 				/>
 				<Text style={styles.inputTitle}>Description</Text>
 				<TextInput
+					value={description}
 					onChangeText={(val) => setDescription(val)}
 					placeholder="Description"
 					multiline={true}
@@ -160,6 +191,7 @@ function NewEventListing({navigation}){
 				<Text style={styles.inputTitle}>Where</Text>
 				<GooglePlacesAutocomplete
 					placeholder="Search..."
+					value={location}
 					onFail={(error) => console.error(error)}
 					fetchDetails={true}
 					onFail={(data, details) => console.error(data, details)}
@@ -276,6 +308,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
 		paddingBottom: '10%',
+	},
+	message:{
+		width: '100%',
+		backgroundColor: '#59b300',
+		padding: 20,
 	},
 	scroll: {
 		backgroundColor: Colours.white,
