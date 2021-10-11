@@ -104,6 +104,9 @@ function NewEventListing({navigation}){
 			case eventDate == null:
 				return false;
 
+			case !category in ['community', 'domestic', 'trades', 'health', 'events', 'other']:
+				return false;
+
 		}
 
 		console.log('Pass');
