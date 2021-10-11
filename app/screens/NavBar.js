@@ -36,31 +36,33 @@ function NavBar({ navigation }) {
 	{
 		if (user)
 		{
+			unsubscribe();
 			setUser(user);
 			setPrefix(user.displayName[0] != roles.donateBusiness? "My":"Our");
-			unsubscribe();
+
+			// Push notifications are not avaliable on web or emulators
+			if (Platform.OS !== "web") {
+				registerForPushNotificationsAsync().then(
+					(token) => {
+						if (token !== undefined) {
+							const db = firebase.firestore();
+							db.collection('users')
+								.doc(user.uid)
+								.update({
+									notificationToken: token
+								})
+								.then(() => {
+									console.log("Updated user's push notification token in database");
+								})
+								.catch((error) => {
+									console.error(error);
+								});
+						};				
+					}
+				);
+			};
 		}
 	})
-
-	// Push notifications are not avaliable on web or emulators
-	if (Platform.OS !== "web") {
-		registerForPushNotificationsAsync().then(
-			(token) => {
-				const db = firebase.firestore();
-				db.collection('users')
-					.doc(user.uid)
-					.update({
-						notificationToken: token
-					})
-					.then(() => {
-						console.log("Updated user's push notification token in database");
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-			}		
-		);
-	}	
 
 	React.useEffect(
 		() =>
