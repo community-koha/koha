@@ -31,7 +31,7 @@ function ListViewScreen({route, navigation}) {
 			.where(firebase.firestore.FieldPath.documentId(), '==', user["uid"])
 			.onSnapshot((querySnapshot) => {
 				querySnapshot.forEach((documentSnapshot) => {
-					const watching = documentSnapshot.data()["watching"];
+					const watching = documentSnapshot.data()["watching"] == undefined? []: documentSnapshot.data()["watching"];
 
 					subscriber = firebase
 					.firestore()

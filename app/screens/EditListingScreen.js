@@ -102,7 +102,11 @@ function ListingDetailScreen({ route, navigation }) {
 	]);
 
 	const [categoryService, setCategoryService] = useState([
-		{ value: 'community', label: 'Community Service' },
+		{ value: 'community', label: 'Community' },
+		{ value: 'domestic', label: 'Domestic' },
+		{ value: 'trades', label: 'Trades' },
+		{ value: 'health', label: 'Health' },
+		{ value: 'events', label: 'Events' },
 		{ value: 'other', label: 'Other' },
 	]);
 
