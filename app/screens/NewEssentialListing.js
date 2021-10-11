@@ -111,6 +111,12 @@ function NewEssentialListing({navigation}){
 			case location['lat'] == 0 || location['lng'] == 0:
 				return false;
 
+			case !category in ['baby', 'household','toiletries','school', 'clothing', 'misc']:
+				return false;
+
+			case !condition in ['new', 'used']:
+				return false;
+
 			case quantity == null || quantity <= 0:
 				return false;
 
