@@ -25,35 +25,8 @@ import API from '../config/api.js';
 
 import firebase from 'firebase/app';
 
-function SubmitForm(
-	userID,
-	listingType,
-	listingTitle,
-	description,
-	location,
-	category,
-	allergen,
-	quantity,
-	expiryDate,
-	collectionMethod,
-	imageFileName
-) {
-	const dbh = firebase.firestore();
-	
-	dbh.collection('listings').add({
-		user: dbh.doc('users/' + userID),
-		listingType: listingType,
-		listingTitle: listingTitle,
-		description: description,
-		location: location,
-		category: category,
-		allergen: allergen,
-		quantity: quantity,
-		expiryDate: expiryDate,
-		collectionMethod: collectionMethod,
-		imageFileName: imageFileName
-	});
-}
+
+
 
 function NewFoodListing({ navigation }) {
 	// This warning can be ignored since our lists are small
@@ -73,6 +46,7 @@ function NewFoodListing({ navigation }) {
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
 	const [imageFileName, setimageFileName] = useState(null);
+	const [success, setSuccess] = useState(false);
 
 	const [showDate, setShowDate] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
@@ -199,6 +173,58 @@ function NewFoodListing({ navigation }) {
 		);
 	}
 
+	function ShowSuccess(){
+		return(
+			<View style={styles.message}><Text style={{color: Colours.white, fontSize: 16}}>Success! New food listing has been created.</Text></View>
+		);
+	}
+
+	function ClearInput(){
+		setListingTitle(null);
+		setDescription(null);
+		setLocation({ lat: 0, lng: 0, name: '' });
+		setCategory(null);
+		setAllergen(null);
+		setQuantity(null);
+		setExpiryDate(ConvertDate(Date.now()));
+		setCollectionMethod(null);
+		setimageFileName(null);
+	}
+
+	function SubmitForm(
+		userID,
+		listingType,
+		listingTitle,
+		description,
+		location,
+		category,
+		allergen,
+		quantity,
+		expiryDate,
+		collectionMethod,
+		imageFileName
+	) {
+		const dbh = firebase.firestore();
+		
+		dbh.collection('listings').add({
+			user: dbh.doc('users/' + userID),
+			listingType: listingType,
+			listingTitle: listingTitle,
+			description: description,
+			location: location,
+			category: category,
+			allergen: allergen,
+			quantity: quantity,
+			expiryDate: expiryDate,
+			collectionMethod: collectionMethod,
+			imageFileName: imageFileName
+		});
+
+		ClearInput();
+		setSuccess(true);
+	
+	}
+
 	const [image, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
 	
@@ -275,6 +301,7 @@ function NewFoodListing({ navigation }) {
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			{ success ? ShowSuccess() : <View></View> }
 			<View>
 				<Text style={styles.headerText}>NEW FOOD</Text>
 			</View>
@@ -283,12 +310,14 @@ function NewFoodListing({ navigation }) {
 				
 				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
+					value={listingTitle}
 					onChangeText={(val) => setListingTitle(val)}
 					placeholder="Title"
 					style={styles.inputText}
 				/>
 				<Text style={styles.inputTitle}>Description</Text>
 				<TextInput
+					value={description}
 					onChangeText={(val) => setDescription(val)}
 					placeholder="Description"
 					multiline={true}
@@ -299,6 +328,7 @@ function NewFoodListing({ navigation }) {
 				<Text style={styles.inputTitle}>Location</Text>
 				<GooglePlacesAutocomplete
 					placeholder="Search..."
+					value={location}
 					onFail={(error) => console.error(error)}
 					fetchDetails={true}
 					onFail={(data, details) => console.error(data, details)}
@@ -463,6 +493,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
 		paddingBottom: '10%',
+	},
+	message:{
+		width: '100%',
+		backgroundColor: '#59b300',
+		padding: 20,
 	},
 	scroll: {
 		backgroundColor: Colours.white,
