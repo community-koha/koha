@@ -126,6 +126,7 @@ function NewFoodListing({ navigation }) {
 		description,
 		location,
 		category,
+		allergen,
 		quantity,
 		expiryDate,
 		collectionMethod,
@@ -141,6 +142,12 @@ function NewFoodListing({ navigation }) {
 				return false;
 
 			case location['lat'] == 0 || location['lng'] == 0:
+				return false;
+
+			case !category in ['fruit', 'vegetables', 'dry_goods', 'cooked', 'bakery', 'dairy', 'misc']:
+				return false;
+
+			case !allergen in ['gluten', 'peanuts', 'seafood', 'dairy', 'eggs']:
 				return false;
 
 			case quantity == null || quantity <= 0:
