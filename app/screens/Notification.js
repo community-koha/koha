@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import firebase from 'firebase/app';
-import { right } from 'inquirer/lib/utils/readline';
 
 function Notification({ navigation }) {
 	const [loading, setLoading] = useState(true);

@@ -1,9 +1,8 @@
-import React, { Component, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	StyleSheet,
 	View,
 	Text,
-	Button,
 	ActivityIndicator,
 	ScrollView,
 	TouchableOpacity,
@@ -12,8 +11,6 @@ import {
 	StatusBar,
 	Modal,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';

@@ -4,7 +4,6 @@ import {
 	View,
 	TextInput,
 	ActivityIndicator,
-	Image,
 	ScrollView,
 	TouchableWithoutFeedback,
 	Button,

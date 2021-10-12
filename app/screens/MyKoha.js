@@ -1,14 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	StyleSheet,
 	View,
 	Text,
-	Button,
 	ActivityIndicator,
 	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';

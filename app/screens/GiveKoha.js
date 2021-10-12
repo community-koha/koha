@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import firebase from 'firebase/app';
 import roles from '../config/roles.js';
 import Colours from '../config/colours.js';

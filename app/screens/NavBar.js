@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { Button } from 'react-native-elements';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 
 import Colours from '../config/colours.js';
 
 import MapViewScreen from './MapViewScreen';
-import ListViewScreen from './ListViewScreen';
 import Notification from './Notification.js';
 import Profile from './Profile.js';
 import GiveKoha from './GiveKoha.js';

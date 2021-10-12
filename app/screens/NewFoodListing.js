@@ -31,9 +31,9 @@ function NewFoodListing({ navigation }) {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
 
-	const [web, setWeb] = useState(Platform.OS === 'web');
+	const [web, _] = useState(Platform.OS === 'web');
 	const userID = firebase.auth().currentUser.uid;
-	const [listingType, setlistingType] = useState('food');
+	const [listingType, _] = useState('food');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
@@ -50,7 +50,7 @@ function NewFoodListing({ navigation }) {
 	const [openAllergenType, setOpenAllergenType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [categoryFood, setCategoryFood] = useState([
+	const [categoryFood, _] = useState([
 		{ value: 'fruit', label: 'Fruit' },
 		{ value: 'vegetables', label: 'Vegetables' },
 		{ value: 'dry_goods', label: 'Dry Goods' },

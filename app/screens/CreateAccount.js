@@ -21,7 +21,7 @@ import DatePicker from 'react-datepicker';
 import firebase from 'firebase/app';
 
 function CreateAccount({ navigation }) {
-	const [web, setWeb] = useState(Platform.OS === 'web');
+	const [web, _] = useState(Platform.OS === 'web');
 	const [name, setName] = useState('');
 	const [dob, setDob] = useState(ConvertDate(Date.now()));
 	const [email, setEmail] = useState(global.email);
