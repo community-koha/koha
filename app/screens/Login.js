@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
+import AppLoading from 'expo-app-loading';
 
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import * as Google from 'expo-auth-session/providers/google';
@@ -34,6 +35,11 @@ function Login({ navigation }) {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	function resetPasswordDialog() {
 		setModalResetText('');
@@ -164,10 +170,23 @@ function Login({ navigation }) {
 		}
 	}, [gResponse]);
 
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
+
 	return (
 		<ScrollView style={styles.scroll}>
 			<View style={styles.container}>
-				<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
+				<StatusBar
+					backgroundColor={Colours.koha_background}
+					barStyle="dark-content"
+				/>
 				<Image style={styles.logo} source={require('../assets/logo.png')} />
 				<Modal
 					animationType="slide"
@@ -296,14 +315,6 @@ function Login({ navigation }) {
 						>
 							<Text style={styles.buttonText}>LOGIN WITH GOOGLE</Text>
 						</TouchableOpacity>
-						<TouchableOpacity
-							style={[styles.button, styles.backButton, styles.finalButton]}
-							onPress={() => {
-								navigation.navigate('Entry');
-							}}
-						>
-							<Text style={styles.buttonText}>BACK</Text>
-						</TouchableOpacity>
 					</View>
 				)}
 			</View>
@@ -314,21 +325,21 @@ function Login({ navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Gui.container.backgroundColor,
 		alignItems: 'center',
 	},
 	scroll: {
 		height: Gui.screen.height,
 		width: Gui.screen.width,
+		backgroundColor: Gui.container.backgroundColor,
 	},
 	logo: {
 		resizeMode: 'contain',
-		top: Gui.screen.height * 0.18,
+		top: Gui.screen.height * 0.1,
 		width: Gui.screen.width * 0.6,
 		height: Gui.screen.height * 0.3,
 	},
 	buttons: {
-		top: Gui.screen.height * 0.2,
+		top: Gui.screen.height * 0.15,
 		height: Gui.screen.height * 0.6,
 		width: Gui.screen.width * 0.75,
 	},
@@ -346,21 +357,18 @@ const styles = StyleSheet.create({
 	},
 	fbButton: {
 		backgroundColor: Colours.koha_navy,
+		fontSize: Gui.button.fontSize * 0.8,
 	},
 	googleButton: {
-		backgroundColor: Colours.koha_peach,
+		backgroundColor: Colours.koha_orange,
 	},
 	backButton: {
 		backgroundColor: Colours.koha_lightblue,
 	},
-	finalButton: {
-		marginBottom: gui.screen.height * 0,
-	},
 	buttonText: {
 		textAlign: 'center',
-		fontSize: Gui.button.fontSize,
 		color: Gui.button.textColour,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	inputText: {
 		textAlign: 'center',
@@ -373,18 +381,21 @@ const styles = StyleSheet.create({
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: 1,
 		borderColor: Colours.default,
+		fontFamily: 'Volte',
 	},
 	loginButton: {
 		width: Gui.button.width * 0.65,
-		backgroundColor: Colours.grey,
+		backgroundColor: Colours.koha_purple,
 		marginBottom: gui.screen.height * 0.05,
+		fontSize: Gui.button.fontSize * 0.8,
 	},
 	resetPasswordButton: {
+		fontSize: Gui.button.fontSize * 0.6,
 		width: Gui.button.width * 0.325,
 		backgroundColor: Colours.koha_navy,
-		marginTop: -gui.screen.height * 0.1,
+		marginTop: -gui.screen.height * 0.12,
 		marginBottom: gui.screen.height * 0.05,
-		marginLeft: gui.screen.width * 0.5,
+		marginLeft: gui.screen.width * 0.505,
 	},
 	modalCenter: {
 		flex: 1,
@@ -404,7 +415,7 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 	},
 	modalView: {
-		backgroundColor: Colours.white,
+		backgroundColor: Colours.koha_background,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.9,
@@ -421,28 +432,31 @@ const styles = StyleSheet.create({
 		elevation: 24,
 	},
 	modalResetView: {
-		//justifyContent: 'normal',
 		height: Gui.screen.height * 0.275,
 	},
 	modalViewText: {
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
 		height: Gui.screen.height * 0.275 * 0.66,
+		fontFamily: 'Volte',
 	},
 	modalText: {
 		textAlign: 'center',
-		fontWeight: 'bold',
 		fontSize: Gui.screen.height * 0.275 * 0.1,
+		fontFamily: 'Volte',
 	},
 	modalResetTitle: {
 		fontSize: Gui.screen.height * 0.275 * 0.125,
+		fontFamily: 'Volte',
 	},
 	modalResetInput: {
-		marginTop: Gui.screen.height * 0.275 * 0.1,
+		marginTop: Gui.screen.height * 0.01,
+		fontFamily: 'Volte',
 	},
 	modalResetButton: {
-		marginTop: Gui.screen.height * 0.275 * 0.1,
-		width: Gui.screen.width * 0.65,
+		marginTop: Gui.screen.height * 0.005,
+		width: Gui.screen.width * 0.75,
+		fontFamily: 'Volte',
 	},
 	modalButton: {
 		justifyContent: 'center',
@@ -450,14 +464,13 @@ const styles = StyleSheet.create({
 		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
-		borderWidth: 2,
-		borderColor: Colours.koha_navy,
 		backgroundColor: Colours.koha_navy,
+		fontFamily: 'Volte',
 	},
 	modalButtonText: {
 		fontSize: Gui.screen.height * 0.25 * 0.12,
 		color: Colours.white,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 });
 
