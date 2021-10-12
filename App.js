@@ -1,5 +1,6 @@
 import React from 'react';
 
+import useFonts from './app/config/useFonts.js';
 import NavBar from './app/screens/NavBar';
 import Entry from './app/screens/Entry';
 import Splash from './app/screens/Splash';
@@ -8,7 +9,6 @@ import CreateAccount from './app/screens/CreateAccount';
 import VerifyEmail from './app/screens/VerifyEmail';
 import UserTypeScreen from './app/screens/UserTypeScreen';
 import HomeScreen from './app/screens/HomeScreen';
-import ListViewComponent from './app/screens/ListViewComponent';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
 import EditListingScreen from './app/screens/EditListingScreen';
 import GiveKoha from './app/screens/GiveKoha';
