@@ -72,12 +72,16 @@ function NavBar({ navigation }) {
 			initialRouteName="Map View"
 			screenOptions={{
 				headerShown: false,
-				tabBarActiveTintColor: Colours.default,
-				tabBarInactiveTintColor: Colours.grey,
+				tabBarActiveTintColor: Colours.koha_orange,
+				tabBarInactiveTintColor: Colours.black,
 				tabBarStyle: {
 					position: 'absolute',
 					backgroundColor: gui.container.backgroundColor,
 					padding: 10,
+				},
+				tabBarLabelStyle: {
+					fontFamily: 'Volte',
+					fontSize: 12,
 				},
 			}}
 		>
@@ -124,7 +128,7 @@ function NavBar({ navigation }) {
 				name="Notification"
 				component={Notification}
 				options={{
-					tabBarLabel: 'Notification',
+					tabBarLabel: 'Alerts',
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons
 							name="bell-outline"

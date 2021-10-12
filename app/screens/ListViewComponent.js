@@ -39,15 +39,19 @@ const ListViewComponent = (props) => {
 						}
 					>
 						<ListItem.Content>
-							<ListItem.Title>Liked: {item.listingTitle}</ListItem.Title>
-							<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+							<ListItem.Title style={{ fontFamily: 'Volte', }}>
+								Liked: {item.listingTitle}
+							</ListItem.Title>
+							<ListItem.Subtitle style={{ fontFamily: 'Volte', }}>
+								{item.description}
+							</ListItem.Subtitle>
 						</ListItem.Content>
 					</ListItem>
 				);
 			})}
 			{noResults ? (
 				<View>
-					<Text style={styles.noListings}>No listings found</Text>
+					<Text style={styles.noListings}>No listings found.</Text>
 				</View>
 			) : (
 				listings.map((item, i) => {
