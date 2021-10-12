@@ -184,7 +184,7 @@ function ListViewScreen({route, navigation}) {
 						</ListItem>
 					);
 				})}
-				{
+				{ noResults ? <View><Text style={styles.noListings}>No listings found</Text></View> :
 					listings.map((item, i) => {
 						return (
 							<ListItem
@@ -218,9 +218,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 		paddingTop: Platform.OS === "ios" ? 20 : 0
-
 	},
-	
+	noListings:{
+		fontSize: 22,
+		padding: '10%',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	searchContainer:{
 		height: '21%',
 		padding: 20,
