@@ -9,7 +9,8 @@ import {
 	TouchableWithoutFeedback,
 	Button,
 	Keyboard,
-	Text
+	Text,
+	Platform
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
