@@ -12,7 +12,7 @@ import {
 	StatusBar,
 } from 'react-native';
 
-import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
 
 function Entry({ navigation }) {
 	return (

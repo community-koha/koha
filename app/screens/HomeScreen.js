@@ -30,7 +30,7 @@ function HomeScreen({ navigation }) {
 	const [listings, setListings] = useState([]); // Initial empty array of listings
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
-	const [view, setView] = useState('Map');
+	const [view, setView] = useState('List');
 
 	//subscribe from firestore
 	useEffect(() => {

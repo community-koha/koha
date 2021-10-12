@@ -21,6 +21,7 @@ const MapViewComponent = (props) => {
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
 	const [listings] = useState(props.listing);
+	const [loading] = useState(props.loading);
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -73,7 +74,7 @@ const MapViewComponent = (props) => {
 		},
 	];
 
-	if (!mapRegion) {
+	if (!mapRegion || loading) {
 		return <ActivityIndicator size="small" color={Colours.activityIndicator} />;
 	}
 
