@@ -413,6 +413,7 @@ function NewFoodListing({ navigation }) {
 					onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
 					placeholder="Quantity"
 					keyboardType="numeric"
+					returnKeyType='done'
 					style={styles.inputText}
 				/>
 				<Text style={styles.inputTitle}>Expiry Date</Text>
