@@ -21,6 +21,7 @@ const MapViewComponent = (props) => {
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
 	const [listings] = useState(props.listing);
+	const [navigation] = useState(props.nav);
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -140,7 +141,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 		alignItems: 'center',
-		justifyContent: 'flex-start',
 	},
 	searchContainer: {
 		height: '21%',
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	map: {
-		width: '100%',
-		height: '73%',
+		height: '100%',
+		zIndex: 0,
 	},
 	calloutText: {
 		fontSize: 16,

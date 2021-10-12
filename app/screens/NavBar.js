@@ -15,6 +15,7 @@ import MyKoha from './MyKoha.js';
 import firebase from 'firebase/app';
 import roles from '../config/roles.js';
 import { Platform } from 'react-native';
+import gui from '../config/gui.js';
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -75,7 +76,7 @@ function NavBar({ navigation }) {
 				tabBarInactiveTintColor: Colours.grey,
 				tabBarStyle: {
 					position: 'absolute',
-					backgroundColor: Colours.koha_beige,
+					backgroundColor: gui.container.backgroundColor,
 					padding: 10,
 				},
 			}}

@@ -76,7 +76,7 @@ export default function App() {
 				/>
 				<Stack.Screen name="Entry" component={Entry} />
 				<Stack.Screen name="Nav" component={NavBar} />
-				<Stack.Screen name="Map" component={HomeScreen} />
+				<Stack.Screen name="Search" component={HomeScreen} />
 				<Stack.Screen name="Login" component={Login} />
 				<Stack.Screen name="CreateAccount" component={CreateAccount} />
 				<Stack.Screen name="VerifyEmail" component={VerifyEmail} />

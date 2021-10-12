@@ -15,7 +15,7 @@
 		},
 		"androidNavigationBar": {
 			"barStyle": "dark-content",
-			"backgroundColor": "#F0E5D7"
+			"backgroundColor": "#F4E292"
 		},
 		"android": {
 			"package": "com.communitykoha.koha",

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
 	StyleSheet,
-	Text,
 	View,
 	TextInput,
 	TouchableWithoutFeedback,
@@ -10,6 +9,9 @@ import {
 	ActivityIndicator,
 } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+
+import AppLoading from 'expo-app-loading';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
@@ -20,6 +22,8 @@ import ListViewComponent from './ListViewComponent.js';
 import Gui from '../config/gui.js';
 
 function HomeScreen({ navigation }) {
+	const [isReady, setIsReady] = useState(false);
+
 	const [keyword, setKeyword] = useState('');
 	const [listings, setListings] = useState([]); // Initial empty array of listings
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -27,6 +31,21 @@ function HomeScreen({ navigation }) {
 	const [view, setView] = useState('Map');
 	const [noResults, setNoResults] = useState(false);
 
+	const [open, setOpen] = useState(false);
+	const [value, setValue] = useState(null);
+	const [items, setItems] = useState([
+		{
+			label: 'All',
+			value: ['food', 'essentialItem', 'event', 'service'],
+		},
+		{ label: 'Food', value: ['food'] },
+		{ label: 'Essentials', value: ['essentialItem'] },
+		{ label: 'Event', value: ['event'] },
+		{ label: 'Service', value: ['service'] },
+	]);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 	//subscribe from firestore
 	useEffect(() => {
 		// Get watched listings
@@ -137,8 +156,20 @@ function HomeScreen({ navigation }) {
 			/>
 		);
 	}
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
+
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<TouchableWithoutFeedback
+			onPress={() => (Keyboard.dismiss, setOpen(false))}
+		>
 			<View style={styles.container}>
 				<View style={styles.searchContainer}>
 					<View style={styles.searchBar}>
@@ -146,6 +177,7 @@ function HomeScreen({ navigation }) {
 							style={styles.searchInput}
 							value={keyword}
 							placeholder="Search listings"
+							placeholderTextColor={Colours.black}
 							onChangeText={(val) => setKeyword(val)}
 							returnKeyType="search"
 							onSubmitEditing={() => {
@@ -161,53 +193,61 @@ function HomeScreen({ navigation }) {
 						/>
 						<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
 					</View>
-					<View style={styles.filterContainer}>
-						<Button
-							title="All"
-							onPress={() =>
-								FilterListingType(['food', 'essentialItem', 'event', 'service'])
-							}
+				</View>
+				<View style={styles.filterContainer}>
+					<View style={styles.filterBar}>
+						<DropDownPicker
+							style={styles.dropdown}
+							open={open}
+							items={items}
+							value={value}
+							setOpen={setOpen}
+							setValue={setValue}
+							setItems={setItems}
+							mode="BADGE"
+							style={{
+								borderWidth: 0,
+								width: 150,
+							}}
+							textStyle={{
+								fontFamily: 'Volte',
+								fontSize: 16,
+							}}
+							placeholder="All"
+							placeholderStyle={{
+								color: Colours.black,
+							}}
+							onChangeItem={(item) => FilterListingType(item.value)}
 						/>
-						<Button title="Food" onPress={() => FilterListingType(['food'])} />
-						<Button
-							title="Essentials"
-							onPress={() => FilterListingType(['essentialItem'])}
-						/>
-						<Button
-							title="Event"
-							onPress={() => FilterListingType(['event'])}
-						/>
-						<Button
-							title="Service"
-							onPress={() => FilterListingType(['service'])}
-						/>
-					</View>
-
-					<View style={styles.iconContainer}>
 						<MaterialCommunityIcons
 							name="view-list-outline"
 							size={30}
-							color={Colours.default}
-							style={{ margin: 5 }}
+							color={view === 'List' ? Colours.koha_orange : Colours.black}
+							style={{ marginRight: 60 }}
 							onPress={() => setView('List')}
 						/>
 						<MaterialCommunityIcons
 							name="map-marker"
 							size={30}
-							color={Colours.black}
-							style={{ margin: 5 }}
+							color={view === 'Map' ? Colours.koha_orange : Colours.black}
 							onPress={() => setView('Map')}
+							style={{ marginRight: 60 }}
 						/>
 					</View>
 				</View>
-				{view === 'Map' && <MapViewComponent listing={listings} />}
-				{view === 'List' && (
-					<ListViewComponent
-						listing={listings}
-						watched={watchedListings}
-						results={noResults}
-					/>
-				)}
+				<View style={styles.main}>
+					{view === 'Map' && (
+						<MapViewComponent listing={listings} nav={navigation} />
+					)}
+					{view === 'List' && (
+						<ListViewComponent
+							listing={listings}
+							watched={watchedListings}
+							results={noResults}
+							nav={navigation}
+						/>
+					)}
+				</View>
 			</View>
 		</TouchableWithoutFeedback>
 	);
@@ -215,25 +255,27 @@ function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		backgroundColor: Colours.white,
-		alignItems: 'center',
-		justifyContent: 'flex-start',
+		minHeight: gui.screen.height,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		backgroundColor: gui.container.backgroundColor,
 	},
 	searchContainer: {
-		height: '21%',
-		padding: 20,
+		marginTop: 30,
+		paddingLeft: 20,
+		paddingRight: 20,
+		zIndex: 3,
 	},
 	searchBar: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderRadius: 10,
-		borderColor: Colours.grey,
-		borderWidth: 0.5,
 		width: gui.screen.width * 0.9,
+		backgroundColor: Colours.white,
 	},
 	searchInput: {
+		fontFamily: 'Volte',
 		fontSize: 16,
 		padding: 12,
 		borderRadius: 10,
@@ -242,14 +284,28 @@ const styles = StyleSheet.create({
 		width: '85%',
 	},
 	filterContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		paddingTop: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
 	},
-	iconContainer: {
+	filterBar: {
 		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		width: gui.screen.width * 0.9,
+		minHeight: 500,
+		marginTop: -210,
+		marginLeft: 30,
+		padding: 15,
+		zIndex: 2,
+	},
+	dropdown: {
+		width: '40%',
+	},
+	main: {
+		height: gui.screen.height - 210,
 		justifyContent: 'flex-end',
+		marginBottom: 80,
+		marginTop: -200,
 	},
 	calloutText: {
 		fontSize: 16,
@@ -259,7 +315,6 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 		padding: 20,
 		width: gui.screen.width * 0.8,
-		flex: 1,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		alignItems: 'flex-start',

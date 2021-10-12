@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { StyleSheet, Platform, ScrollView } from 'react-native';
+import AppLoading from 'expo-app-loading';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
@@ -8,6 +9,20 @@ const ListViewComponent = (props) => {
 	const [listings] = useState(props.listing);
 	const [watchedListings] = useState(props.watched);
 	const [noResults] = useState(props.results);
+	const [isReady, setIsReady] = useState(false);
+	const [navigation] = useState(props.nav);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
@@ -73,6 +88,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
+		fontFamily: 'Volte',
 	},
 	filterContainer: {
 		flexDirection: 'row',
@@ -86,6 +102,7 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		width: gui.screen.width,
+		fontFamily: 'Volte',
 	},
 });
 
