@@ -22,7 +22,7 @@ import 'firebase';
 function Profile({ navigation }) {
 	const [web, setWeb] = useState(Platform.OS == 'web');
 	const [user, setUser] = useState(null);
-	const [editting, setEditting] = useState(false);
+	const [editing, setEditing] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalText, setModalText] = useState(false);
@@ -107,12 +107,12 @@ function Profile({ navigation }) {
 			);
 			setEmail(originalEmail);
 			setModalVisible(true);
-			setEditting(false);
+			setEditing(false);
 			setSubmitted(false);
 		} else {
 			setModalText('Your information has been updated.');
 			setModalVisible(true);
-			setEditting(false);
+			setEditing(false);
 			setSubmitted(false);
 		}
 
@@ -168,7 +168,7 @@ function Profile({ navigation }) {
 
 	let icon = (
 		<MaterialCommunityIcons
-			name={editting ? 'content-save' : 'pencil'}
+			name={editing ? 'content-save' : 'pencil'}
 			size={Gui.screen.height * 0.035}
 			color={Colours.default}
 			style={web ? styles.headerIconWeb : styles.headerIcon}
@@ -258,14 +258,14 @@ function Profile({ navigation }) {
 						<ActivityIndicator size="large" color={Colours.activityIndicator} />
 					</View>
 				))}
-			{!submitted && user != null && !editting && (
+			{!submitted && user != null && !editing && (
 				<View>
 					<View style={styles.header}>
 						<Text style={styles.title}>Account Information</Text>
 						<TouchableOpacity
 							style={[styles.button, styles.editButton]}
 							onPress={() => {
-								setEditting(true);
+								setEditing(true);
 							}}
 						>
 							{icon}
@@ -337,10 +337,10 @@ function Profile({ navigation }) {
 					</ScrollView>
 				</View>
 			)}
-			{!submitted && user != null && editting && (
+			{!submitted && user != null && editing && (
 				<View>
 					<View style={styles.header}>
-						<Text style={styles.title}>Editting Account Information</Text>
+						<Text style={styles.title}>Editing Account Information</Text>
 					</View>
 					<ScrollView style={styles.content}>
 						<Text style={styles.infoTitle}>Display Name</Text>
@@ -372,7 +372,7 @@ function Profile({ navigation }) {
 						<TouchableOpacity
 							style={[styles.button, styles.emailButton, styles.passwordButton]}
 							onPress={() => {
-								setEditting(false);
+								setEditing(false);
 								setName(originalName);
 								setEmail(originalEmail);
 							}}

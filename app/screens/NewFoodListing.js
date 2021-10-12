@@ -31,9 +31,9 @@ function NewFoodListing({ navigation }) {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
 
-	const [web, _] = useState(Platform.OS === 'web');
+	const [web, _0] = useState(Platform.OS === 'web');
 	const userID = firebase.auth().currentUser.uid;
-	const [listingType, _] = useState('food');
+	const [listingType, _1] = useState('food');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
@@ -50,7 +50,7 @@ function NewFoodListing({ navigation }) {
 	const [openAllergenType, setOpenAllergenType] = useState(false);
 	const [openCollectionType, setOpenCollectionType] = useState(false);
 
-	const [categoryFood, _] = useState([
+	const [categoryFood, _2] = useState([
 		{ value: 'fruit', label: 'Fruit' },
 		{ value: 'vegetables', label: 'Vegetables' },
 		{ value: 'dry_goods', label: 'Dry Goods' },
@@ -60,7 +60,7 @@ function NewFoodListing({ navigation }) {
 		{ value: 'misc', label: 'Miscellaneous' },
 	]);
 
-	const [categoryAllergen, setCategoryAllergen] = useState([
+	const [categoryAllergen, _3] = useState([
 		{ value: 'gluten', label: 'Gluten' },
 		{ value: 'peanuts', label: 'Peanuts' },
 		{ value: 'seafood', label: 'Seafood' },
@@ -68,7 +68,7 @@ function NewFoodListing({ navigation }) {
 		{ value: 'eggs', label: 'Eggs' },
 	]);
 
-	const [collectionItems, setCollectionItems] = useState([
+	const [collectionItems, _4] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
 	]);

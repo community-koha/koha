@@ -10,7 +10,7 @@ import {
 	Button,
 	Keyboard,
 } from 'react-native';
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -237,6 +237,9 @@ function MapViewScreen({ navigation }) {
 					style={styles.map}
 					region={mapRegion}
 					customMapStyle={mapStyle}
+					showsUserLocation={true}
+					minZoomLevel={12}
+					maxZoomLevel={17}
 					options={{ disableDefaultUI: true }}
 				>
 					{listings.map((item, i) => {
