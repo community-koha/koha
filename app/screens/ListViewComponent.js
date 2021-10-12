@@ -5,13 +5,8 @@ import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
 
 const ListViewComponent = (props) => {
-	const [loading] = useState(props.loading);
 	const [listings] = useState(props.listing);
 	const [watchedListings] = useState(props.watched);
-
-	if (loading) {
-		return <ActivityIndicator size="small" color={Colours.activityIndicator} />;
-	}
 
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>

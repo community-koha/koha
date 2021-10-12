@@ -7,6 +7,7 @@ import {
 	TouchableWithoutFeedback,
 	Button,
 	Keyboard,
+	ActivityIndicator,
 } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -16,21 +17,14 @@ import gui from '../config/gui.js';
 import MapViewComponent from './MapViewComponent.js';
 import ListViewComponent from './ListViewComponent.js';
 
-// generic notif view
-function NotifScreen() {
-	return (
-		<View style={styles.container}>
-			<Text>{global.e}</Text>
-		</View>
-	);
-}
+import Gui from '../config/gui.js';
 
 function HomeScreen({ navigation }) {
 	const [keyword, setKeyword] = useState('');
 	const [listings, setListings] = useState([]); // Initial empty array of listings
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
-	const [view, setView] = useState('List');
+	const [view, setView] = useState('Map');
 
 	//subscribe from firestore
 	useEffect(() => {
@@ -130,6 +124,15 @@ function HomeScreen({ navigation }) {
 			});
 	}
 
+	if (loading) {
+		return (
+			<ActivityIndicator
+				size="large"
+				color={Colours.activityIndicator}
+				style={styles.loading}
+			/>
+		);
+	}
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
@@ -187,15 +190,9 @@ function HomeScreen({ navigation }) {
 						/>
 					</View>
 				</View>
-				{view === 'Map' && (
-					<MapViewComponent listing={listings} loading={loading} />
-				)}
+				{view === 'Map' && <MapViewComponent listing={listings} />}
 				{view === 'List' && (
-					<ListViewComponent
-						listing={listings}
-						loading={loading}
-						watched={watchedListings}
-					/>
+					<ListViewComponent listing={listings} watched={watchedListings} />
 				)}
 			</View>
 		</TouchableWithoutFeedback>
@@ -258,6 +255,9 @@ const styles = StyleSheet.create({
 		width: 80,
 		justifyContent: 'flex-start',
 		marginRight: 20,
+	},
+	loading: {
+		marginTop: Gui.screen.height * 0.3,
 	},
 });
 
