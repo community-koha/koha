@@ -20,7 +20,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import firebase from 'firebase/app';
 
-
 function CreateAccount({ navigation }) {
 	const [web, setWeb] = useState(Platform.OS === 'web');
 	const [name, setName] = useState('');
@@ -64,84 +63,92 @@ function CreateAccount({ navigation }) {
 	) {
 		switch (true) {
 			case name === '':
-				setModalText('Please enter a display name')
-				setModalVisible(true)
+				setModalText('Please enter a display name');
+				setModalVisible(true);
 				return false;
 
 			case dob == '':
-				setModalText('Please enter your date of birth')
-				setModalVisible(true)
+				setModalText('Please enter your date of birth');
+				setModalVisible(true);
 				return false;
 
 			case email == '':
-				setModalText('Please enter your email')
-				setModalVisible(true)
+				setModalText('Please enter your email');
+				setModalVisible(true);
 				return false;
 
 			case password == '':
-				setModalText('Please enter a password')
-				setModalVisible(true)
+				setModalText('Please enter a password');
+				setModalVisible(true);
 				return false;
 
 			case confirm == '':
-				setModalText('Please enter your password again')
-				setModalVisible(true)
+				setModalText('Please enter your password again');
+				setModalVisible(true);
 				return false;
 
 			case password != confirm:
-				setModalText('Your passwords do not match')
-				setModalVisible(true)
+				setModalText('Your passwords do not match');
+				setModalVisible(true);
 				return false;
 		}
 		setSubmitted(true);
 
-		firebase.auth().createUserWithEmailAndPassword(email, password)
-		.then((userCredential) => {
-			var user = userCredential.user;
-			console.log("User '" + user.uid + "' created successfully!");
+		firebase
+			.auth()
+			.createUserWithEmailAndPassword(email, password)
+			.then((userCredential) => {
+				var user = userCredential.user;
+				console.log("User '" + user.uid + "' created successfully!");
 
-			// Add the user to the users database
-			var db = firebase.firestore();
-			db.collection("users").doc(user.uid).set(
-				{
-					created: (new Date(Date.now())).toISOString(),
-					email: email,
-					dob: dob,
-					name: name,
-					uid: user.uid
-				}, {merge: true}
-			).then(() => 
-			{
-				console.log("User's displayname set to '" + name + "' successfully!")
-			}).catch((error) => {
-				console.error(error.code+": "+error.message)
+				// Add the user to the users database
+				var db = firebase.firestore();
+				db.collection('users')
+					.doc(user.uid)
+					.set(
+						{
+							created: new Date(Date.now()).toISOString(),
+							email: email,
+							dob: dob,
+							name: name,
+							uid: user.uid,
+						},
+						{ merge: true }
+					)
+					.then(() => {
+						console.log(
+							"User's displayname set to '" + name + "' successfully!"
+						);
+					})
+					.catch((error) => {
+						console.error(error.code + ': ' + error.message);
+					});
+
+				user
+					.updateProfile({
+						displayName: name,
+					})
+					.catch((error) => {
+						console.error(error.code + ': ' + error.message);
+					});
+
+				// Send the email verification
+				user.sendEmailVerification().catch((error) => {
+					console.log(error.code + ': ' + error.message);
+					setModalText(error.message);
+					setModalVisible(true);
+				});
+
+				// Navigate to the verify email screen
+				navigation.navigate('VerifyEmail');
+			})
+			.catch((error) => {
+				console.log(error.code + ': ' + error.message);
+				setModalText(error.message);
+				setModalVisible(true);
+				setSubmitted(false);
+				return false;
 			});
-
-			user.updateProfile(
-			{
-				displayName: name,
-			}).catch((error) => {
-				console.error(error.code+": "+error.message)
-			});
-
-			// Send the email verification
-			user.sendEmailVerification().catch((error) =>
-			{
-				console.log(error.code+": "+error.message);
-				setModalText(error.message)
-				setModalVisible(true)
-			});
-
-			// Navigate to the verify email screen 
-			navigation.navigate('VerifyEmail');
-		})
-		.catch((error) => {
-			console.log(error.code+": "+error.message);
-			setModalText(error.message)
-			setModalVisible(true)
-			setSubmitted(false)
-			return false;
-		});
 		return true;
 	}
 
@@ -149,10 +156,10 @@ function CreateAccount({ navigation }) {
 		<MaterialCommunityIcons
 			name="arrow-left"
 			size={Gui.screen.height * 0.05}
-			color={Colours.default}			
-			style={web ? styles.headerIconWeb: styles.headerIcon}
-		/>		
-	)
+			color={Colours.default}
+			style={web ? styles.headerIconWeb : styles.headerIcon}
+		/>
+	);
 	if (process.env.JEST_WORKER_ID !== undefined) {
 		icon = '';
 	}
@@ -161,12 +168,15 @@ function CreateAccount({ navigation }) {
 	// to avoid accidental breaks with the user type definition used
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<Modal
 				animationType="slide"
 				transparent={true}
 				visible={modalVisible}
-				onRequestClose={() => {setModalVisible(false)}}>
+				onRequestClose={() => {
+					setModalVisible(false);
+				}}
+			>
 				<View style={styles.modalCenter}>
 					<View style={styles.modalView}>
 						<View style={styles.modalViewText}>
@@ -174,14 +184,19 @@ function CreateAccount({ navigation }) {
 						</View>
 						<TouchableOpacity
 							style={[styles.modalButton]}
-							onPress={() => { setModalVisible(false);}}>
+							onPress={() => {
+								setModalVisible(false);
+							}}
+						>
 							<Text style={styles.modalButtonText}>OK</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
 			<View>
-				<Text style={web ? styles.headerTextWeb: styles.headerText}>CREATE ACCOUNT</Text>
+				<Text style={web ? styles.headerTextWeb : styles.headerText}>
+					CREATE ACCOUNT
+				</Text>
 				<TouchableOpacity
 					onPress={() => navigation.navigate('Entry')}
 					style={styles.backButton}
@@ -192,7 +207,9 @@ function CreateAccount({ navigation }) {
 			<ScrollView style={styles.scroll}>
 				<Text style={styles.inputTitle}>Display Name</Text>
 				<TextInput
-					onChangeText={(name) => setName(name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()|\\]/g,""))}
+					onChangeText={(name) =>
+						setName(name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()|\\]/g, ''))
+					}
 					value={name}
 					placeholder="Display Name"
 					autoCompleteType="name"
@@ -266,27 +283,17 @@ function CreateAccount({ navigation }) {
 				<View style={styles.errorView}>
 					<Text style={styles.errorText}></Text>
 				</View>
-				{
-					!submitted
-					&&
-					(
-						<TouchableOpacity
-							style={styles.submit}
-							onPress={() =>
-								SubmitData(name, dob, email, password, confirm)
-							}
-						>
-							<Text style={styles.submitText}>CREATE ACCOUNT</Text>
-						</TouchableOpacity>
-					)
-				}
-				{
-					submitted
-					&&
-					(
-						<ActivityIndicator size="large" color={Colours.activityIndicator}/>
-					)
-				}
+				{!submitted && (
+					<TouchableOpacity
+						style={styles.submit}
+						onPress={() => SubmitData(name, dob, email, password, confirm)}
+					>
+						<Text style={styles.submitText}>CREATE ACCOUNT</Text>
+					</TouchableOpacity>
+				)}
+				{submitted && (
+					<ActivityIndicator size="large" color={Colours.activityIndicator} />
+				)}
 				<View style={styles.end} />
 			</ScrollView>
 		</View>
@@ -439,29 +446,28 @@ const styles = StyleSheet.create({
 		borderWidth: 5,
 		borderRadius: 5,
 		shadowColor: Colours.black,
-		shadowOffset:
-		{
+		shadowOffset: {
 			width: 0,
 			height: 12,
 		},
 		shadowOpacity: 0.58,
-		shadowRadius: 16.00,
+		shadowRadius: 16.0,
 		elevation: 24,
 	},
 	modalViewText: {
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
-		height: (Gui.screen.height * 0.275) * 0.66,
+		height: Gui.screen.height * 0.275 * 0.66,
 	},
-	modalText: {		
+	modalText: {
 		textAlign: 'center',
 		fontWeight: 'bold',
-		fontSize: (Gui.screen.height * 0.275) * 0.1
+		fontSize: Gui.screen.height * 0.275 * 0.1,
 	},
 	modalButton: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.50,
+		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: 2,

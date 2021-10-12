@@ -10,7 +10,7 @@ import {
 	Platform,
 	Button,
 	Image,
-	ActivityIndicator
+	ActivityIndicator,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
@@ -24,9 +24,6 @@ import Gui from '../config/gui.js';
 import API from '../config/api.js';
 
 import firebase from 'firebase/app';
-
-
-
 
 function NewFoodListing({ navigation }) {
 	// This warning can be ignored since our lists are small
@@ -70,13 +67,12 @@ function NewFoodListing({ navigation }) {
 		{ value: 'dairy', label: 'Dairy' },
 		{ value: 'eggs', label: 'Eggs' },
 	]);
-	
+
 	const [collectionItems, setCollectionItems] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
 	]);
 
-	
 	function categoryOpened(val) {
 		setOpenCategoryType(val);
 		setOpenAllergenType(false);
@@ -144,7 +140,16 @@ function NewFoodListing({ navigation }) {
 			case location['lat'] == 0 || location['lng'] == 0:
 				return false;
 
-			case !category in ['fruit', 'vegetables', 'dry_goods', 'cooked', 'bakery', 'dairy', 'misc']:
+			case !category in
+				[
+					'fruit',
+					'vegetables',
+					'dry_goods',
+					'cooked',
+					'bakery',
+					'dairy',
+					'misc',
+				]:
 				return false;
 
 			case !allergen in ['gluten', 'peanuts', 'seafood', 'dairy', 'eggs']:
@@ -164,7 +169,7 @@ function NewFoodListing({ navigation }) {
 		}
 
 		console.log('Pass');
-		
+
 		SubmitForm(
 			userID,
 			listingType,
@@ -180,13 +185,17 @@ function NewFoodListing({ navigation }) {
 		);
 	}
 
-	function ShowSuccess(){
-		return(
-			<View style={styles.message}><Text style={{color: Colours.white, fontSize: 16}}>Success! New food listing has been created.</Text></View>
+	function ShowSuccess() {
+		return (
+			<View style={styles.message}>
+				<Text style={{ color: Colours.white, fontSize: 16 }}>
+					Success! New food listing has been created.
+				</Text>
+			</View>
 		);
 	}
 
-	function ClearInput(){
+	function ClearInput() {
 		setListingTitle(null);
 		setDescription(null);
 		setLocation({ lat: 0, lng: 0, name: '' });
@@ -212,7 +221,7 @@ function NewFoodListing({ navigation }) {
 		imageFileName
 	) {
 		const dbh = firebase.firestore();
-		
+
 		dbh.collection('listings').add({
 			user: dbh.doc('users/' + userID),
 			listingType: listingType,
@@ -224,97 +233,94 @@ function NewFoodListing({ navigation }) {
 			quantity: quantity,
 			expiryDate: expiryDate,
 			collectionMethod: collectionMethod,
-			imageFileName: imageFileName
+			imageFileName: imageFileName,
 		});
 
 		ClearInput();
 		setSuccess(true);
-	
 	}
 
 	const [image, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
-	
 
 	useEffect(() => {
 		(async () => {
-		if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-			if (status !== 'granted') {
-			alert('Sorry, we need camera roll permissions to make this work!');
+			if (Platform.OS !== 'web') {
+				const { status } =
+					await ImagePicker.requestMediaLibraryPermissionsAsync();
+				if (status !== 'granted') {
+					alert('Sorry, we need camera roll permissions to make this work!');
+				}
 			}
-		}
 		})();
 	}, []);
 
 	const pickImage = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
-		mediaTypes: ImagePicker.MediaTypeOptions.All,
-		allowsEditing: true,
-		aspect: [4, 3],
-		quality: 1,
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
 		});
 
 		console.log(result);
 
 		if (!result.cancelled) {
-		setImage(result.uri);
+			setImage(result.uri);
 		}
 	};
 
-	const uploadImage = async () =>{
+	const uploadImage = async () => {
 		const blob = await new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
-			xhr.onload = function() {
-			  resolve(xhr.response);
+			xhr.onload = function () {
+				resolve(xhr.response);
 			};
-			xhr.onerror = function() {
-			  reject(new TypeError('Network request failed'));
+			xhr.onerror = function () {
+				reject(new TypeError('Network request failed'));
 			};
 			xhr.responseType = 'blob';
 			xhr.open('GET', image, true);
 			xhr.send(null);
 		});
-		 
-		const ref = firebase.storage().ref().child(new Date().toISOString())
-		const snapshot = ref.put(blob)
+
+		const ref = firebase.storage().ref().child(new Date().toISOString());
+		const snapshot = ref.put(blob);
 
 		snapshot.on(
 			firebase.storage.TaskEvent.STATE_CHANGED,
-			()=>{
-				setUploading(true)
+			() => {
+				setUploading(true);
 			},
 
 			(error) => {
-				setUploading(false)
+				setUploading(false);
 				console.log(error);
-				blob.close
-				return
+				blob.close;
+				return;
 			},
 
 			() => {
-				snapshot.snapshot.ref.getMetadata().then((data)=>{
+				snapshot.snapshot.ref.getMetadata().then((data) => {
 					setimageFileName(data.name);
-					setUploading(false)
-					console.log("Upload successful");
-					console.log("Filename", data.name);
-					blob.close
+					setUploading(false);
+					console.log('Upload successful');
+					console.log('Filename', data.name);
+					blob.close;
 					return data;
 				});
 			}
-		)
-	}
+		);
+	};
 
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
-			{ success ? ShowSuccess() : <View></View> }
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
+			{success ? ShowSuccess() : <View></View>}
 			<View>
 				<Text style={styles.headerText}>NEW FOOD</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
-				
-				
 				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
 					value={listingTitle}
@@ -463,10 +469,15 @@ function NewFoodListing({ navigation }) {
 					style={styles.inputText}
 				/>
 
-				<Button title="Choose photo" onPress={pickImage}/>
-				{image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }}  />}
-				{!uploading?<Button title="Upload" onPress={uploadImage}/> : <ActivityIndicator size="large" color="#000"/>}
-				
+				<Button title="Choose photo" onPress={pickImage} />
+				{image && (
+					<Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+				)}
+				{!uploading ? (
+					<Button title="Upload" onPress={uploadImage} />
+				) : (
+					<ActivityIndicator size="large" color="#000" />
+				)}
 
 				<TouchableOpacity
 					style={styles.submit}
@@ -501,7 +512,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
 		paddingBottom: '10%',
 	},
-	message:{
+	message: {
 		width: '100%',
 		backgroundColor: '#59b300',
 		padding: 20,

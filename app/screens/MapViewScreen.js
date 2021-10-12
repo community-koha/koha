@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
 	StyleSheet,
-	Text, 
-	View, 
-	ActivityIndicator, 
-	TextInput, 
-	Image, 
-	TouchableWithoutFeedback, 
-	Button, 
-	Keyboard 
+	Text,
+	View,
+	ActivityIndicator,
+	TextInput,
+	Image,
+	TouchableWithoutFeedback,
+	Button,
+	Keyboard,
 } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -27,13 +27,12 @@ function NotifScreen() {
 	);
 }
 
-function MapViewScreen({navigation}) {
+function MapViewScreen({ navigation }) {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
 	const [keyword, setKeyword] = useState('');
 
-	
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -60,9 +59,8 @@ function MapViewScreen({navigation}) {
 		if (hasLocationPermissions === false) {
 			getLocationAsync();
 		}
-		
+
 		return () => getLocationAsync();
-		
 	}, []);
 
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -77,8 +75,10 @@ function MapViewScreen({navigation}) {
 				//add all docs to listings array
 				querySnapshot.forEach((documentSnapshot) => {
 					// Don't show listings that have been deleted or hidden from public view
-					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
-					{
+					if (
+						documentSnapshot.data()['deleted'] != true &&
+						documentSnapshot.data()['public'] != false
+					) {
 						listings.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
@@ -111,70 +111,71 @@ function MapViewScreen({navigation}) {
 	//customize map style
 	var mapStyle = [
 		{
-			featureType: "administrative",
-			elementType: "geometry",
-			stylers: [{visibility: "off"}]
+			featureType: 'administrative',
+			elementType: 'geometry',
+			stylers: [{ visibility: 'off' }],
 		},
 		{
-			featureType: "poi",
-			stylers: [{visibility: "off"}]
+			featureType: 'poi',
+			stylers: [{ visibility: 'off' }],
 		},
 		{
-			featureType: "road",
-			elementType: "labels.icon",
-			stylers: [{visibility: "off"}]
+			featureType: 'road',
+			elementType: 'labels.icon',
+			stylers: [{ visibility: 'off' }],
 		},
 		{
-			featureType: "transit",
-			stylers: [{visibility: "off"}]
-		}
-	]
+			featureType: 'transit',
+			stylers: [{ visibility: 'off' }],
+		},
+	];
 
-	function Search(keyword, listings){
+	function Search(keyword, listings) {
 		//create new array
-		const filteredList = []
+		const filteredList = [];
 		//check each listings title and description
-		listings.forEach(function(item) {
-			if (item.listingTitle.includes(keyword)){
-				filteredList.push(item)
+		listings.forEach(function (item) {
+			if (item.listingTitle.includes(keyword)) {
+				filteredList.push(item);
 			}
-			if (item.description.includes(keyword)){
-				filteredList.push(item)
+			if (item.description.includes(keyword)) {
+				filteredList.push(item);
 			}
-		})
-		if (filteredList.length != 0){
+		});
+		if (filteredList.length != 0) {
 			//if there are matches, update listing
 			setListings(filteredList);
 		}
 	}
 
-	function FilterListingType(type){
-		
-		firebase.firestore()
+	function FilterListingType(type) {
+		firebase
+			.firestore()
 			.collection('listings')
 			// Filter results
 			.where('listingType', 'in', type)
 			.get()
-			.then(querySnapshot => {
-				const filteredList = []
+			.then((querySnapshot) => {
+				const filteredList = [];
 				querySnapshot.forEach((documentSnapshot) => {
 					// Don't show listings that have been deleted or hidden from public view
-					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
-					{
+					if (
+						documentSnapshot.data()['deleted'] != true &&
+						documentSnapshot.data()['public'] != false
+					) {
 						filteredList.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
 						});
-					}					
+					}
 				});
 
-				if (filteredList.length != 0){
+				if (filteredList.length != 0) {
 					setListings(filteredList);
 				}
 			});
-		
 	}
-	
+
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
@@ -185,77 +186,107 @@ function MapViewScreen({navigation}) {
 							value={keyword}
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
-							/>
+						/>
 						<MaterialIcons
 							name="search"
 							size={26}
-							style={{padding: 12}}
-							onPress={() => Search(keyword, listings)}/>
+							style={{ padding: 12 }}
+							onPress={() => Search(keyword, listings)}
+						/>
 					</View>
 					<View style={styles.filterContainer}>
-						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>
-						<Button title="Food" onPress={() => FilterListingType(["food"])}/>
-						<Button title="Essentials" onPress={() => FilterListingType(["essentialItem"])}/>
-						<Button title="Event" onPress={() => FilterListingType(["event"])}/>
-						<Button title="Service" onPress={() => FilterListingType(["service"])}/>
+						<Button
+							title="All"
+							onPress={() =>
+								FilterListingType(['food', 'essentialItem', 'event', 'service'])
+							}
+						/>
+						<Button title="Food" onPress={() => FilterListingType(['food'])} />
+						<Button
+							title="Essentials"
+							onPress={() => FilterListingType(['essentialItem'])}
+						/>
+						<Button
+							title="Event"
+							onPress={() => FilterListingType(['event'])}
+						/>
+						<Button
+							title="Service"
+							onPress={() => FilterListingType(['service'])}
+						/>
 					</View>
-					
+
 					<View style={styles.iconContainer}>
-						<MaterialCommunityIcons name="view-list-outline"
+						<MaterialCommunityIcons
+							name="view-list-outline"
 							size={30}
 							color={Colours.default}
-							style={{margin: 5}}
-							onPress={()=> navigation.navigate('ListViewScreen')}/>
-						<MaterialCommunityIcons name="map-marker"
+							style={{ margin: 5 }}
+							onPress={() => navigation.navigate('ListViewScreen')}
+						/>
+						<MaterialCommunityIcons
+							name="map-marker"
 							size={30}
 							color={Colours.black}
-							style={{margin: 5}}/>
+							style={{ margin: 5 }}
+						/>
 					</View>
-					
 				</View>
 				<MapView
 					provider={PROVIDER_GOOGLE}
 					style={styles.map}
 					region={mapRegion}
 					customMapStyle={mapStyle}
-					options={{disableDefaultUI: true}}>
-				
+					options={{ disableDefaultUI: true }}
+				>
 					{listings.map((item, i) => {
-						return(
+						return (
 							<MapView.Marker
 								key={i}
 								coordinate={{
 									latitude: item.location.lat,
-									longitude: item.location.lng
+									longitude: item.location.lng,
 								}}
 								title={item.listingTitle}
 								description={item.description}
 							>
-								<MapView.Callout tooltip
-									onPress={() => navigation.navigate('ListingDetailScreen', {
-										listingId: item.key,
-									})}
+								<MapView.Callout
+									tooltip
+									onPress={() =>
+										navigation.navigate('ListingDetailScreen', {
+											listingId: item.key,
+										})
+									}
 								>
 									<View>
-									<View style={styles.bubble}>
-										<View>
-											<Image style={styles.photo} source={require('../assets/logo.png')} onPress={() => navigation.navigate('ListingDetailScreen', {
-													listingId: item.key,
-												})}/>
+										<View style={styles.bubble}>
+											<View>
+												<Image
+													style={styles.photo}
+													source={require('../assets/logo.png')}
+													onPress={() =>
+														navigation.navigate('ListingDetailScreen', {
+															listingId: item.key,
+														})
+													}
+												/>
+											</View>
+											<View>
+												<Text style={styles.calloutText}>
+													{item.listingTitle}
+												</Text>
+												<Text style={styles.calloutText}>
+													{item.description}
+												</Text>
+												<Text style={styles.calloutText}></Text>
+												<Text style={styles.calloutText}>View Details</Text>
+											</View>
 										</View>
-										<View>
-											<Text style={styles.calloutText}>{item.listingTitle}</Text>
-											<Text style={styles.calloutText}>{item.description}</Text>
-											<Text style={styles.calloutText}></Text>
-											<Text style={styles.calloutText}>View Details</Text>
-										</View>
-									</View>
 									</View>
 								</MapView.Callout>
 							</MapView.Marker>
 						);
 					})}
-					
 				</MapView>
 			</View>
 		</TouchableWithoutFeedback>
@@ -268,13 +299,12 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-
 	},
-	searchContainer:{
+	searchContainer: {
 		height: '21%',
 		padding: 20,
 	},
-	searchBar:{
+	searchBar: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
@@ -283,21 +313,21 @@ const styles = StyleSheet.create({
 		borderWidth: 0.5,
 		width: gui.screen.width * 0.9,
 	},
-	searchInput:{
+	searchInput: {
 		fontSize: 16,
 		padding: 12,
 		borderRadius: 10,
 		borderColor: Colours.grey,
 		borderWidth: 0,
-		width: '85%'
+		width: '85%',
 	},
-	filterContainer:{
+	filterContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		paddingTop: 10,
 	},
-	iconContainer:{
+	iconContainer: {
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 		padding: 10,
@@ -306,10 +336,10 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '70%',
 	},
-	calloutText:{
+	calloutText: {
 		fontSize: 16,
 	},
-	bubble:{
+	bubble: {
 		borderRadius: 10,
 		backgroundColor: Colours.white,
 		padding: 20,
@@ -319,12 +349,12 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		alignItems: 'flex-start',
 	},
-	photo:{
+	photo: {
 		height: 80,
 		width: 80,
 		justifyContent: 'flex-start',
-		marginRight: 20
-	}
+		marginRight: 20,
+	},
 });
 
 export default MapViewScreen;

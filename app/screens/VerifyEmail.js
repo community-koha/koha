@@ -11,11 +11,10 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	ActivityIndicator,
-	Modal
+	Modal,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
-
 
 function VerifyEmail({ navigation }) {
 	const [email, setEmail] = useState('');
@@ -25,54 +24,45 @@ function VerifyEmail({ navigation }) {
 	const [modalText, setModalText] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [buttonDisabled, setButtonDisabled] = useState(false);
-	
 
-	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
-	{
-		if (user)
-		{			
-			console.log(user.email + " - " + user.emailVerified)
-			setUser(user)
-			setEmail(user.email)
+	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
+			console.log(user.email + ' - ' + user.emailVerified);
+			setUser(user);
+			setEmail(user.email);
 
-			var id = setInterval(() => 
-			{
-				if (user.emailVerified)
-				{
-					console.log("User has verified their email.")
-					navigation.navigate('UserType')
-					clearInterval(id)
-					unsubscribe()
+			var id = setInterval(() => {
+				if (user.emailVerified) {
+					console.log('User has verified their email.');
+					navigation.navigate('UserType');
+					clearInterval(id);
+					unsubscribe();
+				} else {
+					user.reload();
 				}
-				else
-				{
-					user.reload()
-				}
-			}, 1000);			
+			}, 1000);
 		}
-	})
+	});
 
-	function resendEmail()
-	{
-		user.sendEmailVerification().catch((error) =>
-		{
-			console.log(error.code+": "+error.message);
-			setModalText(error.message)
-			setModalVisible(true)
+	function resendEmail() {
+		user.sendEmailVerification().catch((error) => {
+			console.log(error.code + ': ' + error.message);
+			setModalText(error.message);
+			setModalVisible(true);
 		});
-		
-		setModalText("The verification email has been sent, make sure to check your spam inbox.\nYou'll be able to request a new verification email in 60 seconds.");
+
+		setModalText(
+			"The verification email has been sent, make sure to check your spam inbox.\nYou'll be able to request a new verification email in 60 seconds."
+		);
 		setModalVisible(true);
 
 		// Block the resend button for a minute
 		setButtonDisabled(true);
-		var id = setInterval(() => 
-		{
+		var id = setInterval(() => {
 			setButtonDisabled(false);
 			clearInterval(id);
-		}, 60*1000);
-		
-	};
+		}, 60 * 1000);
+	}
 
 	let icon = (
 		<MaterialCommunityIcons
@@ -88,57 +78,76 @@ function VerifyEmail({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<Modal
-					animationType="slide"
-					transparent={true}
-					visible={modalVisible}
-					onRequestClose={() => {setModalVisible(false)}}>
-					<View style={styles.modalCenter}>
-						<View style={styles.modalView}>
-							<View style={styles.modalViewText}>
-								<Text style={styles.modalText}>{modalText}</Text>
-							</View>
-							<TouchableOpacity
-								style={[styles.modalButton]}
-								onPress={() => {setModalVisible(false);}}>
-								<Text style={styles.modalButtonText}>OK</Text>
-							</TouchableOpacity>
+				animationType="slide"
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={() => {
+					setModalVisible(false);
+				}}
+			>
+				<View style={styles.modalCenter}>
+					<View style={styles.modalView}>
+						<View style={styles.modalViewText}>
+							<Text style={styles.modalText}>{modalText}</Text>
 						</View>
+						<TouchableOpacity
+							style={[styles.modalButton]}
+							onPress={() => {
+								setModalVisible(false);
+							}}
+						>
+							<Text style={styles.modalButtonText}>OK</Text>
+						</TouchableOpacity>
 					</View>
-				</Modal>
+				</View>
+			</Modal>
 			<View>
-				<Text style={web ? styles.headerTextWeb: styles.headerText}>VERIFY EMAIL</Text>
+				<Text style={web ? styles.headerTextWeb : styles.headerText}>
+					VERIFY EMAIL
+				</Text>
 				<TouchableOpacity
-					onPress={() => {firebase.auth().signOut(); navigation.navigate('Entry')}}
-					style={styles.backButton}>
+					onPress={() => {
+						firebase.auth().signOut();
+						navigation.navigate('Entry');
+					}}
+					style={styles.backButton}
+				>
 					{icon}
 				</TouchableOpacity>
 			</View>
 			<ScrollView style={styles.scroll}>
-				<Text style={styles.mainText}>We've sent an email to <Text style={styles.emailText}>{email}</Text>. Follow the instructions in the email to verify your email address, activate your account, and enable your access to the application.
-				<br/><br/>If you haven't received an email from us, click the button below to resend the verification email.</Text>
-				{
-					submitted
-					&&
-					(
-						<View style={styles.buttons}>
-							<ActivityIndicator size="large" color={Colours.activityIndicator} style={[styles.resend, styles.hideBorder]}/>
-						</View>
-					)
-				}
-				{
-					!submitted
-					&&
-					(
-						<TouchableOpacity
-							style={styles.resend}
-							disabled={buttonDisabled}
-							onPress={() => {setSubmitted(true); resendEmail();}}>
-							<Text style={styles.emailText}>RESEND VERIFICATION EMAIL</Text>
-						</TouchableOpacity>
-					)
-				}				
+				<Text style={styles.mainText}>
+					We've sent an email to <Text style={styles.emailText}>{email}</Text>.
+					Follow the instructions in the email to verify your email address,
+					activate your account, and enable your access to the application.
+					<br />
+					<br />
+					If you haven't received an email from us, click the button below to
+					resend the verification email.
+				</Text>
+				{submitted && (
+					<View style={styles.buttons}>
+						<ActivityIndicator
+							size="large"
+							color={Colours.activityIndicator}
+							style={[styles.resend, styles.hideBorder]}
+						/>
+					</View>
+				)}
+				{!submitted && (
+					<TouchableOpacity
+						style={styles.resend}
+						disabled={buttonDisabled}
+						onPress={() => {
+							setSubmitted(true);
+							resendEmail();
+						}}
+					>
+						<Text style={styles.emailText}>RESEND VERIFICATION EMAIL</Text>
+					</TouchableOpacity>
+				)}
 			</ScrollView>
 		</View>
 	);
@@ -232,7 +241,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	hideBorder: {
-		borderWidth: 0
+		borderWidth: 0,
 	},
 	modalCenter: {
 		flex: 1,
@@ -248,29 +257,28 @@ const styles = StyleSheet.create({
 		borderWidth: 5,
 		borderRadius: 5,
 		shadowColor: Colours.black,
-		shadowOffset:
-		{
+		shadowOffset: {
 			width: 0,
 			height: 12,
 		},
 		shadowOpacity: 0.58,
-		shadowRadius: 16.00,
+		shadowRadius: 16.0,
 		elevation: 24,
 	},
 	modalViewText: {
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
-		height: (Gui.screen.height * 0.275) * 0.66,
+		height: Gui.screen.height * 0.275 * 0.66,
 	},
-	modalText: {		
+	modalText: {
 		textAlign: 'center',
 		fontWeight: 'bold',
-		fontSize: (Gui.screen.height * 0.275) * 0.1
+		fontSize: Gui.screen.height * 0.275 * 0.1,
 	},
 	modalButton: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.50,
+		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: 2,

@@ -19,33 +19,37 @@ function Notification({ navigation }) {
 	const [notifications, setNotifications] = useState([]);
 	const [user, setUser] = useState(null);
 
-	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
-	{
-		if (user)
-		{
+	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
 			setUser(user);
 			unsubscribe();
 		}
-	})
+	});
 
 	function DeleteNotification(id) {
 		const db = firebase.firestore();
-		db.collection('notifications').doc(id).delete().then(() => {
-			console.log("Notification successfully deleted!");
-		}).catch((error) => {
-			console.error(error);
-		});
+		db.collection('notifications')
+			.doc(id)
+			.delete()
+			.then(() => {
+				console.log('Notification successfully deleted!');
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	}
 
 	function DeleteAllNotifications() {
 		const db = firebase.firestore();
-		var notifications = db.collection('notifications').where('uid', '==', user.uid);
-		notifications.get().then(function(querySnapshot) {
-			querySnapshot.forEach(function(doc) {
+		var notifications = db
+			.collection('notifications')
+			.where('uid', '==', user.uid);
+		notifications.get().then(function (querySnapshot) {
+			querySnapshot.forEach(function (doc) {
 				doc.ref.delete();
 			});
 		});
-		console.log("Successfully deleted all notifications!");
+		console.log('Successfully deleted all notifications!');
 	}
 
 	useEffect(() => {
@@ -53,7 +57,7 @@ function Notification({ navigation }) {
 		const db = firebase.firestore();
 		const subscriber = db
 			.collection('notifications')
-			.where('uid', '==', user == null ? "": user.uid)
+			.where('uid', '==', user == null ? '' : user.uid)
 			.onSnapshot((querySnapshot) => {
 				const notifications = [];
 				querySnapshot.forEach((documentSnapshot) => {
@@ -61,7 +65,7 @@ function Notification({ navigation }) {
 						...documentSnapshot.data(),
 						key: documentSnapshot.id,
 					});
-				});				
+				});
 				setNotifications(notifications);
 				setLoading(false);
 			});
@@ -70,46 +74,57 @@ function Notification({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			{
-				notifications.length > 0
-				&&
-				(
-					<View style={styles.buttons}>
-						<TouchableOpacity
-							style={[styles.button, styles.clearButton]}
-							onPress={() => {DeleteAllNotifications(1)}}>
-							<Text style={styles.buttonText}>CLEAR NOTIFICATIONS</Text>
-						</TouchableOpacity>
-					</View>
-				)
-			}			
+			{notifications.length > 0 && (
+				<View style={styles.buttons}>
+					<TouchableOpacity
+						style={[styles.button, styles.clearButton]}
+						onPress={() => {
+							DeleteAllNotifications(1);
+						}}
+					>
+						<Text style={styles.buttonText}>CLEAR NOTIFICATIONS</Text>
+					</TouchableOpacity>
+				</View>
+			)}
 			<ScrollView style={styles.scroll}>
-				{loading && <ActivityIndicator size="large" color={Colours.activityIndicator}/>}
+				{loading && (
+					<ActivityIndicator size="large" color={Colours.activityIndicator} />
+				)}
 				<View style={styles.contentView}>
-					{!loading && notifications.length > 0 &&
+					{!loading &&
+						notifications.length > 0 &&
 						notifications.map((item, i) => {
 							return (
-								<ListItem key={i}
-									style={styles.listStyle}>
+								<ListItem key={i} style={styles.listStyle}>
 									<ListItem.Content style={styles.contentViewItem}>
-										<ListItem.Title style={styles.title}>The watched listing '{item.title}' has been removed by the poster</ListItem.Title>
-										<ListItem.Subtitle style={styles.subtitle}>The listing has been removed by the poster, and was automatically removed from your watched listings. It will no longer appear in your watched listings.</ListItem.Subtitle>
+										<ListItem.Title style={styles.title}>
+											The watched listing '{item.title}' has been removed by the
+											poster
+										</ListItem.Title>
+										<ListItem.Subtitle style={styles.subtitle}>
+											The listing has been removed by the poster, and was
+											automatically removed from your watched listings. It will
+											no longer appear in your watched listings.
+										</ListItem.Subtitle>
 										<TouchableOpacity
 											style={[styles.button, styles.clearItemButton]}
-											onPress={() => {DeleteNotification(item.key)}}>
-											<Text style={[styles.buttonText, styles.clearItemText]}>DELETE NOTIFICATION</Text>
+											onPress={() => {
+												DeleteNotification(item.key);
+											}}
+										>
+											<Text style={[styles.buttonText, styles.clearItemText]}>
+												DELETE NOTIFICATION
+											</Text>
 										</TouchableOpacity>
 									</ListItem.Content>
 								</ListItem>
 							);
-					})}
-					{!loading && notifications.length <= 0 &&
-						(
-							<View>
-								<Text style={styles.emptyText}>No Notifications Found</Text>
-							</View>
-						)						
-					}
+						})}
+					{!loading && notifications.length <= 0 && (
+						<View>
+							<Text style={styles.emptyText}>No Notifications Found</Text>
+						</View>
+					)}
 				</View>
 			</ScrollView>
 		</View>
@@ -121,17 +136,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 	},
-	contentView: {	
+	contentView: {
 		width: Gui.screen.width * 1,
 		height: Gui.screen.height * 0.8,
 	},
-	title: {	
+	title: {
 		fontSize: Gui.screen.height * 0.018,
 		maxWidth: Gui.screen.width * 0.5,
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},
-	subtitle: {	
+	subtitle: {
 		fontSize: Gui.screen.height * 0.0175,
 		maxWidth: Gui.screen.width * 0.5,
 		textAlign: 'center',
@@ -153,7 +168,7 @@ const styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderBottomWidth: 1,
 		borderRadius: 1,
-		borderColor: Colours.grey,		
+		borderColor: Colours.grey,
 		width: Gui.screen.width * 1,
 		marginLeft: Gui.screen.width * 0,
 	},
@@ -190,7 +205,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_peach,
 		borderColor: Colours.koha_peach,
 		width: Gui.screen.width * 0.25,
-	},	
+	},
 	clearItemButton: {
 		backgroundColor: Colours.koha_navy,
 		borderColor: Colours.koha_navy,
@@ -212,7 +227,7 @@ const styles = StyleSheet.create({
 		fontSize: Gui.button.fontSize,
 		color: Colours.black,
 		fontWeight: 'bold',
-		paddingTop: Gui.screen.height * 0.02, 
+		paddingTop: Gui.screen.height * 0.02,
 	},
 });
 

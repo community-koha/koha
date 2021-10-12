@@ -23,13 +23,12 @@ import DatePicker from 'react-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import API from '../config/api.js';
 
-
 function ListingDetailScreen({ route, navigation }) {
 	const [web, setWeb] = useState(Platform.OS === 'web');
 	const [listingId, setListingId] = useState(route.params.listingId);
 	const [loading, setLoading] = useState(true);
 	const [listing, setListing] = useState(null);
-	const [type, setType] = useState("");
+	const [type, setType] = useState('');
 
 	const [showDate, setShowDate] = useState(false);
 	const [openCategoryType, setOpenCategoryType] = useState(false);
@@ -52,7 +51,7 @@ function ListingDetailScreen({ route, navigation }) {
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [eventDate, setEventDate] = useState(ConvertDate(Date.now()));
-	
+
 	// Food
 	const [allergen, setAllergen] = useState(null);
 	const [collectionMethod, setCollectionMethod] = useState(null);
@@ -81,7 +80,7 @@ function ListingDetailScreen({ route, navigation }) {
 		{ value: 'dairy', label: 'Dairy' },
 		{ value: 'eggs', label: 'Eggs' },
 	]);
-	
+
 	const [collectionItems, setCollectionItems] = useState([
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
@@ -158,21 +157,22 @@ function ListingDetailScreen({ route, navigation }) {
 		const db = firebase.firestore();
 
 		// Sets the delete field and then notifies the user
-		db.collection("listings").doc(listingId).update(
-		{
-			deleted: true,
-			public: false,
-		})
-		.then(() => {			
-			setModalText("The listing has been deleted.");
-			setModalVisible(true);
-			setModalRedirect(true);
-		})
-		.catch((error) => {
-			console.error(error);
-			setModalText(error.message);
-			setModalVisible(true);
-		});		
+		db.collection('listings')
+			.doc(listingId)
+			.update({
+				deleted: true,
+				public: false,
+			})
+			.then(() => {
+				setModalText('The listing has been deleted.');
+				setModalVisible(true);
+				setModalRedirect(true);
+			})
+			.catch((error) => {
+				console.error(error);
+				setModalText(error.message);
+				setModalVisible(true);
+			});
 
 		// Add a notifiction for all the users watching the listing
 		var subscriber = db
@@ -184,286 +184,302 @@ function ListingDetailScreen({ route, navigation }) {
 				const push_tokens = [];
 
 				querySnapshot.forEach((documentSnapshot) => {
-					watching_users.push(documentSnapshot.data()["uid"])
-					push_tokens.push(documentSnapshot.data()["notificationToken"])
+					watching_users.push(documentSnapshot.data()['uid']);
+					push_tokens.push(documentSnapshot.data()['notificationToken']);
 				});
 
-				console.log(watching_users)
-				console.log(watching_users.length)
+				console.log(watching_users);
+				console.log(watching_users.length);
 
 				watching_users.forEach((id) => {
-					console.log(id)
+					console.log(id);
 					// Remove listing ID from users watching the listing
 					db.collection('users')
 						.doc(id)
 						.update({
-							watching: firebase.firestore.FieldValue.arrayRemove( listingId )
+							watching: firebase.firestore.FieldValue.arrayRemove(listingId),
 						})
 						.then(() => {
-							console.log("Removed item from watching list");
+							console.log('Removed item from watching list');
 						})
 						.catch((error) => {
 							console.error(error);
 						});
-					
 
-					// Add notifications for the users 
+					// Add notifications for the users
 					db.collection('notifications')
 						.doc()
-						.set({
-							uid: user["uid"],
-							title: listingTitleOriginal,
-							reason: "removed"
-						},{merge:true})
+						.set(
+							{
+								uid: user['uid'],
+								title: listingTitleOriginal,
+								reason: 'removed',
+							},
+							{ merge: true }
+						)
 						.then(() => {
-							console.log("Added notification to database");
+							console.log('Added notification to database');
 						})
 						.catch((error) => {
 							console.error(error);
-						});		
-				})
+						});
+				});
 
 				// Send push notifications
 				push_tokens.forEach((token) => {
-					console.log(token)
+					console.log(token);
 
-					if (token !== null && token !== "") {
+					if (token !== null && token !== '') {
 						sendPushNotification(
 							token,
 							'A watched listing has been removed.',
-							"Your watched listing '" + listingTitleOriginal + "' has been removed by the poster. This listing will no longer appear in your watched listings."
-						)
-						console.log("Sent notification")
-					}					
-				})
+							"Your watched listing '" +
+								listingTitleOriginal +
+								"' has been removed by the poster. This listing will no longer appear in your watched listings."
+						);
+						console.log('Sent notification');
+					}
+				});
 			});
 	}
 
 	function updateListing() {
 		const db = firebase.firestore();
 
-		switch (type)
-		{
-			case "food":
-			{
+		switch (type) {
+			case 'food': {
 				switch (true) {
 					case listingTitle === '':
-						setModalText("Please enter a title for your listing");
+						setModalText('Please enter a title for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case description === '':
-						setModalText("Please enter a description for your listing");
+						setModalText('Please enter a description for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case location['lat'] == 0 || location['lng'] == 0:
-						setModalText("Please enter a location for your listing");
+						setModalText('Please enter a location for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case quantity == null || quantity <= 0:
-						setModalText("Please enter a quantity for your listing");
+						setModalText('Please enter a quantity for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case expiryDate == null:
-						setModalText("Please enter an expiry date for your listing");
+						setModalText('Please enter an expiry date for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case !collectionMethod in ['pick_up', 'delivery']:
-						setModalText("Please enter a collection method for your listing");
+						setModalText('Please enter a collection method for your listing');
 						setModalVisible(true);
 						return false;
 				}
 
-				db.collection("listings").doc(listingId).set(
-				{
-					listingTitle: listingTitle,
-					description: description,
-					location: location,
-					allergen: allergen,
-					quantity: quantity,
-					expiryDate: expiryDate,
-					collectionMethod: collectionMethod,
-					edited: true,
-				},{merge:true})
-				.then(() => {
-					setModalText("The listing has been updated.");
-					setModalVisible(true);
-					setModalRedirect(true);
-				})
-				.catch((error) => {
-					console.error(error);
-					setModalText(error.message);
-					setModalVisible(true);
-				});
+				db.collection('listings')
+					.doc(listingId)
+					.set(
+						{
+							listingTitle: listingTitle,
+							description: description,
+							location: location,
+							allergen: allergen,
+							quantity: quantity,
+							expiryDate: expiryDate,
+							collectionMethod: collectionMethod,
+							edited: true,
+						},
+						{ merge: true }
+					)
+					.then(() => {
+						setModalText('The listing has been updated.');
+						setModalVisible(true);
+						setModalRedirect(true);
+					})
+					.catch((error) => {
+						console.error(error);
+						setModalText(error.message);
+						setModalVisible(true);
+					});
 				break;
-			};
-			case "essentialItem":
-			{
+			}
+			case 'essentialItem': {
 				switch (true) {
 					case listingTitle === '':
-						setModalText("Please enter a title for your listing");
+						setModalText('Please enter a title for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case description === '':
-						setModalText("Please enter a description for your listing");
+						setModalText('Please enter a description for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case location['lat'] == 0 || location['lng'] == 0:
-						setModalText("Please enter a location for your listing");
+						setModalText('Please enter a location for your listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case quantity == null || quantity <= 0:
-						setModalText("Please enter a quantity for your listing");
+						setModalText('Please enter a quantity for your listing');
 						setModalVisible(true);
 						return false;
-					
-					case !category in ['baby', 'household', 'toiletries', 'school', 'clothing', 'misc']:
-						setModalText("Please enter a category for your listing");
+
+					case !category in
+						['baby', 'household', 'toiletries', 'school', 'clothing', 'misc']:
+						setModalText('Please enter a category for your listing');
 						setModalVisible(true);
 						return false;
 
 					case !condition in ['new', 'used']:
-						setModalText("Please enter an item condition for your listing");
+						setModalText('Please enter an item condition for your listing');
 						setModalVisible(true);
 						return false;
 
 					case !collectionMethod in ['pick_up', 'delivery']:
-						setModalText("Please enter a collection method for your listing");
+						setModalText('Please enter a collection method for your listing');
 						setModalVisible(true);
 						return false;
 				}
 
-				db.collection("listings").doc(listingId).set(
-				{
-					listingTitle: listingTitle,
-					description: description,
-					location: location,
-					condition: condition,
-					quantity: quantity,
-					expiryDate: expiryDate,
-					collectionMethod: collectionMethod,
-					edited: true,
-				},{merge:true})
-				.then(() => {
-					setModalText("The listing has been updated.");
-					setModalVisible(true);
-					setModalRedirect(true);
-				})
-				.catch((error) => {
-					console.error(error);
-					setModalText(error.message);
-					setModalVisible(true);
-				});
+				db.collection('listings')
+					.doc(listingId)
+					.set(
+						{
+							listingTitle: listingTitle,
+							description: description,
+							location: location,
+							condition: condition,
+							quantity: quantity,
+							expiryDate: expiryDate,
+							collectionMethod: collectionMethod,
+							edited: true,
+						},
+						{ merge: true }
+					)
+					.then(() => {
+						setModalText('The listing has been updated.');
+						setModalVisible(true);
+						setModalRedirect(true);
+					})
+					.catch((error) => {
+						console.error(error);
+						setModalText(error.message);
+						setModalVisible(true);
+					});
 				break;
-			};
-			case "event":
-			{
+			}
+			case 'event': {
 				switch (true) {
 					case listingTitle === '':
-						setModalText("Please enter a title for your event");
+						setModalText('Please enter a title for your event');
 						setModalVisible(true);
 						return false;
-		
+
 					case description === '':
-						setModalText("Please enter a description for your event");
+						setModalText('Please enter a description for your event');
 						setModalVisible(true);
 						return false;
-		
+
 					case location['lat'] == 0 || location['lng'] == 0:
-						setModalText("Please enter a location for your event");
+						setModalText('Please enter a location for your event');
 						setModalVisible(true);
 						return false;
-		
+
 					case capacity == null || capacity <= 0:
-						setModalText("Please enter a capacity for your event");
+						setModalText('Please enter a capacity for your event');
 						setModalVisible(true);
 						return false;
-					
+
 					case eventDate == null:
-						setModalText("Please enter a date for your event");
+						setModalText('Please enter a date for your event');
 						setModalVisible(true);
 						return false;
 				}
 
-				db.collection("listings").doc(listingId).set(
-				{
-					listingTitle: listingTitle,
-					description: description,
-					location: location,
-					capacity: capacity,
-					eventDate: eventDate,
-					edited: true,
-				},{merge:true})
-				.then(() => {
-					setModalText("The event has been updated.");
-					setModalVisible(true);
-					setModalRedirect(true);
-				})
-				.catch((error) => {
-					console.error(error);
-					setModalText(error.message);
-					setModalVisible(true);
-				});
+				db.collection('listings')
+					.doc(listingId)
+					.set(
+						{
+							listingTitle: listingTitle,
+							description: description,
+							location: location,
+							capacity: capacity,
+							eventDate: eventDate,
+							edited: true,
+						},
+						{ merge: true }
+					)
+					.then(() => {
+						setModalText('The event has been updated.');
+						setModalVisible(true);
+						setModalRedirect(true);
+					})
+					.catch((error) => {
+						console.error(error);
+						setModalText(error.message);
+						setModalVisible(true);
+					});
 				break;
-			};
-			case "service":
-			{
+			}
+			case 'service': {
 				switch (true) {
 					case listingTitle === '':
-						setModalText("Please enter a title for your service listing");
+						setModalText('Please enter a title for your service listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case description === '':
-						setModalText("Please enter a description for your service listing");
+						setModalText('Please enter a description for your service listing');
 						setModalVisible(true);
 						return false;
-		
+
 					case location['lat'] == 0 || location['lng'] == 0:
-						setModalText("Please enter a location for your service listing");
+						setModalText('Please enter a location for your service listing');
 						setModalVisible(true);
 						return false;
-		
-					case !category in ['community','other']:
-						setModalText("Please enter a capacity for your service listing");
+
+					case !category in ['community', 'other']:
+						setModalText('Please enter a capacity for your service listing');
 						setModalVisible(true);
 						return false;
-					
+
 					case eventDate == null:
-						setModalText("Please enter a date for your service listing");
+						setModalText('Please enter a date for your service listing');
 						setModalVisible(true);
 						return false;
 				}
 
-				db.collection("listings").doc(listingId).set(
-				{
-					listingTitle: listingTitle,
-					description: description,
-					location: location,
-					eventDate: eventDate,
-					category: category,
-					edited: true,
-				},{merge:true})
-				.then(() => {
-					setModalText("The service listing has been updated.");
-					setModalVisible(true);
-					setModalRedirect(true);
-				})
-				.catch((error) => {
-					console.error(error);
-					setModalText(error.message);
-					setModalVisible(true);
-				});
+				db.collection('listings')
+					.doc(listingId)
+					.set(
+						{
+							listingTitle: listingTitle,
+							description: description,
+							location: location,
+							eventDate: eventDate,
+							category: category,
+							edited: true,
+						},
+						{ merge: true }
+					)
+					.then(() => {
+						setModalText('The service listing has been updated.');
+						setModalVisible(true);
+						setModalRedirect(true);
+					})
+					.catch((error) => {
+						console.error(error);
+						setModalText(error.message);
+						setModalVisible(true);
+					});
 				break;
-			};
-		};
+			}
+		}
 	}
 
 	function setDate(date) {
@@ -479,23 +495,28 @@ function ListingDetailScreen({ route, navigation }) {
 			.collection('listings')
 			.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
 			.onSnapshot((querySnapshot) => {
-				querySnapshot.forEach((documentSnapshot) =>{
+				querySnapshot.forEach((documentSnapshot) => {
 					setListing(documentSnapshot.data());
-					setType(documentSnapshot.data()["listingType"]);
-					setListingTitle(documentSnapshot.data()["listingTitle"]);
-					setListingTitleOriginal(documentSnapshot.data()["listingTitle"])
-					setDescription(documentSnapshot.data()["description"]);
-					setLocation(documentSnapshot.data()["location"]);
+					setType(documentSnapshot.data()['listingType']);
+					setListingTitle(documentSnapshot.data()['listingTitle']);
+					setListingTitleOriginal(documentSnapshot.data()['listingTitle']);
+					setDescription(documentSnapshot.data()['description']);
+					setLocation(documentSnapshot.data()['location']);
 					setLocationOriginal({
-						description: documentSnapshot.data()["location"]["name"],
-						geometry: { location: { lat: documentSnapshot.data()["location"]["lat"], lng: documentSnapshot.data()["location"]["lng"] } },
+						description: documentSnapshot.data()['location']['name'],
+						geometry: {
+							location: {
+								lat: documentSnapshot.data()['location']['lat'],
+								lng: documentSnapshot.data()['location']['lng'],
+							},
+						},
 					});
-					setCategory(documentSnapshot.data()["category"]);
-					setAllergen(documentSnapshot.data()["allergen"]);
-					setQuantity(documentSnapshot.data()["quantity"]);
-					setCollectionMethod(documentSnapshot.data()["collectionMethod"]);
-					setCondition(documentSnapshot.data()["condition"]);
-					setCapacity(documentSnapshot.data()["capacity"]);
+					setCategory(documentSnapshot.data()['category']);
+					setAllergen(documentSnapshot.data()['allergen']);
+					setQuantity(documentSnapshot.data()['quantity']);
+					setCollectionMethod(documentSnapshot.data()['collectionMethod']);
+					setCondition(documentSnapshot.data()['condition']);
+					setCapacity(documentSnapshot.data()['capacity']);
 				});
 				setLoading(false);
 			});
@@ -506,26 +527,40 @@ function ListingDetailScreen({ route, navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<Modal
 				animationType="slide"
 				transparent={true}
 				visible={modalDelete}
-				onRequestClose={() => {setModalDeleteVisible(false)}}>
+				onRequestClose={() => {
+					setModalDeleteVisible(false);
+				}}
+			>
 				<View style={styles.modalCenter}>
 					<View style={[styles.modalView, styles.modalViewDelete]}>
 						<View style={styles.modalViewText}>
-							<Text style={styles.modalText}>Are you sure you want to delete this listing?<br/>You can't undo this action.</Text>
+							<Text style={styles.modalText}>
+								Are you sure you want to delete this listing?
+								<br />
+								You can't undo this action.
+							</Text>
 						</View>
 						<View style={styles.rowFlex}>
 							<TouchableOpacity
 								style={[styles.modalButton, styles.modalDeleteButton]}
-								onPress={() => {deleteListing(); setModalDeleteVisible(false)}}>
+								onPress={() => {
+									deleteListing();
+									setModalDeleteVisible(false);
+								}}
+							>
 								<Text style={styles.modalButtonText}>DELETE</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={[styles.modalButton, styles.modalCancelButton]}
-								onPress={() => {setModalDeleteVisible(false)}}>
+								onPress={() => {
+									setModalDeleteVisible(false);
+								}}
+							>
 								<Text style={styles.modalButtonCancelText}>CANCEL</Text>
 							</TouchableOpacity>
 						</View>
@@ -536,7 +571,10 @@ function ListingDetailScreen({ route, navigation }) {
 				animationType="slide"
 				transparent={true}
 				visible={modalVisible}
-				onRequestClose={() => {setModalVisible(false)}}>
+				onRequestClose={() => {
+					setModalVisible(false);
+				}}
+			>
 				<View style={styles.modalCenter}>
 					<View style={styles.modalView}>
 						<View style={styles.modalViewText}>
@@ -544,32 +582,53 @@ function ListingDetailScreen({ route, navigation }) {
 						</View>
 						<TouchableOpacity
 							style={[styles.modalButton]}
-							onPress={() => {setModalVisible(false); if (modalRedirect) {setModalRedirect(false); navigation.goBack();}}}>
+							onPress={() => {
+								setModalVisible(false);
+								if (modalRedirect) {
+									setModalRedirect(false);
+									navigation.goBack();
+								}
+							}}
+						>
 							<Text style={styles.modalButtonText}>OK</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
-			<ScrollView>			
-				{loading && <ActivityIndicator size="large" color={Colours.activityIndicator}/>}
-				{!loading &&
-				(
+			<ScrollView>
+				{loading && (
+					<ActivityIndicator size="large" color={Colours.activityIndicator} />
+				)}
+				{!loading && (
 					<View>
 						<View style={styles.buttons}>
-						<TouchableOpacity
+							<TouchableOpacity
 								style={[styles.button, styles.cancelButton]}
-								onPress={() => {navigation.goBack()}}>
-								<Text style={[styles.buttonText, styles.cancelText]}>CANCEL</Text>
+								onPress={() => {
+									navigation.goBack();
+								}}
+							>
+								<Text style={[styles.buttonText, styles.cancelText]}>
+									CANCEL
+								</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={[styles.button, styles.saveButton]}
-								onPress={() => {updateListing();}}>
+								onPress={() => {
+									updateListing();
+								}}
+							>
 								<Text style={styles.buttonText}>SAVE</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={[styles.button, styles.deleteButton]}
-								onPress={() => {setModalDeleteVisible(true)}}>
-								<Text style={[styles.buttonText, styles.deleteText]}>DELETE</Text>
+								onPress={() => {
+									setModalDeleteVisible(true);
+								}}
+							>
+								<Text style={[styles.buttonText, styles.deleteText]}>
+									DELETE
+								</Text>
 							</TouchableOpacity>
 						</View>
 						<View style={styles.contentView}>
@@ -592,7 +651,7 @@ function ListingDetailScreen({ route, navigation }) {
 								placeholder="Search..."
 								onFail={(error) => console.error(error)}
 								fetchDetails={true}
-								value={location["name"]}
+								value={location['name']}
 								predefinedPlaces={[locationOriginal]}
 								onFail={(data, details) => console.error(data, details)}
 								onNotFound={(data, details) => console.error(data, details)}
@@ -625,14 +684,12 @@ function ListingDetailScreen({ route, navigation }) {
 								zIndex={8000}
 								debounce={200}
 							/>
-							{
-								type != "essentialItem"
-								&&
-								(
-									<Text style={styles.inputTitle}>{type == "food"? "Expiry Date": "Date"}</Text>
-								)
-							}
-							{type !== "essentialItem" && web && (
+							{type != 'essentialItem' && (
+								<Text style={styles.inputTitle}>
+									{type == 'food' ? 'Expiry Date' : 'Date'}
+								</Text>
+							)}
+							{type !== 'essentialItem' && web && (
 								<DatePicker
 									selected={new Date(Date.now())}
 									onChange={(val) => setDate(ConvertDate(val))}
@@ -649,7 +706,7 @@ function ListingDetailScreen({ route, navigation }) {
 									}
 								/>
 							)}
-							{type !== "essentialItem" && !web && (
+							{type !== 'essentialItem' && !web && (
 								<TouchableOpacity
 									style={styles.date}
 									onPress={() => setShowDate(true)}
@@ -657,7 +714,7 @@ function ListingDetailScreen({ route, navigation }) {
 									<Text style={styles.dateText}>{expiryDate}</Text>
 								</TouchableOpacity>
 							)}
-							{type !== "essentialItem" && !web && showDate && (
+							{type !== 'essentialItem' && !web && showDate && (
 								<DateTimePicker
 									mode="date"
 									dateFormat="day month year"
@@ -668,174 +725,158 @@ function ListingDetailScreen({ route, navigation }) {
 									}
 								/>
 							)}
-							{
-								type === "food"
-								&&
-								(
-									<View>
-										<Text style={styles.inputTitle}>Category</Text>
-										<DropDownPicker
-											open={openCategoryType}
-											items={categoryFood}
-											value={category}
-											setOpen={(val) => categoryOpened(val)}
-											setValue={(val) => setCategory(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={5000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Allergen</Text>
-										<DropDownPicker
-											open={openAllergenType}
-											items={categoryAllergen}
-											value={allergen}
-											setOpen={(val) => allergenOpened(val)}
-											setValue={(val) => setAllergen(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={3000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Quantity</Text>
-										<TextInput
-											value={quantity}
-											onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
-											placeholder="Quantity"
-											keyboardType="numeric"
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Collection Method</Text>
-										<DropDownPicker
-											open={openCollectionType}
-											items={collectionItems}
-											value={collectionMethod}
-											setOpen={(val) => collectionOpened(val)}
-											setValue={(val) => setCollectionMethod(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={1000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>										
-									</View>
-								)
-							}
-							{
-								type === "essentialItem"
-								&&
-								(
-									<View>
-										<Text style={styles.inputTitle}>Category</Text>
-										<DropDownPicker
-											open={openCategoryType}
-											items={categoryItems}
-											value={category}
-											setOpen={(val) => categoryOpened(val)}
-											setValue={(val) => setCategory(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={5000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Condition</Text>
-										<DropDownPicker
-											open={openConditionType}
-											items={categoryCondition}
-											value={condition}
-											setOpen={(val) => conditionOpened(val)}
-											setValue={(val) => setCondition(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={3000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Quantity</Text>
-										<TextInput
-											value={quantity}
-											onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
-											placeholder="Quantity"
-											keyboardType="numeric"
-											style={styles.inputText}
-										/>
-										<Text style={styles.inputTitle}>Collection Method</Text>
-										<DropDownPicker
-											open={openCollectionType}
-											items={collectionItems}
-											value={collectionMethod}
-											setOpen={(val) => collectionOpened(val)}
-											setValue={(val) => setCollectionMethod(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={1000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>										
-									</View>
-								)
-							}
-							{
-								type === "event"
-								&&
-								(
-									<View>
-										<Text style={styles.inputTitle}>Event Capacity</Text>
-										<TextInput
-											value={capacity}
-											onChangeText={(val) => setCapacity(val.replace(/\D/, ''))}
-											placeholder="Number of people"
-											keyboardType="numeric"
-											style={styles.inputText}
-										/>									
-									</View>
-								)
-							}
-							{
-								type === "service"
-								&&
-								(
-									<View>
-										<Text style={styles.inputTitle}>Category</Text>
-										<DropDownPicker
-											open={openCategoryType}
-											items={categoryService}
-											value={category}
-											setOpen={(val) => categoryOpened(val)}
-											setValue={(val) => setCategory(val)}
-											showArrowIcon={!web}
-											showTickIcon={false}
-											zIndex={5000}
-											placeholder="Select..."
-											placeholderStyle={styles.dropDownPlaceholderText}
-											dropDownContainerStyle={styles.dropDownBody}
-											textStyle={styles.dropDownText}
-											style={styles.inputText}
-										/>
-									</View>
-								)
-							}
+							{type === 'food' && (
+								<View>
+									<Text style={styles.inputTitle}>Category</Text>
+									<DropDownPicker
+										open={openCategoryType}
+										items={categoryFood}
+										value={category}
+										setOpen={(val) => categoryOpened(val)}
+										setValue={(val) => setCategory(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={5000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Allergen</Text>
+									<DropDownPicker
+										open={openAllergenType}
+										items={categoryAllergen}
+										value={allergen}
+										setOpen={(val) => allergenOpened(val)}
+										setValue={(val) => setAllergen(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={3000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Quantity</Text>
+									<TextInput
+										value={quantity}
+										onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
+										placeholder="Quantity"
+										keyboardType="numeric"
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Collection Method</Text>
+									<DropDownPicker
+										open={openCollectionType}
+										items={collectionItems}
+										value={collectionMethod}
+										setOpen={(val) => collectionOpened(val)}
+										setValue={(val) => setCollectionMethod(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={1000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+								</View>
+							)}
+							{type === 'essentialItem' && (
+								<View>
+									<Text style={styles.inputTitle}>Category</Text>
+									<DropDownPicker
+										open={openCategoryType}
+										items={categoryItems}
+										value={category}
+										setOpen={(val) => categoryOpened(val)}
+										setValue={(val) => setCategory(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={5000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Condition</Text>
+									<DropDownPicker
+										open={openConditionType}
+										items={categoryCondition}
+										value={condition}
+										setOpen={(val) => conditionOpened(val)}
+										setValue={(val) => setCondition(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={3000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Quantity</Text>
+									<TextInput
+										value={quantity}
+										onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
+										placeholder="Quantity"
+										keyboardType="numeric"
+										style={styles.inputText}
+									/>
+									<Text style={styles.inputTitle}>Collection Method</Text>
+									<DropDownPicker
+										open={openCollectionType}
+										items={collectionItems}
+										value={collectionMethod}
+										setOpen={(val) => collectionOpened(val)}
+										setValue={(val) => setCollectionMethod(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={1000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+								</View>
+							)}
+							{type === 'event' && (
+								<View>
+									<Text style={styles.inputTitle}>Event Capacity</Text>
+									<TextInput
+										value={capacity}
+										onChangeText={(val) => setCapacity(val.replace(/\D/, ''))}
+										placeholder="Number of people"
+										keyboardType="numeric"
+										style={styles.inputText}
+									/>
+								</View>
+							)}
+							{type === 'service' && (
+								<View>
+									<Text style={styles.inputTitle}>Category</Text>
+									<DropDownPicker
+										open={openCategoryType}
+										items={categoryService}
+										value={category}
+										setOpen={(val) => categoryOpened(val)}
+										setValue={(val) => setCategory(val)}
+										showArrowIcon={!web}
+										showTickIcon={false}
+										zIndex={5000}
+										placeholder="Select..."
+										placeholderStyle={styles.dropDownPlaceholderText}
+										dropDownContainerStyle={styles.dropDownBody}
+										textStyle={styles.dropDownText}
+										style={styles.inputText}
+									/>
+								</View>
+							)}
 						</View>
 					</View>
 				)}
@@ -849,7 +890,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 	},
-	contentView: {	
+	contentView: {
 		marginLeft: Gui.screen.width * 0.2,
 		width: Gui.screen.width * 0.6,
 	},
@@ -993,13 +1034,12 @@ const styles = StyleSheet.create({
 		borderWidth: 5,
 		borderRadius: 5,
 		shadowColor: Colours.black,
-		shadowOffset:
-		{
+		shadowOffset: {
 			width: 0,
 			height: 12,
 		},
 		shadowOpacity: 0.58,
-		shadowRadius: 16.00,
+		shadowRadius: 16.0,
 		elevation: 24,
 	},
 	modalViewDelete: {
@@ -1008,17 +1048,17 @@ const styles = StyleSheet.create({
 	modalViewText: {
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
-		height: (Gui.screen.height * 0.275) * 0.66,
+		height: Gui.screen.height * 0.275 * 0.66,
 	},
-	modalText: {		
+	modalText: {
 		textAlign: 'center',
 		fontWeight: 'bold',
-		fontSize: (Gui.screen.height * 0.275) * 0.1
+		fontSize: Gui.screen.height * 0.275 * 0.1,
 	},
 	modalButton: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.50,
+		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
 		borderWidth: 2,
@@ -1034,7 +1074,7 @@ const styles = StyleSheet.create({
 		width: Gui.screen.width * 0.2,
 		backgroundColor: Colours.koha_peach,
 		borderColor: Colours.koha_peach,
-		marginRight: Gui.screen.width * 0.05
+		marginRight: Gui.screen.width * 0.05,
 	},
 	modalCancelButton: {
 		width: Gui.screen.width * 0.4,

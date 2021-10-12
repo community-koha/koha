@@ -22,14 +22,12 @@ function ListingDetailScreen({ route, navigation }) {
 	const [user, setUser] = useState(null);
 	const [type, setType] = useState('');
 
-	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
-	{
-		if (user)
-		{
+	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
 			unsubscribe();
 			setUser(user);
 		}
-	})
+	});
 
 	useEffect(() => {
 		setLoading(true);
@@ -42,14 +40,16 @@ function ListingDetailScreen({ route, navigation }) {
 
 				querySnapshot.forEach((documentSnapshot) => {
 					// Don't show listings that have been deleted or hidden from public view
-					if (documentSnapshot.data()["deleted"] != true && documentSnapshot.data()["public"] != false)
-					{
-						setType(documentSnapshot.data()["listingType"])
+					if (
+						documentSnapshot.data()['deleted'] != true &&
+						documentSnapshot.data()['public'] != false
+					) {
+						setType(documentSnapshot.data()['listingType']);
 						listings.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
 						});
-					}					
+					}
 				});
 
 				setListings(listings);
@@ -63,16 +63,20 @@ function ListingDetailScreen({ route, navigation }) {
 	useEffect(() => {
 		if (user !== null) {
 			const subscriber = firebase
-			.firestore()
-			.collection('users')
-			.where(firebase.firestore.FieldPath.documentId(), '==', user["uid"])
-			.onSnapshot((querySnapshot) => {
-				querySnapshot.forEach((documentSnapshot) => {
-					var watching_var = documentSnapshot.data()["watching"];
+				.firestore()
+				.collection('users')
+				.where(firebase.firestore.FieldPath.documentId(), '==', user['uid'])
+				.onSnapshot((querySnapshot) => {
+					querySnapshot.forEach((documentSnapshot) => {
+						var watching_var = documentSnapshot.data()['watching'];
 
-					setWatching(watching_var !== undefined? watching_var.includes(listingId): false);
+						setWatching(
+							watching_var !== undefined
+								? watching_var.includes(listingId)
+								: false
+						);
+					});
 				});
-			});
 
 			// Unsubscribe from events when no longer in use
 			return () => subscriber();
@@ -81,30 +85,34 @@ function ListingDetailScreen({ route, navigation }) {
 
 	function AddWatching(id) {
 		const db = firebase.firestore();
-		db.collection('users').doc(user["uid"]).update({
-			watching: firebase.firestore.FieldValue.arrayUnion( id )
-		})
-		.then(() => {
-			console.log("Added item to watching list");
-			setWatching(true);
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+		db.collection('users')
+			.doc(user['uid'])
+			.update({
+				watching: firebase.firestore.FieldValue.arrayUnion(id),
+			})
+			.then(() => {
+				console.log('Added item to watching list');
+				setWatching(true);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	}
 
 	function RemoveWatching(id) {
 		const db = firebase.firestore();
-		db.collection('users').doc(user["uid"]).update({
-			watching: firebase.firestore.FieldValue.arrayRemove( id )
-		})
-		.then(() => {
-			console.log("Removed item from watching list");
-			setWatching(false);
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+		db.collection('users')
+			.doc(user['uid'])
+			.update({
+				watching: firebase.firestore.FieldValue.arrayRemove(id),
+			})
+			.then(() => {
+				console.log('Removed item from watching list');
+				setWatching(false);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	}
 
 	return (
@@ -112,38 +120,37 @@ function ListingDetailScreen({ route, navigation }) {
 			<View style={styles.buttons}>
 				<TouchableOpacity
 					style={[styles.button, styles.backButton]}
-					onPress={() => {navigation.goBack()}}>
+					onPress={() => {
+						navigation.goBack();
+					}}
+				>
 					<Text style={styles.backButtonText}>BACK</Text>
 				</TouchableOpacity>
-				{
-					(['food','essentialItem'].includes(type) && watching)
-					&&
-					(
-						<TouchableOpacity
-							style={[styles.button, styles.watchButton]}
-							onPress={() => {
-								RemoveWatching(listingId);
-							}}>
-							<Text style={styles.backButtonText}>UNWATCH</Text>
-						</TouchableOpacity>
-					)
-				}
-				{
-					(['food','essentialItem'].includes(type) && !watching)
-					&&
-					(
-						<TouchableOpacity
-							style={[styles.button, styles.watchButton]}
-							onPress={() => {
-								AddWatching(listingId);
-							}}>
-							<Text style={styles.backButtonText}>WATCH</Text>
-						</TouchableOpacity>
-					)
-				}
+				{['food', 'essentialItem'].includes(type) && watching && (
+					<TouchableOpacity
+						style={[styles.button, styles.watchButton]}
+						onPress={() => {
+							RemoveWatching(listingId);
+						}}
+					>
+						<Text style={styles.backButtonText}>UNWATCH</Text>
+					</TouchableOpacity>
+				)}
+				{['food', 'essentialItem'].includes(type) && !watching && (
+					<TouchableOpacity
+						style={[styles.button, styles.watchButton]}
+						onPress={() => {
+							AddWatching(listingId);
+						}}
+					>
+						<Text style={styles.backButtonText}>WATCH</Text>
+					</TouchableOpacity>
+				)}
 			</View>
-			<ScrollView style={styles.scroll}>				
-				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
+			<ScrollView style={styles.scroll}>
+				{loading && (
+					<ActivityIndicator size="small" color={Colours.activityIndicator} />
+				)}
 				{!loading &&
 					listings.map((item, i) => {
 						return (
@@ -170,13 +177,12 @@ function ListingDetailScreen({ route, navigation }) {
 								</ListItem.Content>
 							</ListItem>
 						);
-					})}			
+					})}
 				<Button
 					style={styles.button}
 					title="Go Back"
 					onPress={() => navigation.goBack()}
 				></Button>
-			
 			</ScrollView>
 		</View>
 	);
