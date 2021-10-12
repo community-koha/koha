@@ -4,8 +4,8 @@ import renderer from 'react-test-renderer';
 import CreateAccount from '../app/screens/CreateAccount.js';
 
 describe('<CreateAccount />', () => {
-	it('Testing started', () => expect(1).toEqual(1));
-	it('Children check', () => {
+	it('Testing started', async () => expect(1).toEqual(1));
+	it('Children check', async () => {
 		const tree = renderer.create(<CreateAccount />).toJSON();
 		expect(tree.children.length).toEqual(3);
 
@@ -44,8 +44,6 @@ describe('<CreateAccount />', () => {
 		}
 
 		// Create Account Button Text
-		expect(tree.children[1].children[0].type).toEqual(
-			'Text'
-		);
+		expect(tree.children[1].children[0].type).toEqual('Text');
 	});
 });
