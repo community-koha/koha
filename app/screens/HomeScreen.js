@@ -14,6 +14,7 @@ import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
 import gui from '../config/gui.js';
 import MapViewComponent from './MapViewComponent.js';
+import ListViewComponent from './ListViewComponent.js';
 
 // generic notif view
 function NotifScreen() {
@@ -28,30 +29,55 @@ function HomeScreen({ navigation }) {
 	const [keyword, setKeyword] = useState('');
 	const [listings, setListings] = useState([]); // Initial empty array of listings
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
+	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
+	const [view, setView] = useState('Map');
 
 	//subscribe from firestore
 	useEffect(() => {
-		const subscriber = firebase
+		// Get watched listings
+		var subscriber = firebase
 			.firestore()
-			.collection('listings')
+			.collection('users')
+			.where(firebase.firestore.FieldPath.documentId(), '==', user['uid'])
 			.onSnapshot((querySnapshot) => {
-				const listings = [];
-				//add all docs to listings array
 				querySnapshot.forEach((documentSnapshot) => {
-					// Don't show listings that have been deleted or hidden from public view
-					if (
-						documentSnapshot.data()['deleted'] != true &&
-						documentSnapshot.data()['public'] != false
-					) {
-						listings.push({
-							...documentSnapshot.data(),
-							key: documentSnapshot.id,
+					const watching =
+						documentSnapshot.data()['watching'] == undefined
+							? []
+							: documentSnapshot.data()['watching'];
+
+					subscriber = firebase
+						.firestore()
+						.collection('listings')
+						.onSnapshot((querySnapshot) => {
+							const listings = [];
+							const watchedListings = [];
+
+							querySnapshot.forEach((documentSnapshot) => {
+								// Don't show listings that have been deleted or hidden from public view
+								if (
+									documentSnapshot.data()['deleted'] != true &&
+									documentSnapshot.data()['public'] != false
+								) {
+									if (watching.includes(documentSnapshot.id)) {
+										watchedListings.push({
+											...documentSnapshot.data(),
+											key: documentSnapshot.id,
+										});
+									} else {
+										listings.push({
+											...documentSnapshot.data(),
+											key: documentSnapshot.id,
+										});
+									}
+								}
+							});
+
+							setListings(listings);
+							setWatchedListings(watchedListings);
+							setLoading(false);
 						});
-					}
 				});
-				//update listings
-				setListings(listings);
-				setLoading(false);
 			});
 
 		// Unsubscribe from events when no longer in use
@@ -150,17 +176,27 @@ function HomeScreen({ navigation }) {
 							size={30}
 							color={Colours.default}
 							style={{ margin: 5 }}
-							onPress={() => navigation.navigate('ListViewScreen')}
+							onPress={() => setView('List')}
 						/>
 						<MaterialCommunityIcons
 							name="map-marker"
 							size={30}
 							color={Colours.black}
 							style={{ margin: 5 }}
+							onPress={() => setView('Map')}
 						/>
 					</View>
 				</View>
-				<MapViewComponent listing={listings} loading={loading} />
+				{view === 'Map' && (
+					<MapViewComponent listing={listings} loading={loading} />
+				)}
+				{view === 'List' && (
+					<ListViewComponent
+						listing={listings}
+						loading={loading}
+						watched={watchedListings}
+					/>
+				)}
 			</View>
 		</TouchableWithoutFeedback>
 	);

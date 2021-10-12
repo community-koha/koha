@@ -12,10 +12,8 @@ import {
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import Colours from '../config/colours.js';
-import firebase from 'firebase/app';
 import gui from '../config/gui.js';
 
 function NotifScreen() {
@@ -30,9 +28,7 @@ const MapViewComponent = (props) => {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
-	const [listings, setListings] = useState(props.listing); // Initial empty array of listings
-	const [loading, setLoading] = useState(props.loading); // Set loading to true on component mount
-
+	const [listings] = useState(props.listing);
 	// do after render
 	useEffect(() => {
 		const getLocationAsync = async () => {
@@ -92,7 +88,6 @@ const MapViewComponent = (props) => {
 			region={mapRegion}
 			customMapStyle={mapStyle}
 			showsUserLocation={true}
-			minZoomLevel={12}
 			maxZoomLevel={17}
 			options={{ disableDefaultUI: true }}
 		>

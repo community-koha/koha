@@ -8,7 +8,7 @@ import CreateAccount from './app/screens/CreateAccount';
 import VerifyEmail from './app/screens/VerifyEmail';
 import UserTypeScreen from './app/screens/UserTypeScreen';
 import HomeScreen from './app/screens/HomeScreen';
-import ListViewScreen from './app/screens/ListViewScreen';
+import ListViewComponent from './app/screens/ListViewComponent';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
 import EditListingScreen from './app/screens/EditListingScreen';
 import GiveKoha from './app/screens/GiveKoha';
@@ -81,7 +81,6 @@ export default function App() {
 				<Stack.Screen name="CreateAccount" component={CreateAccount} />
 				<Stack.Screen name="VerifyEmail" component={VerifyEmail} />
 				<Stack.Screen name="UserType" component={UserTypeScreen} />
-				<Stack.Screen name="ListViewScreen" component={ListViewScreen} />
 				<Stack.Screen
 					name="ListingDetailScreen"
 					component={ListingDetailScreen}
