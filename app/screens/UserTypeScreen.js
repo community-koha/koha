@@ -26,7 +26,7 @@ function UserTypeScreen({ navigation }) {
 	);
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<Text style={styles.text}>I am:</Text>
 			<View style={styles.buttons}>

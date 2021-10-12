@@ -7,7 +7,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 	ScrollView,
-	Platform
+	Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
@@ -21,10 +21,8 @@ import API from '../config/api.js';
 
 import firebase from 'firebase/app';
 
-
-
-function NewEventListing({navigation}){
-    // This warning can be ignored since our lists are small
+function NewEventListing({ navigation }) {
+	// This warning can be ignored since our lists are small
 	useEffect(() => {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
@@ -36,13 +34,13 @@ function NewEventListing({navigation}){
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [eventDate, setEventDate] = useState(ConvertDate(Date.now()));
-    const [category, setCategory] = useState(null);
+	const [category, setCategory] = useState(null);
 	const [success, setSuccess] = useState(false);
 
 	const [showDate, setShowDate] = useState(false);
-    const [openCategoryType, setOpenCategoryType] = useState(false);
+	const [openCategoryType, setOpenCategoryType] = useState(false);
 
-    const [categoryService, setCategoryService] = useState([
+	const [categoryService, setCategoryService] = useState([
 		{ value: 'community', label: 'Community' },
 		{ value: 'domestic', label: 'Domestic' },
 		{ value: 'trades', label: 'Trades' },
@@ -51,11 +49,11 @@ function NewEventListing({navigation}){
 		{ value: 'other', label: 'Other' },
 	]);
 
-    function categoryOpened(val) {
+	function categoryOpened(val) {
 		setOpenCategoryType(val);
 	}
 
-    function setDate(date) {
+	function setDate(date) {
 		setShowDate(false);
 		setEventDate(date);
 	}
@@ -82,12 +80,12 @@ function NewEventListing({navigation}){
 		navigation.goBack();
 	}
 
-    function CheckInput(
+	function CheckInput(
 		listingTitle,
-        description,
-        location,
-        eventDate,
-        category
+		description,
+		location,
+		eventDate,
+		category
 	) {
 		console.log('');
 		console.log('Checking');
@@ -104,31 +102,35 @@ function NewEventListing({navigation}){
 			case eventDate == null:
 				return false;
 
-			case !category in ['community', 'domestic', 'trades', 'health', 'events', 'other']:
+			case !category in
+				['community', 'domestic', 'trades', 'health', 'events', 'other']:
 				return false;
-
 		}
 
 		console.log('Pass');
-		
+
 		SubmitForm(
 			userID,
 			listingType,
 			listingTitle,
-            description,
-            location,
-            eventDate,
-            category
+			description,
+			location,
+			eventDate,
+			category
 		);
 	}
 
-	function ShowSuccess(){
-		return(
-			<View style={styles.message}><Text style={{color: Colours.white, fontSize: 16}}>Success! New service listing has been created.</Text></View>
+	function ShowSuccess() {
+		return (
+			<View style={styles.message}>
+				<Text style={{ color: Colours.white, fontSize: 16 }}>
+					Success! New service listing has been created.
+				</Text>
+			</View>
 		);
 	}
 
-	function ClearInput(){
+	function ClearInput() {
 		setListingTitle(null);
 		setDescription(null);
 		setLocation({ lat: 0, lng: 0, name: '' });
@@ -146,7 +148,7 @@ function NewEventListing({navigation}){
 		category
 	) {
 		const dbh = firebase.firestore();
-		
+
 		dbh.collection('listings').add({
 			user: dbh.doc('users/' + userID),
 			listingType: listingType,
@@ -154,23 +156,21 @@ function NewEventListing({navigation}){
 			description: description,
 			location: location,
 			eventDate: eventDate,
-			category: category
+			category: category,
 		});
-	
+
 		ClearInput();
 		setSuccess(true);
 	}
 
-    return(
-        <View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
-			{ success ? ShowSuccess() : <View></View> }
+	return (
+		<View style={styles.container} keyboardShouldPersistTaps="always">
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
+			{success ? ShowSuccess() : <View></View>}
 			<View>
 				<Text style={styles.headerText}>NEW SERVICE</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
-				
-				
 				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
 					value={listingTitle}
@@ -225,7 +225,7 @@ function NewEventListing({navigation}){
 					zIndex={8000}
 					debounce={200}
 				/>
-                <Text style={styles.inputTitle}>When</Text>
+				<Text style={styles.inputTitle}>When</Text>
 				{web && (
 					<DatePicker
 						selected={new Date(Date.now())}
@@ -262,7 +262,7 @@ function NewEventListing({navigation}){
 						}
 					/>
 				)}
-				
+
 				<Text style={styles.inputTitle}>Category</Text>
 				<DropDownPicker
 					open={openCategoryType}
@@ -279,17 +279,11 @@ function NewEventListing({navigation}){
 					textStyle={styles.dropDownText}
 					style={styles.inputText}
 				/>
-				
+
 				<TouchableOpacity
 					style={styles.submit}
 					onPress={() =>
-						CheckInput(
-							listingTitle,
-                            description,
-                            location,
-                            eventDate,
-                            category
-						)
+						CheckInput(listingTitle, description, location, eventDate, category)
 					}
 				>
 					<Text style={styles.submitText}>CREATE LISTING</Text>
@@ -300,7 +294,7 @@ function NewEventListing({navigation}){
 				<View style={styles.end} />
 			</ScrollView>
 		</View>
-    );
+	);
 }
 
 const styles = StyleSheet.create({
@@ -309,7 +303,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
 		paddingBottom: '10%',
 	},
-	message:{
+	message: {
 		width: '100%',
 		backgroundColor: '#59b300',
 		padding: 20,

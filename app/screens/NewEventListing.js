@@ -7,7 +7,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 	ScrollView,
-	Platform
+	Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
@@ -20,10 +20,8 @@ import API from '../config/api.js';
 
 import firebase from 'firebase/app';
 
-
-
-function NewEventListing({navigation}){
-    // This warning can be ignored since our lists are small
+function NewEventListing({ navigation }) {
+	// This warning can be ignored since our lists are small
 	useEffect(() => {
 		LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 	}, []);
@@ -40,7 +38,7 @@ function NewEventListing({navigation}){
 
 	const [showDate, setShowDate] = useState(false);
 
-    function setDate(date) {
+	function setDate(date) {
 		setShowDate(false);
 		setEventDate(date);
 	}
@@ -67,12 +65,12 @@ function NewEventListing({navigation}){
 		navigation.goBack();
 	}
 
-    function CheckInput(
+	function CheckInput(
 		listingTitle,
 		description,
 		location,
 		capacity,
-		eventDate,
+		eventDate
 	) {
 		console.log('');
 		console.log('Checking');
@@ -91,11 +89,10 @@ function NewEventListing({navigation}){
 
 			case eventDate == null:
 				return false;
-
 		}
 
 		console.log('Pass');
-		
+
 		SubmitForm(
 			userID,
 			listingType,
@@ -103,17 +100,21 @@ function NewEventListing({navigation}){
 			description,
 			location,
 			capacity,
-			eventDate,
+			eventDate
 		);
 	}
 
-	function ShowSuccess(){
-		return(
-			<View style={styles.message}><Text style={{color: Colours.white, fontSize: 16}}>Success! New event listing has been created.</Text></View>
+	function ShowSuccess() {
+		return (
+			<View style={styles.message}>
+				<Text style={{ color: Colours.white, fontSize: 16 }}>
+					Success! New event listing has been created.
+				</Text>
+			</View>
 		);
 	}
 
-	function ClearInput(){
+	function ClearInput() {
 		setListingTitle(null);
 		setDescription(null);
 		setLocation({ lat: 0, lng: 0, name: '' });
@@ -131,7 +132,7 @@ function NewEventListing({navigation}){
 		eventDate
 	) {
 		const dbh = firebase.firestore();
-		
+
 		dbh.collection('listings').add({
 			user: dbh.doc('users/' + userID),
 			listingType: listingType,
@@ -139,23 +140,21 @@ function NewEventListing({navigation}){
 			description: description,
 			location: location,
 			capacity: capacity,
-			eventDate: eventDate
+			eventDate: eventDate,
 		});
-	
+
 		ClearInput();
 		setSuccess(true);
 	}
 
-    return(
-        <View style={styles.container} keyboardShouldPersistTaps="always">
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
-			{ success ? ShowSuccess() : <View></View> }
+	return (
+		<View style={styles.container} keyboardShouldPersistTaps="always">
+			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
+			{success ? ShowSuccess() : <View></View>}
 			<View>
 				<Text style={styles.headerText}>NEW EVENT</Text>
 			</View>
 			<ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
-				
-				
 				<Text style={styles.inputTitle}>Title</Text>
 				<TextInput
 					value={listingTitle}
@@ -165,7 +164,7 @@ function NewEventListing({navigation}){
 				/>
 				<Text style={styles.inputTitle}>Description</Text>
 				<TextInput
-				 	value={description}
+					value={description}
 					onChangeText={(val) => setDescription(val)}
 					placeholder="Description"
 					multiline={true}
@@ -210,7 +209,7 @@ function NewEventListing({navigation}){
 					zIndex={8000}
 					debounce={200}
 				/>
-                <Text style={styles.inputTitle}>When</Text>
+				<Text style={styles.inputTitle}>When</Text>
 				{web && (
 					<DatePicker
 						selected={new Date(Date.now())}
@@ -247,7 +246,7 @@ function NewEventListing({navigation}){
 						}
 					/>
 				)}
-				
+
 				<Text style={styles.inputTitle}>Event Capacity</Text>
 				<TextInput
 					value={capacity}
@@ -257,17 +256,11 @@ function NewEventListing({navigation}){
 					returnKeyType='done'
 					style={styles.inputText}
 				/>
-				
+
 				<TouchableOpacity
 					style={styles.submit}
 					onPress={() =>
-						CheckInput(
-							listingTitle,
-							description,
-							location,
-							capacity,
-							eventDate
-						)
+						CheckInput(listingTitle, description, location, capacity, eventDate)
 					}
 				>
 					<Text style={styles.submitText}>CREATE LISTING</Text>
@@ -278,7 +271,7 @@ function NewEventListing({navigation}){
 				<View style={styles.end} />
 			</ScrollView>
 		</View>
-    );
+	);
 }
 
 const styles = StyleSheet.create({
@@ -287,7 +280,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_green, //Gui.container.backgroundColor,
 		paddingBottom: '10%',
 	},
-	message:{
+	message: {
 		width: '100%',
 		backgroundColor: '#59b300',
 		padding: 20,

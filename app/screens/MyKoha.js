@@ -1,14 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	StyleSheet,
 	View,
 	Text,
-	Button,
 	ActivityIndicator,
 	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
@@ -23,36 +21,38 @@ function MyKoha({ navigation }) {
 	const [showService, setShowService] = useState(true);
 	const [showEvent, setShowEvent] = useState(true);
 
-	var unsubscribe = firebase.auth().onAuthStateChanged(user =>
-	{
-		if (user)
-		{
+	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
 			setUser(user);
 			unsubscribe();
 		}
-	})
+	});
 
 	useEffect(() => {
 		setLoading(true);
 		const db = firebase.firestore();
 		const subscriber = db
 			.collection('listings')
-			.where('user', '==', user == null ? "": db.doc('users/' + user.uid))
+			.where('user', '==', user == null ? '' : db.doc('users/' + user.uid))
 			.onSnapshot((querySnapshot) => {
 				const listings = [];
 
 				querySnapshot.forEach((documentSnapshot) => {
-					var index = ["food","essentialItem","service","event"].indexOf(documentSnapshot.data().listingType);
-					
-					if ([showFood, showItem, showService, showEvent][index] && documentSnapshot.data()["deleted"] != true)
-					{
+					var index = ['food', 'essentialItem', 'service', 'event'].indexOf(
+						documentSnapshot.data().listingType
+					);
+
+					if (
+						[showFood, showItem, showService, showEvent][index] &&
+						documentSnapshot.data()['deleted'] != true
+					) {
 						listings.push({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
 						});
 					}
 				});
-				
+
 				setListings(listings);
 				setLoading(false);
 			});
@@ -63,58 +63,130 @@ function MyKoha({ navigation }) {
 		<View style={styles.container}>
 			<View style={styles.buttons}>
 				<TouchableOpacity
-					style={showFood? [styles.button, styles.foodButton]: [styles.button, styles.foodButton, styles.disableButton]}
-					onPress={() => {setShowFood(!showFood)}}>
-					<Text style={showFood? [styles.buttonText]: [styles.buttonText, styles.disableButton]}>FOOD</Text>
+					style={
+						showFood
+							? [styles.button, styles.foodButton]
+							: [styles.button, styles.foodButton, styles.disableButton]
+					}
+					onPress={() => {
+						setShowFood(!showFood);
+					}}
+				>
+					<Text
+						style={
+							showFood
+								? [styles.buttonText]
+								: [styles.buttonText, styles.disableButton]
+						}
+					>
+						FOOD
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={showItem? [styles.button, styles.itemButton]: [styles.button, styles.itemButton, styles.disableButton]}
-					onPress={() => {setShowItem(!showItem)}}>
-					<Text style={showItem? [styles.buttonText]: [styles.buttonText, styles.disableButton]}>ITEMS</Text>
+					style={
+						showItem
+							? [styles.button, styles.itemButton]
+							: [styles.button, styles.itemButton, styles.disableButton]
+					}
+					onPress={() => {
+						setShowItem(!showItem);
+					}}
+				>
+					<Text
+						style={
+							showItem
+								? [styles.buttonText]
+								: [styles.buttonText, styles.disableButton]
+						}
+					>
+						ITEMS
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={showEvent? [styles.button, styles.eventButton]: [styles.button, styles.eventButton, styles.disableButton]}
-					onPress={() => {setShowEvent(!showEvent)}}>
-					<Text style={showEvent? [styles.buttonText]: [styles.buttonText, styles.disableButton]}>EVENTS</Text>
+					style={
+						showEvent
+							? [styles.button, styles.eventButton]
+							: [styles.button, styles.eventButton, styles.disableButton]
+					}
+					onPress={() => {
+						setShowEvent(!showEvent);
+					}}
+				>
+					<Text
+						style={
+							showEvent
+								? [styles.buttonText]
+								: [styles.buttonText, styles.disableButton]
+						}
+					>
+						EVENTS
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={showService? [styles.button, styles.serviceButton]: [styles.button, styles.serviceButton, styles.disableButton]}
-					onPress={() => {setShowService(!showService)}}>
-					<Text style={showService? [styles.buttonText]: [styles.buttonText, styles.disableButton]}>SERVICES</Text>					
+					style={
+						showService
+							? [styles.button, styles.serviceButton]
+							: [styles.button, styles.serviceButton, styles.disableButton]
+					}
+					onPress={() => {
+						setShowService(!showService);
+					}}
+				>
+					<Text
+						style={
+							showService
+								? [styles.buttonText]
+								: [styles.buttonText, styles.disableButton]
+						}
+					>
+						SERVICES
+					</Text>
 				</TouchableOpacity>
 			</View>
 			<ScrollView style={styles.scroll}>
-				{loading && <ActivityIndicator size="small" color={Colours.activityIndicator}/>}
+				{loading && (
+					<ActivityIndicator size="small" color={Colours.activityIndicator} />
+				)}
 				<View style={styles.contentView}>
-					{!loading && listings.length > 0 &&
+					{!loading &&
+						listings.length > 0 &&
 						listings.map((item, i) => {
 							return (
-								<ListItem key={i}
+								<ListItem
+									key={i}
 									style={styles.listStyle}
 									onPress={() => {
 										navigation.navigate('EditListingScreen', {
 											listingId: item.key,
-										})
-									}}>
+										});
+									}}
+								>
 									<ListItem.Content style={styles.contentViewItem}>
-										<ListItem.Title style={styles.title}>{item.listingTitle}</ListItem.Title>
-										<ListItem.Subtitle style={styles.subtitle}>{item.description}</ListItem.Subtitle>
+										<ListItem.Title style={styles.title}>
+											{item.listingTitle}
+										</ListItem.Title>
+										<ListItem.Subtitle style={styles.subtitle}>
+											{item.description}
+										</ListItem.Subtitle>
 									</ListItem.Content>
 								</ListItem>
 							);
-					})}
-					{!loading && listings.length <= 0 &&
-						(
-							<View>
-								<Text style={styles.emptyText}>No Koha Found</Text>
-								<TouchableOpacity
-									style={[styles.button, styles.giveButton]}
-									onPress={() => {navigation.navigate('GiveKoha')}}>
-									<Text style={[styles.buttonText, styles.backButtonText]}>GIVE KOHA</Text>
-								</TouchableOpacity>
-							</View>
-						)						
-					}
+						})}
+					{!loading && listings.length <= 0 && (
+						<View>
+							<Text style={styles.emptyText}>No Koha Found</Text>
+							<TouchableOpacity
+								style={[styles.button, styles.giveButton]}
+								onPress={() => {
+									navigation.navigate('GiveKoha');
+								}}
+							>
+								<Text style={[styles.buttonText, styles.backButtonText]}>
+									GIVE KOHA
+								</Text>
+							</TouchableOpacity>
+						</View>
+					)}
 				</View>
 			</ScrollView>
 		</View>
@@ -126,18 +198,18 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 	},
-	contentView: {	
+	contentView: {
 		width: Gui.screen.width * 1,
 		height: Gui.screen.height * 0.8,
 	},
-	title: {	
+	title: {
 		fontSize: Gui.screen.height * 0.02,
 		fontWeight: 'bold',
 	},
-	subtitle: {	
+	subtitle: {
 		fontSize: Gui.screen.height * 0.0175,
 	},
-	contentView: {	
+	contentView: {
 		width: Gui.screen.width * 1,
 		height: Gui.screen.height * 0.8,
 	},
@@ -149,7 +221,7 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 		borderWidth: 2,
 		borderRadius: 1,
-		borderColor: Colours.black,		
+		borderColor: Colours.black,
 		width: Gui.screen.width * 0.75,
 		marginLeft: Gui.screen.width * 0.125,
 	},
@@ -220,6 +292,5 @@ const styles = StyleSheet.create({
 	backButtonText: {
 		color: Colours.white,
 	},
-	
 });
 export default MyKoha;

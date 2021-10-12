@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import AppLoading from 'expo-app-loading';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 
@@ -12,10 +12,28 @@ import {
 	StatusBar,
 } from 'react-native';
 
+import * as Font from 'expo-font';
+
 function Entry({ navigation }) {
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle='dark-content'/>
+			<StatusBar
+				backgroundColor={Gui.container.backgroundColor}
+				barStyle="dark-content"
+			/>
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<View style={styles.buttons}>
 				<TouchableOpacity
@@ -51,7 +69,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		top: Gui.screen.height * 0.08,
-		height: Gui.screen.height * 0.5,
+		height: Gui.screen.height * 0.6,
 		width: Gui.screen.width * 0.75,
 	},
 	button: {
@@ -65,14 +83,16 @@ const styles = StyleSheet.create({
 		marginBottom: Gui.button.spacing,
 	},
 	loginButton: {
-		backgroundColor: Colours.koha_navy,
+		backgroundColor: Colours.koha_purple,
 	},
 	signupButton: {
-		backgroundColor: Colours.koha_lightblue,
+		backgroundColor: Colours.koha_navy,
 	},
 	buttonText: {
 		fontSize: Gui.button.fontSize,
 		color: Gui.button.textColour,
+		fontFamily: 'Volte',
+		letterSpacing: Gui.button.letterSpacing,
 	},
 });
 
