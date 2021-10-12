@@ -3,20 +3,17 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	ActivityIndicator,
 	TextInput,
-	Image,
 	TouchableWithoutFeedback,
 	Button,
 	Keyboard,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import * as Location from 'expo-location';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import Colours from '../config/colours.js';
 import firebase from 'firebase/app';
 import gui from '../config/gui.js';
+import MapViewComponent from './MapViewComponent.js';
 
 // generic notif view
 function NotifScreen() {
@@ -27,44 +24,11 @@ function NotifScreen() {
 	);
 }
 
-function MapViewScreen({ navigation }) {
-	// states and modifiers
-	const [hasLocationPermissions, setLocationPermission] = useState(false);
-	const [mapRegion, setRegion] = useState(null);
+function HomeScreen({ navigation }) {
 	const [keyword, setKeyword] = useState('');
-
-	// do after render
-	useEffect(() => {
-		const getLocationAsync = async () => {
-			// check permissions
-			let { status } = await Location.requestForegroundPermissionsAsync();
-			if ('granted' === status) {
-				setLocationPermission(true);
-
-				// get location
-				let {
-					coords: { latitude, longitude },
-				} = await Location.getCurrentPositionAsync({});
-
-				// initial region set (happens once per app load)
-				setRegion({
-					latitude,
-					longitude,
-					latitudeDelta: 0.0922,
-					longitudeDelta: 0.0421,
-				});
-			}
-		};
-		// wait for permissions
-		if (hasLocationPermissions === false) {
-			getLocationAsync();
-		}
-
-		return () => getLocationAsync();
-	}, []);
-
-	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [listings, setListings] = useState([]); // Initial empty array of listings
+	const [loading, setLoading] = useState(true); // Set loading to true on component mount
+
 	//subscribe from firestore
 	useEffect(() => {
 		const subscriber = firebase
@@ -93,42 +57,6 @@ function MapViewScreen({ navigation }) {
 		// Unsubscribe from events when no longer in use
 		return () => subscriber();
 	}, []);
-
-	if (hasLocationPermissions === false) {
-		global.e = 'Error: Please Enable Location Permissions';
-		return <NotifScreen />;
-	}
-
-	if (mapRegion === null) {
-		global.e = 'Loading Local Area';
-		return <NotifScreen />;
-	}
-
-	if (loading) {
-		return <ActivityIndicator />;
-	}
-
-	//customize map style
-	var mapStyle = [
-		{
-			featureType: 'administrative',
-			elementType: 'geometry',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'poi',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'road',
-			elementType: 'labels.icon',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'transit',
-			stylers: [{ visibility: 'off' }],
-		},
-	];
 
 	function Search(keyword, listings) {
 		//create new array
@@ -232,65 +160,7 @@ function MapViewScreen({ navigation }) {
 						/>
 					</View>
 				</View>
-				<MapView
-					provider={PROVIDER_GOOGLE}
-					style={styles.map}
-					region={mapRegion}
-					customMapStyle={mapStyle}
-					showsUserLocation={true}
-					minZoomLevel={12}
-					maxZoomLevel={17}
-					options={{ disableDefaultUI: true }}
-				>
-					{listings.map((item, i) => {
-						return (
-							<MapView.Marker
-								key={i}
-								coordinate={{
-									latitude: item.location.lat,
-									longitude: item.location.lng,
-								}}
-								title={item.listingTitle}
-								description={item.description}
-							>
-								<MapView.Callout
-									tooltip
-									onPress={() =>
-										navigation.navigate('ListingDetailScreen', {
-											listingId: item.key,
-										})
-									}
-								>
-									<View>
-										<View style={styles.bubble}>
-											<View>
-												<Image
-													style={styles.photo}
-													source={require('../assets/logo.png')}
-													onPress={() =>
-														navigation.navigate('ListingDetailScreen', {
-															listingId: item.key,
-														})
-													}
-												/>
-											</View>
-											<View>
-												<Text style={styles.calloutText}>
-													{item.listingTitle}
-												</Text>
-												<Text style={styles.calloutText}>
-													{item.description}
-												</Text>
-												<Text style={styles.calloutText}></Text>
-												<Text style={styles.calloutText}>View Details</Text>
-											</View>
-										</View>
-									</View>
-								</MapView.Callout>
-							</MapView.Marker>
-						);
-					})}
-				</MapView>
+				<MapViewComponent listing={listings} loading={loading} />
 			</View>
 		</TouchableWithoutFeedback>
 	);
@@ -333,11 +203,6 @@ const styles = StyleSheet.create({
 	iconContainer: {
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
-		padding: 10,
-	},
-	map: {
-		width: '100%',
-		height: '70%',
 	},
 	calloutText: {
 		fontSize: 16,
@@ -360,4 +225,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default MapViewScreen;
+export default HomeScreen;

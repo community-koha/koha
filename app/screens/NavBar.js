@@ -7,7 +7,7 @@ import * as Notifications from 'expo-notifications';
 
 import Colours from '../config/colours.js';
 
-import MapViewScreen from './MapViewScreen';
+import HomeScreen from './HomeScreen';
 import Notification from './Notification.js';
 import Profile from './Profile.js';
 import GiveKoha from './GiveKoha.js';
@@ -82,7 +82,7 @@ function NavBar({ navigation }) {
 		>
 			<Tab.Screen
 				name="Search"
-				component={MapViewScreen}
+				component={HomeScreen}
 				options={{
 					tabBarLabel: 'Search',
 					tabBarIcon: ({ color }) => (

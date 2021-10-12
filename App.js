@@ -7,7 +7,7 @@ import Login from './app/screens/Login';
 import CreateAccount from './app/screens/CreateAccount';
 import VerifyEmail from './app/screens/VerifyEmail';
 import UserTypeScreen from './app/screens/UserTypeScreen';
-import MapViewScreen from './app/screens/MapViewScreen';
+import HomeScreen from './app/screens/HomeScreen';
 import ListViewScreen from './app/screens/ListViewScreen';
 import ListingDetailScreen from './app/screens/ListingDetailScreen';
 import EditListingScreen from './app/screens/EditListingScreen';
@@ -46,11 +46,10 @@ if (!firebase.apps.length) {
 	firebase.app(); // if already initialized, use that one
 }
 
-var unsubscribe = firebase.auth().onAuthStateChanged(user =>
-{
-	console.log(user ? 'User is logged in' : 'User is logged out')
-	global.user = user
-})
+var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	console.log(user ? 'User is logged in' : 'User is logged out');
+	global.user = user;
+});
 
 // For OAuth
 WebBrowser.maybeCompleteAuthSession();
@@ -67,77 +66,36 @@ export default function App() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
-			initialRouteName='Splash'
-			screenOptions={{ headerShown: false }}>				
+				initialRouteName="Splash"
+				screenOptions={{ headerShown: false }}
+			>
 				<Stack.Screen
 					name="Splash"
 					component={Splash}
 					options={{ cardStyleInterpolator: forFade }}
 				/>
-				<Stack.Screen
-					name="Entry"
-					component={Entry}
-				/>
-				<Stack.Screen
-					name="Nav"
-					component={NavBar}
-				/>
-				<Stack.Screen
-					name="Map"
-					component={MapViewScreen}
-				/>
-				<Stack.Screen
-					name="Login"
-					component={Login}
-				/>
-				<Stack.Screen
-					name="CreateAccount"
-					component={CreateAccount}
-				/>
-				<Stack.Screen
-					name="VerifyEmail"
-					component={VerifyEmail}
-				/>
-				<Stack.Screen
-					name="UserType"
-					component={UserTypeScreen}
-				/>
-				<Stack.Screen
-					name="ListViewScreen"
-					component={ListViewScreen}
-				/>
+				<Stack.Screen name="Entry" component={Entry} />
+				<Stack.Screen name="Nav" component={NavBar} />
+				<Stack.Screen name="Map" component={HomeScreen} />
+				<Stack.Screen name="Login" component={Login} />
+				<Stack.Screen name="CreateAccount" component={CreateAccount} />
+				<Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+				<Stack.Screen name="UserType" component={UserTypeScreen} />
+				<Stack.Screen name="ListViewScreen" component={ListViewScreen} />
 				<Stack.Screen
 					name="ListingDetailScreen"
 					component={ListingDetailScreen}
 				/>
-				<Stack.Screen
-					name="EditListingScreen"
-					component={EditListingScreen}
-				/>
-				<Stack.Screen
-					name="GiveKoha"
-					component={GiveKoha}
-				/>
-				<Stack.Screen
-					name="MyKoha"
-					component={MyKoha}
-				/>
-				<Stack.Screen
-					name="NewFoodListing"
-					component={NewFoodListing}
-				/>
+				<Stack.Screen name="EditListingScreen" component={EditListingScreen} />
+				<Stack.Screen name="GiveKoha" component={GiveKoha} />
+				<Stack.Screen name="MyKoha" component={MyKoha} />
+				<Stack.Screen name="NewFoodListing" component={NewFoodListing} />
 				<Stack.Screen
 					name="NewEssentialListing"
 					component={NewEssentialListing}
 				/>
-				<Stack.Screen
-					name="NewEventListing"
-					component={NewEventListing}
-				/>
-				<Stack.Screen
-					name="NewServiceListing"
-					component={NewServiceListing}
-				/>
+				<Stack.Screen name="NewEventListing" component={NewEventListing} />
+				<Stack.Screen name="NewServiceListing" component={NewServiceListing} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
