@@ -8,7 +8,7 @@ import {
 	Image, 
 	TouchableWithoutFeedback, 
 	Button, 
-	Keyboard 
+	Keyboard
 } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -32,7 +32,7 @@ function MapViewScreen({navigation}) {
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
 	const [keyword, setKeyword] = useState('');
-
+	const [noResults, setNoResults] = useState(false);
 	
 	// do after render
 	useEffect(() => {
@@ -146,6 +146,9 @@ function MapViewScreen({navigation}) {
 			//if there are matches, update listing
 			setListings(filteredList);
 		}
+		else{
+			setNoResults(true);
+		}
 	}
 
 	function FilterListingType(type){
@@ -172,6 +175,8 @@ function MapViewScreen({navigation}) {
 					setListings(filteredList);
 				}
 			});
+
+		setNoResults(false);
 		
 	}
 	
@@ -185,12 +190,17 @@ function MapViewScreen({navigation}) {
 							value={keyword}
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
+							returnKeyType='search'
+							onSubmitEditing={() => 
+								{
+									keyword ? Search(keyword, listings) : FilterListingType(["food", "essentialItem", "event", "service"])
+								}}
 							/>
 						<MaterialIcons
 							name="search"
 							size={26}
 							style={{padding: 12}}
-							onPress={() => Search(keyword, listings)}/>
+							/>
 					</View>
 					<View style={styles.filterContainer}>
 						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>

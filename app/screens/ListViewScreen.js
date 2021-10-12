@@ -8,7 +8,9 @@ import {
 	ScrollView,
 	TouchableWithoutFeedback,
 	Button,
-	Keyboard
+	Keyboard,
+	Text,
+	Platform
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
@@ -22,6 +24,7 @@ function ListViewScreen({route, navigation}) {
 	const [listings, setListings] = useState([]); // Initial empty array of users
 	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
 	const [keyword, setKeyword] = useState('');
+	const [noResults, setNoResults] = useState(false);
 
 	useEffect(() => {		
 		// Get watched listings
@@ -91,6 +94,9 @@ function ListViewScreen({route, navigation}) {
 			//if there are matches, update listing
 			setListings(filteredList);
 		}
+		else{
+			setNoResults(true);
+		}
 	}
 
 	function FilterListingType(type){		
@@ -111,7 +117,9 @@ function ListViewScreen({route, navigation}) {
 				if (filteredList.length != 0){
 					setListings(filteredList);
 				}
+				
 			});
+		setNoResults(false);
 		
 	}
 
@@ -125,12 +133,17 @@ function ListViewScreen({route, navigation}) {
 							value={keyword}
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
+							returnKeyType='search'
+							onSubmitEditing={() => 
+								{
+									keyword ? Search(keyword, listings) : FilterListingType(["food", "essentialItem", "event", "service"])
+								}}
 							/>
 						<MaterialIcons
 							name="search"
 							size={26}
 							style={{padding: 12}}
-							onPress={() => Search(keyword, listings)}/>
+							/>
 					</View>
 					<View style={styles.filterContainer}>
 						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>
@@ -172,25 +185,27 @@ function ListViewScreen({route, navigation}) {
 						</ListItem>
 					);
 				})}
-				{listings.map((item, i) => {
-					return (
-						<ListItem
-							style={styles.list}
-							key={i}
-							bottomDivider
-							onPress={() =>
-								navigation.navigate('ListingDetailScreen', {
-									listingId: item.key,
-								})
-							}
-						>
-							<ListItem.Content>
-								<ListItem.Title>{item.listingTitle}</ListItem.Title>
-								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-							</ListItem.Content>
-						</ListItem>
-					);
-				})}
+				{ noResults ? <View><Text style={styles.noListings}>No listings found</Text></View> :
+					listings.map((item, i) => {
+						return (
+							<ListItem
+								style={styles.list}
+								key={i}
+								bottomDivider
+								onPress={() =>
+									navigation.navigate('ListingDetailScreen', {
+										listingId: item.key,
+									})
+								}
+							>
+								<ListItem.Content>
+									<ListItem.Title>{item.listingTitle}</ListItem.Title>
+									<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+								</ListItem.Content>
+							</ListItem>
+						);
+					})
+				}
 			</ScrollView>
 		</View>
 		</TouchableWithoutFeedback>
@@ -203,7 +218,14 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-
+		paddingTop: Platform.OS === "ios" ? 20 : 0
+	},
+	noListings:{
+		fontSize: 22,
+		padding: '10%',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	searchContainer:{
 		height: '21%',

@@ -254,6 +254,7 @@ function NewEventListing({navigation}){
 					onChangeText={(val) => setCapacity(val.replace(/\D/, ''))}
 					placeholder="Number of people"
 					keyboardType="numeric"
+					returnKeyType='done'
 					style={styles.inputText}
 				/>
 				
