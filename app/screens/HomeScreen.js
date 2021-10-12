@@ -25,6 +25,7 @@ function HomeScreen({ navigation }) {
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
 	const [view, setView] = useState('Map');
+	const [noResults, setNoResults] = useState(false);
 
 	//subscribe from firestore
 	useEffect(() => {
@@ -93,6 +94,8 @@ function HomeScreen({ navigation }) {
 		if (filteredList.length != 0) {
 			//if there are matches, update listing
 			setListings(filteredList);
+		} else {
+			setNoResults(true);
 		}
 	}
 
@@ -122,6 +125,7 @@ function HomeScreen({ navigation }) {
 					setListings(filteredList);
 				}
 			});
+		setNoResults(false);
 	}
 
 	if (loading) {
@@ -143,13 +147,19 @@ function HomeScreen({ navigation }) {
 							value={keyword}
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
+							returnKeyType="search"
+							onSubmitEditing={() => {
+								keyword
+									? Search(keyword, listings)
+									: FilterListingType([
+											'food',
+											'essentialItem',
+											'event',
+											'service',
+									  ]);
+							}}
 						/>
-						<MaterialIcons
-							name="search"
-							size={26}
-							style={{ padding: 12 }}
-							onPress={() => Search(keyword, listings)}
-						/>
+						<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
 					</View>
 					<View style={styles.filterContainer}>
 						<Button
@@ -192,7 +202,11 @@ function HomeScreen({ navigation }) {
 				</View>
 				{view === 'Map' && <MapViewComponent listing={listings} />}
 				{view === 'List' && (
-					<ListViewComponent listing={listings} watched={watchedListings} />
+					<ListViewComponent
+						listing={listings}
+						watched={watchedListings}
+						results={noResults}
+					/>
 				)}
 			</View>
 		</TouchableWithoutFeedback>

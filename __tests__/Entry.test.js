@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from 'react-dom';
 import renderer from 'react-test-renderer';
 
 import Entry from '../app/screens/Entry.js';

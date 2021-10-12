@@ -7,6 +7,7 @@ import gui from '../config/gui.js';
 const ListViewComponent = (props) => {
 	const [listings] = useState(props.listing);
 	const [watchedListings] = useState(props.watched);
+	const [noResults] = useState(props.results);
 
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
@@ -29,25 +30,31 @@ const ListViewComponent = (props) => {
 					</ListItem>
 				);
 			})}
-			{listings.map((item, i) => {
-				return (
-					<ListItem
-						style={styles.list}
-						key={i}
-						bottomDivider
-						onPress={() =>
-							navigation.navigate('ListingDetailScreen', {
-								listingId: item.key,
-							})
-						}
-					>
-						<ListItem.Content>
-							<ListItem.Title>{item.listingTitle}</ListItem.Title>
-							<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-						</ListItem.Content>
-					</ListItem>
-				);
-			})}
+			{noResults ? (
+				<View>
+					<Text style={styles.noListings}>No listings found</Text>
+				</View>
+			) : (
+				listings.map((item, i) => {
+					return (
+						<ListItem
+							style={styles.list}
+							key={i}
+							bottomDivider
+							onPress={() =>
+								navigation.navigate('ListingDetailScreen', {
+									listingId: item.key,
+								})
+							}
+						>
+							<ListItem.Content>
+								<ListItem.Title>{item.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+							</ListItem.Content>
+						</ListItem>
+					);
+				})
+			)}
 		</ScrollView>
 	);
 };
@@ -58,6 +65,14 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
+		paddingTop: Platform.OS === 'ios' ? 20 : 0,
+	},
+	noListings: {
+		fontSize: 22,
+		padding: '10%',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	filterContainer: {
 		flexDirection: 'row',
