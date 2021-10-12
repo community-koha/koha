@@ -190,12 +190,17 @@ function MapViewScreen({navigation}) {
 							value={keyword}
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
+							returnKeyType='search'
+							onSubmitEditing={() => 
+								{
+									keyword ? Search(keyword, listings) : FilterListingType(["food", "essentialItem", "event", "service"])
+								}}
 							/>
 						<MaterialIcons
 							name="search"
 							size={26}
 							style={{padding: 12}}
-							onPress={() => Search(keyword, listings)}/>
+							/>
 					</View>
 					<View style={styles.filterContainer}>
 						<Button title="All" onPress={() => FilterListingType(["food", "essentialItem", "event", "service"])}/>

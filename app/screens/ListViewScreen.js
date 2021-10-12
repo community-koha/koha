@@ -133,7 +133,10 @@ function ListViewScreen({route, navigation}) {
 							placeholder="Search listings"
 							onChangeText={(val) => setKeyword(val)}
 							returnKeyType='search'
-							
+							onSubmitEditing={() => 
+								{
+									keyword ? Search(keyword, listings) : FilterListingType(["food", "essentialItem", "event", "service"])
+								}}
 							/>
 						<MaterialIcons
 							name="search"
