@@ -1,6 +1,5 @@
 import React from 'react';
 
-import useFonts from './app/config/useFonts.js';
 import NavBar from './app/screens/NavBar';
 import Entry from './app/screens/Entry';
 import Splash from './app/screens/Splash';
@@ -26,6 +25,7 @@ import firebase from 'firebase/app';
 import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+LogBox.ignoreLogs(['perform a React state update on an unmounted component']);
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',

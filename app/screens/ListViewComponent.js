@@ -39,10 +39,10 @@ const ListViewComponent = (props) => {
 						}
 					>
 						<ListItem.Content>
-							<ListItem.Title style={{ fontFamily: 'Volte', }}>
+							<ListItem.Title style={{ fontFamily: 'Volte' }}>
 								Liked: {item.listingTitle}
 							</ListItem.Title>
-							<ListItem.Subtitle style={{ fontFamily: 'Volte', }}>
+							<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
 								{item.description}
 							</ListItem.Subtitle>
 						</ListItem.Content>
@@ -67,8 +67,12 @@ const ListViewComponent = (props) => {
 							}
 						>
 							<ListItem.Content>
-								<ListItem.Title>{item.listingTitle}</ListItem.Title>
-								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+								<ListItem.Title style={{ fontFamily: 'Volte' }}>
+									{item.listingTitle}
+								</ListItem.Title>
+								<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
+									{item.description}
+								</ListItem.Subtitle>
 							</ListItem.Content>
 						</ListItem>
 					);

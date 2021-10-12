@@ -5,6 +5,8 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 
+import AppLoading from 'expo-app-loading';
+
 import Colours from '../config/colours.js';
 
 import HomeScreen from './HomeScreen';
@@ -30,6 +32,8 @@ const Tab = createBottomTabNavigator();
 function NavBar({ navigation }) {
 	const [user, setUser] = useState(null);
 	const [prefix, setPrefix] = useState('My');
+	const [isReady, setIsReady] = useState(false);
+
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			unsubscribe();
@@ -67,6 +71,19 @@ function NavBar({ navigation }) {
 			}),
 		[navigation]
 	);
+
+	const LoadFonts = async () => {
+		await useFonts();
+	};
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<Tab.Navigator
 			initialRouteName="Map View"
