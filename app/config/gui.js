@@ -9,7 +9,7 @@ export default {
 		width: width,
 	},
 	container: {
-		backgroundColor: Colours.koha_white,
+		backgroundColor: Colours.koha_background,
 		alignItems: 'center',
 	},
 	button: {

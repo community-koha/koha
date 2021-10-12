@@ -22,7 +22,7 @@
 			"versionCode": 1,
 			"adaptiveIcon": {
 				"foregroundImage": "./app/assets/adaptive-icon.png",
-				"backgroundColor": "#F6F1F0"
+				"backgroundColor": "#F4E292"
 			},
 			"config": {
 				"googleMaps": {

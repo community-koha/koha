@@ -12,6 +12,8 @@ import {
 	StatusBar,
 } from 'react-native';
 
+import { useFonts } from 'expo-font';
+
 function Entry({ navigation }) {
 	return (
 		<View style={styles.container}>

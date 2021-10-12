@@ -16,14 +16,6 @@ import * as Location from 'expo-location';
 import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
 
-function NotifScreen() {
-	return (
-		<View style={styles.container}>
-			<Text>{global.e}</Text>
-		</View>
-	);
-}
-
 const MapViewComponent = (props) => {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
@@ -80,6 +72,10 @@ const MapViewComponent = (props) => {
 			stylers: [{ visibility: 'off' }],
 		},
 	];
+
+	if (!mapRegion) {
+		return <ActivityIndicator size="small" color={Colours.activityIndicator} />;
+	}
 
 	return (
 		<MapView

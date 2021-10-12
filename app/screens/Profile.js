@@ -330,6 +330,7 @@ function Profile({ navigation }) {
 							style={[styles.button, styles.emailButton, styles.passwordButton]}
 							onPress={() => {
 								firebase.auth().signOut();
+								navigation.navigate('Entry');
 							}}
 						>
 							<Text style={styles.buttonText}>Logout</Text>
