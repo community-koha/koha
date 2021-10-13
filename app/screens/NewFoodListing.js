@@ -483,11 +483,11 @@ function NewFoodListing({ navigation }) {
 					style={styles.submit}
 					onPress={() =>
 						CheckInput(
-							listingType,
 							listingTitle,
 							description,
 							location,
 							category,
+							allergen,
 							quantity,
 							expiryDate,
 							collectionMethod,
