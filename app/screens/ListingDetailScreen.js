@@ -199,7 +199,7 @@ function ListingDetailScreen({ route, navigation }) {
 									Quantity: {listing.quantity}
 								</ListItem.Subtitle>
 								<ListItem.Subtitle style={styles.contentText}>
-									Collection Method: {listing.collectionMethod}
+									Collection Method: {listing.collectionMethod == "pick_up" ? "Pick up" : "Delivery"}
 								</ListItem.Subtitle>
 								
 							</ListItem.Content>
