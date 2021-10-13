@@ -404,7 +404,7 @@ function NewFoodListing({ navigation }) {
 					onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
 					placeholder="Quantity"
 					keyboardType="numeric"
-					returnKeyType='done'
+					returnKeyType="done"
 					style={styles.inputText}
 				/>
 				<Text style={styles.inputTitle}>Expiry Date</Text>
@@ -461,12 +461,14 @@ function NewFoodListing({ navigation }) {
 					style={styles.inputText}
 				/>
 
-				
 				<TouchableOpacity style={styles.cancel} onPress={pickImage}>
 					<Text style={styles.cancelText}>1. Select Photo</Text>
 				</TouchableOpacity>
 				{image && (
-					<Image source={{ uri: image }} style={{ marginLeft: 40, width: 100, height: 100 }} />
+					<Image
+						source={{ uri: image }}
+						style={{ marginLeft: 40, width: 100, height: 100 }}
+					/>
 				)}
 
 				{!uploading ? (
@@ -476,7 +478,7 @@ function NewFoodListing({ navigation }) {
 				) : (
 					<ActivityIndicator size="large" color="#000" />
 				)}
-				
+
 				<TouchableOpacity
 					style={styles.submit}
 					onPress={() =>

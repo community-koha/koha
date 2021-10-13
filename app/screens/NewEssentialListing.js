@@ -20,6 +20,8 @@ import Colours from '../config/colours.js';
 import { FormStyle } from '../config/styles.js';
 import API from '../config/api.js';
 
+import AppLoading from 'expo-app-loading';
+
 import firebase from 'firebase/app';
 
 function NewEssentialListing({ navigation }) {
@@ -63,6 +65,11 @@ function NewEssentialListing({ navigation }) {
 		{ value: 'pick_up', label: 'Pick Up' },
 		{ value: 'delivery', label: 'Delivery' },
 	]);
+
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	function categoryOpened(val) {
 		setOpenCategoryType(val);
@@ -265,6 +272,16 @@ function NewEssentialListing({ navigation }) {
 		);
 	};
 
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
+
 	return (
 		<View style={styles.container} keyboardShouldPersistTaps="always">
 			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
@@ -360,7 +377,7 @@ function NewEssentialListing({ navigation }) {
 					onChangeText={(val) => setQuantity(val.replace(/\D/, ''))}
 					placeholder="Quantity"
 					keyboardType="numeric"
-					returnKeyType='done'
+					returnKeyType="done"
 					style={styles.inputText}
 				/>
 
@@ -385,7 +402,10 @@ function NewEssentialListing({ navigation }) {
 					<Text style={styles.cancelText}>1. Select Photo</Text>
 				</TouchableOpacity>
 				{image && (
-					<Image source={{ uri: image }} style={{ marginLeft: 40, width: 100, height: 100 }} />
+					<Image
+						source={{ uri: image }}
+						style={{ marginLeft: 40, width: 100, height: 100 }}
+					/>
 				)}
 
 				{!uploading ? (

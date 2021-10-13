@@ -277,7 +277,7 @@ function Profile({ navigation }) {
 					<View style={styles.header}>
 						<Text style={styles.headerTitle}>Account Information</Text>
 						<TouchableOpacity
-							style={[styles.button, styles.editButton]}
+							style={([styles.button, styles.editButton], { zIndex: 100 })}
 							onPress={() => {
 								setEditing(true);
 							}}
@@ -419,6 +419,7 @@ const styles = StyleSheet.create({
 		height: Gui.screen.height * 0.12,
 		flexDirection: 'row',
 		alignContent: 'space-between',
+		alignItems: 'center',
 	},
 	content: {
 		backgroundColor: Colours.white,
@@ -443,10 +444,9 @@ const styles = StyleSheet.create({
 		marginBottom: Gui.screen.width * 0.2,
 	},
 	editButton: {
-		paddingTop: 30,
 		borderColor: Colours.default,
 		marginRight: Gui.screen.width * 0,
-		width: Gui.screen.width * 0.12,
+		width: Gui.screen.width * 0.14,
 		borderRadius: 3,
 		borderWidth: 0,
 		borderColor: Colours.default,
