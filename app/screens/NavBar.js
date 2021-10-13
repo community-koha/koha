@@ -50,9 +50,12 @@ function NavBar({ navigation }) {
 						const db = firebase.firestore();
 						db.collection('users')
 							.doc(user.uid)
-							.update({
-								notificationToken: token,
-							})
+							.set(
+								{
+									notificationToken: token,
+								},
+								{ merge: true }
+							)
 							.then(() => {
 								console.log(
 									"Updated user's push notification token in database"
@@ -85,7 +88,7 @@ function NavBar({ navigation }) {
 	}
 	return (
 		<Tab.Navigator
-			initialRouteName="Map View"
+			initialRouteName="Search"
 			screenOptions={{
 				headerShown: false,
 				tabBarActiveTintColor: Colours.koha_orange,
@@ -112,7 +115,7 @@ function NavBar({ navigation }) {
 				}}
 			/>
 			<Tab.Screen
-				name={prefix + ' Koha'}
+				name={prefix + 'Koha'}
 				component={MyKoha}
 				options={{
 					tabBarLabel: prefix + ' Koha',
@@ -126,7 +129,7 @@ function NavBar({ navigation }) {
 				}}
 			/>
 			<Tab.Screen
-				name="Give Koha"
+				name="GiveKoha"
 				component={GiveKoha}
 				options={{
 					tabBarLabel: 'Give Koha',

@@ -4,7 +4,6 @@ import {
 	View,
 	TextInput,
 	TouchableWithoutFeedback,
-	Button,
 	Keyboard,
 	ActivityIndicator,
 } from 'react-native';
@@ -23,7 +22,6 @@ import useFonts from '../config/useFonts';
 
 function HomeScreen({ navigation }) {
 	const [isReady, setIsReady] = useState(false);
-
 	const [keyword, setKeyword] = useState('');
 	const [listings, setListings] = useState([]); // Initial empty array of listings
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount

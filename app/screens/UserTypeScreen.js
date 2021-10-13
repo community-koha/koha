@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import Roles from '../config/roles.js';
+import AppLoading from 'expo-app-loading';
 
 import firebase from 'firebase/app';
 import 'firebase';
+
+import useFonts from '../config/useFonts';
 
 import {
 	View,
@@ -17,6 +20,11 @@ import {
 } from 'react-native';
 
 function UserTypeScreen({ navigation }) {
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
+
 	React.useEffect(
 		() =>
 			navigation.addListener('beforeRemove', (e) => {
@@ -24,9 +32,23 @@ function UserTypeScreen({ navigation }) {
 			}),
 		[navigation]
 	);
+
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
+
 	return (
 		<View style={styles.container}>
-			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
+			<StatusBar
+				backgroundColor={Colours.koha_background}
+				barStyle="dark-content"
+			/>
 			<Image style={styles.logo} source={require('../assets/logo.png')} />
 			<Text style={styles.text}>I am:</Text>
 			<View style={styles.buttons}>
@@ -88,15 +110,16 @@ const styles = StyleSheet.create({
 	},
 	logo: {
 		resizeMode: 'contain',
-		top: Gui.screen.height * 0.18,
+		top: Gui.screen.height * 0.1,
 		width: Gui.screen.width * 0.6,
 		height: Gui.screen.height * 0.3,
 	},
 	text: {
-		top: Gui.screen.height * 0.22,
-		fontSize: Gui.screen.height * 0.03,
+		top: Gui.screen.height * 0.14,
+		fontSize: Gui.screen.height * 0.05,
+		color: Colours.koha_purple,
 		textAlign: 'center',
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	buttons: {
 		justifyContent: 'center',
@@ -113,7 +136,7 @@ const styles = StyleSheet.create({
 		borderRadius: Gui.button.borderRadius,
 		borderColor: Gui.button.borderColour,
 		borderRadius: Gui.button.borderRadius,
-		marginBottom: Gui.button.spacing,
+		marginBottom: Gui.screen.height * 0.02,
 	},
 	inNeedButton: {
 		backgroundColor: Colours.koha_navy,
@@ -125,7 +148,8 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.koha_peach,
 	},
 	buttonText: {
-		fontSize: Gui.button.fontSize,
+		fontSize: Gui.button.fontSize * 0.8,
+		fontFamily: 'Volte',
 		color: Gui.button.textColour,
 	},
 });

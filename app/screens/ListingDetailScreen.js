@@ -7,9 +7,10 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
-	Platform
+	Platform,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import AppLoading from 'expo-app-loading';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
@@ -24,6 +25,11 @@ function ListingDetailScreen({ route, navigation }) {
 	const [user, setUser] = useState(null);
 	const [type, setType] = useState('');
 	const [image, setImage] = useState('');
+	const [isReady, setIsReady] = useState(false);
+
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
@@ -39,7 +45,6 @@ function ListingDetailScreen({ route, navigation }) {
 			.collection('listings')
 			.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
 			.onSnapshot((querySnapshot) => {
-
 				querySnapshot.forEach((documentSnapshot) => {
 					// Don't show listings that have been deleted or hidden from public view
 					if (
@@ -115,9 +120,23 @@ function ListingDetailScreen({ route, navigation }) {
 			});
 	}
 
-	var storage = firebase.storage().ref(listing == null? "":listing.imageFileName);
-	storage.getDownloadURL().then((result) => {setImage(result)});
-	console.log(['food', 'essentialItem'].includes(type))
+	var storage = firebase
+		.storage()
+		.ref(listing == null ? '' : listing.imageFileName);
+	storage.getDownloadURL().then((result) => {
+		setImage(result);
+	});
+	console.log(['food', 'essentialItem'].includes(type));
+
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 
 	return (
 		<View style={styles.container}>
@@ -155,39 +174,37 @@ function ListingDetailScreen({ route, navigation }) {
 				{loading && (
 					<ActivityIndicator size="small" color={Colours.activityIndicator} />
 				)}
-				{!loading &&
-					(
-						<View>
-							{['food', 'essentialItem'].includes(type) &&
-								<Image
-									style={styles.listingImage}
-									source={{
-										uri: image,
-									}}
-								/>
-							}
-							<ListItem>
-								<ListItem.Content>
-									<ListItem.Title>{listing.listingTitle}</ListItem.Title>
-									<ListItem.Subtitle>{listing.description}</ListItem.Subtitle>
-									<ListItem.Subtitle>
-										Location: {listing.location['name']} ({listing.location['lat']},
-										{listing.location['lng']})
-									</ListItem.Subtitle>
-									<ListItem.Subtitle>
-										Quantity: {listing.quantity}
-									</ListItem.Subtitle>
-									<ListItem.Subtitle>
-										Collection Method: {listing.collectionMethod}
-									</ListItem.Subtitle>
-									<ListItem.Subtitle>
-										Category: {listing.category}
-									</ListItem.Subtitle>
-								</ListItem.Content>
-							</ListItem>
-						</View>
-					)				
-				}
+				{!loading && (
+					<View>
+						{['food', 'essentialItem'].includes(type) && (
+							<Image
+								style={styles.listingImage}
+								source={{
+									uri: image,
+								}}
+							/>
+						)}
+						<ListItem>
+							<ListItem.Content>
+								<ListItem.Title>{listing.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle>{listing.description}</ListItem.Subtitle>
+								<ListItem.Subtitle>
+									Location: {listing.location['name']} (
+									{listing.location['lat']},{listing.location['lng']})
+								</ListItem.Subtitle>
+								<ListItem.Subtitle>
+									Quantity: {listing.quantity}
+								</ListItem.Subtitle>
+								<ListItem.Subtitle>
+									Collection Method: {listing.collectionMethod}
+								</ListItem.Subtitle>
+								<ListItem.Subtitle>
+									Category: {listing.category}
+								</ListItem.Subtitle>
+							</ListItem.Content>
+						</ListItem>
+					</View>
+				)}
 			</ScrollView>
 		</View>
 	);
@@ -215,29 +232,27 @@ const styles = StyleSheet.create({
 	button: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.1,
+		width: Gui.screen.width * 0.3,
 		height: Gui.screen.height * 0.04,
 		borderRadius: 5,
-		borderWidth: 3,
-		borderColor: Colours.koha_navy,
 	},
 	backButton: {
 		backgroundColor: Colours.koha_navy,
-		width: Gui.screen.width * 0.1,
 	},
 	watchButton: {
-		borderColor: Colours.koha_green,
-		backgroundColor: Colours.koha_green,
+		borderColor: Colours.koha_purple,
+		backgroundColor: Colours.koha_purple,
 		marginLeft: Gui.screen.width * 0.05,
-		width: Gui.screen.width * 0.1,
 	},
 	backButtonText: {
 		color: Colours.white,
+		fontFamily: 'Volte',
+		fontSize: Gui.screen.width * 0.05,
 	},
 	listingImage: {
-		marginLeft: (Gui.screen.width*0.5 - (web? 500: 250)/2),
-		width: web? 500: 250,
-    	height: web? 500: 250,
+		marginLeft: Gui.screen.width * 0.5 - (web ? 500 : 250) / 2,
+		width: web ? 500 : 250,
+		height: web ? 500 : 250,
 	},
 });
 export default ListingDetailScreen;
