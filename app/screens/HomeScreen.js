@@ -106,8 +106,7 @@ function HomeScreen({ navigation }) {
 		listings.forEach(function (item) {
 			if (item.listingTitle.includes(keyword)) {
 				filteredList.push(item);
-			}
-			else if (item.description.includes(keyword)) {
+			} else if (item.description.includes(keyword)) {
 				filteredList.push(item);
 			}
 		});
@@ -177,9 +176,8 @@ function HomeScreen({ navigation }) {
 							value={keyword}
 							placeholder="Search listings"
 							placeholderTextColor={Colours.black}
-							onChangeText={(val) => setKeyword(val)}
-							returnKeyType="search"
-							onSubmitEditing={() => {
+							onChangeText={(val) => {
+								setKeyword(val);
 								keyword
 									? Search(keyword, listings)
 									: FilterListingType([
@@ -189,6 +187,7 @@ function HomeScreen({ navigation }) {
 											'service',
 									  ]);
 							}}
+							returnKeyType="search"
 						/>
 						<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
 					</View>
