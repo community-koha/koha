@@ -157,18 +157,19 @@ function MyKoha({ navigation }) {
 							return (
 								<ListItem
 									key={i}
-									style={styles.listStyle}
+									bottomDivider
+									style={styles.list}
 									onPress={() => {
 										navigation.navigate('EditListingScreen', {
 											listingId: item.key,
 										});
 									}}
 								>
-									<ListItem.Content style={styles.contentViewItem}>
-										<ListItem.Title style={styles.title}>
+									<ListItem.Content style={styles.content}>
+										<ListItem.Title style={styles.contentTitle}>
 											{item.listingTitle}
 										</ListItem.Title>
-										<ListItem.Subtitle style={styles.subtitle}>
+										<ListItem.Subtitle style={styles.contentText}>
 											{item.description}
 										</ListItem.Subtitle>
 									</ListItem.Content>
@@ -237,14 +238,22 @@ const styles = StyleSheet.create({
 	contentViewItem: {
 		alignItems: 'center',
 	},
-	listStyle: {
-		padding: 0,
-		marginBottom: 10,
-		borderWidth: 2,
-		borderRadius: 0.5,
-		borderColor: Colours.grey,
-		width: Gui.screen.width * 0.80,
-		marginLeft: Gui.screen.width * 0.1,
+	list: {
+		width: Gui.screen.width,
+	},
+	content:{
+		padding: 12,
+	},
+	contentTitle:{
+		fontFamily: "Volte" ,
+		fontSize: 20,
+		paddingBottom: 5
+	},
+	contentText:{
+		fontFamily: "Volte" ,
+		fontSize: 16,
+		paddingBottom: 5,
+		lineHeight: 20
 	},
 	scroll: {
 		width: Gui.screen.width * 1,
