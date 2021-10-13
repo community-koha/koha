@@ -19,6 +19,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import firebase from 'firebase/app';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 function CreateAccount({ navigation }) {
 	const [web, _] = useState(Platform.OS === 'web');
@@ -306,6 +307,7 @@ const styles = StyleSheet.create({
 	headerText: {
 		textAlign: 'center',
 		top: Gui.screen.height * 0.05,
+		marginBottom: Gui.screen.height * 0.04,
 		fontSize: Gui.screen.height * 0.04,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
@@ -339,7 +341,6 @@ const styles = StyleSheet.create({
 	},
 	inputText: {
 		textAlign: 'center',
-		marginTop: Gui.screen.height * 0.005,
 		marginLeft: Gui.screen.width * 0.1,
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.button.height,
@@ -367,30 +368,29 @@ const styles = StyleSheet.create({
 	errorText: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		marginTop: Gui.screen.height * 0.005,
-		marginBottom: Gui.screen.height * 0.005,
+		marginTop: Gui.screen.height * 0.002,
+		marginBottom: Gui.screen.height * 0.002,
 		fontSize: Gui.screen.height * 0.02,
-		height: Gui.screen.height * 0.1,
+		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
-		color: Colours.red,
+		color: Colours.koha_lightblue,
 		flex: 1,
 		flexWrap: 'wrap',
 		fontFamily: 'Volte',
 	},
 	submit: {
 		marginLeft: Gui.screen.width * 0.1,
-		marginBottom: -Gui.screen.height * 0.02,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.8,
 		height: Gui.screen.height * 0.075,
-		borderRadius: 3,
-		borderWidth: 1,
-		borderColor: Colours.default,
+		borderRadius: 10,
+		backgroundColor: Colours.koha_purple,
 		fontFamily: 'Volte',
 	},
 	submitText: {
 		fontSize: Gui.screen.height * 0.023,
+		color: Colours.white,
 		fontFamily: 'Volte',
 	},
 	modalCenter: {
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	modalView: {
-		backgroundColor: Colours.white,
+		backgroundColor: Colours.koha_background,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: Gui.screen.width * 0.9,
@@ -419,24 +419,26 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		width: Gui.screen.width * 0.75,
 		height: Gui.screen.height * 0.275 * 0.66,
+		marginTop: -40,
 	},
 	modalText: {
 		textAlign: 'center',
 		fontSize: Gui.screen.height * 0.275 * 0.1,
+		color: Colours.koha_purple,
+		fontFamily: 'Volte',
 	},
 	modalButton: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.5,
-		height: Gui.button.height,
-		borderRadius: Gui.button.borderRadius,
-		borderWidth: 2,
-		borderColor: Colours.koha_navy,
-		backgroundColor: Colours.koha_navy,
+		width: Gui.screen.width * 0.4,
+		height: Gui.screen.height * 0.075,
+		borderRadius: 10,
+		backgroundColor: Colours.koha_purple,
 	},
 	modalButtonText: {
 		fontSize: Gui.screen.height * 0.25 * 0.12,
 		color: Colours.white,
+		fontFamily: 'Volte',
 	},
 });
 

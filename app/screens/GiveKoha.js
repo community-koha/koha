@@ -12,16 +12,16 @@ function ShowBusinessOptions({ navigation }) {
 		return (
 			<View>
 				<TouchableOpacity
-					style={styles.submit}
+					style={styles.button}
 					onPress={() => navigation.navigate('NewEventListing')}
 				>
-					<Text style={styles.submitText}>Event</Text>
+					<Text style={styles.buttonText}>Event</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.submit}
+					style={styles.button}
 					onPress={() => navigation.navigate('NewServiceListing')}
 				>
-					<Text style={styles.submitText}>Services</Text>
+					<Text style={styles.buttonText}>Services</Text>
 				</TouchableOpacity>
 			</View>
 		);
