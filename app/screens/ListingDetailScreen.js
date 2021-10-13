@@ -3,23 +3,27 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	Button,
 	ActivityIndicator,
 	ScrollView,
 	TouchableOpacity,
+	Image,
+	Platform
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
 
+var web = Platform.OS === 'web';
+
 function ListingDetailScreen({ route, navigation }) {
 	const { listingId } = route.params;
 	const [loading, setLoading] = useState(true);
-	const [listings, setListings] = useState([]);
+	const [listing, setListing] = useState(null);
 	const [watching, setWatching] = useState(false);
 	const [user, setUser] = useState(null);
 	const [type, setType] = useState('');
+	const [image, setImage] = useState('');
 
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
@@ -35,7 +39,6 @@ function ListingDetailScreen({ route, navigation }) {
 			.collection('listings')
 			.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
 			.onSnapshot((querySnapshot) => {
-				const listings = [];
 
 				querySnapshot.forEach((documentSnapshot) => {
 					// Don't show listings that have been deleted or hidden from public view
@@ -44,14 +47,12 @@ function ListingDetailScreen({ route, navigation }) {
 						documentSnapshot.data()['public'] != false
 					) {
 						setType(documentSnapshot.data()['listingType']);
-						listings.push({
+						setListing({
 							...documentSnapshot.data(),
 							key: documentSnapshot.id,
 						});
 					}
 				});
-
-				setListings(listings);
 				setLoading(false);
 			});
 
@@ -114,6 +115,10 @@ function ListingDetailScreen({ route, navigation }) {
 			});
 	}
 
+	var storage = firebase.storage().ref(listing == null? "":listing.imageFileName);
+	storage.getDownloadURL().then((result) => {setImage(result)});
+	console.log(['food', 'essentialItem'].includes(type))
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.buttons}>
@@ -151,37 +156,38 @@ function ListingDetailScreen({ route, navigation }) {
 					<ActivityIndicator size="small" color={Colours.activityIndicator} />
 				)}
 				{!loading &&
-					listings.map((item, i) => {
-						return (
-							<ListItem key={i}>
+					(
+						<View>
+							{['food', 'essentialItem'].includes(type) &&
+								<Image
+									style={styles.listingImage}
+									source={{
+										uri: image,
+									}}
+								/>
+							}
+							<ListItem>
 								<ListItem.Content>
-									<ListItem.Title>{item.listingTitle}</ListItem.Title>
-									<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+									<ListItem.Title>{listing.listingTitle}</ListItem.Title>
+									<ListItem.Subtitle>{listing.description}</ListItem.Subtitle>
 									<ListItem.Subtitle>
-										Location: {item.location['name']} ({item.location['lat']},
-										{item.location['lng']})
+										Location: {listing.location['name']} ({listing.location['lat']},
+										{listing.location['lng']})
 									</ListItem.Subtitle>
 									<ListItem.Subtitle>
-										Quantity: {item.quantity}
+										Quantity: {listing.quantity}
 									</ListItem.Subtitle>
 									<ListItem.Subtitle>
-										Collection Method: {item.collectionMethod}
+										Collection Method: {listing.collectionMethod}
 									</ListItem.Subtitle>
 									<ListItem.Subtitle>
-										Category: {item.category}
-									</ListItem.Subtitle>
-									<ListItem.Subtitle>
-										Sub Category{item.subCategory}
+										Category: {listing.category}
 									</ListItem.Subtitle>
 								</ListItem.Content>
 							</ListItem>
-						);
-					})}
-				<Button
-					style={styles.button}
-					title="Go Back"
-					onPress={() => navigation.goBack()}
-				></Button>
+						</View>
+					)				
+				}
 			</ScrollView>
 		</View>
 	);
@@ -227,6 +233,11 @@ const styles = StyleSheet.create({
 	},
 	backButtonText: {
 		color: Colours.white,
+	},
+	listingImage: {
+		marginLeft: (Gui.screen.width*0.5 - (web? 500: 250)/2),
+		width: web? 500: 250,
+    	height: web? 500: 250,
 	},
 });
 export default ListingDetailScreen;
