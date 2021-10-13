@@ -180,12 +180,11 @@ function HomeScreen({ navigation }) {
 								setKeyword(val);
 								keyword
 									? Search(keyword, listings)
-									: FilterListingType([
-											'food',
-											'essentialItem',
-											'event',
-											'service',
-									  ]);
+									: FilterListingType(
+											value
+												? value
+												: ['food', 'essentialItem', 'event', 'service']
+									  );
 							}}
 							returnKeyType="search"
 						/>
