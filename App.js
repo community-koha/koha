@@ -26,6 +26,7 @@ import firebase from 'firebase/app';
 import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+LogBox.ignoreLogs(['unmounted']);
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDnqlnigTMTCV4TFnCpxL2FIJPaSsDcOrI',

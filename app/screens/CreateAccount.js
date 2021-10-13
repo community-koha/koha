@@ -285,7 +285,7 @@ function CreateAccount({ navigation }) {
 						style={styles.submit}
 						onPress={() => SubmitData(name, dob, email, password, confirm)}
 					>
-						<Text style={styles.submitText}>CREATE ACCOUNT</Text>
+						<Text style={styles.submitText}>Create Account</Text>
 					</TouchableOpacity>
 				)}
 				{submitted && (
@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Gui.container.backgroundColor,
 		flexDirection: 'column',
+		fontFamily: 'Volte',
 	},
 	headerText: {
 		textAlign: 'center',
@@ -389,10 +390,12 @@ const styles = StyleSheet.create({
 		borderRadius: 3,
 		borderWidth: 1,
 		borderColor: Colours.default,
+		fontFamily: 'Volte',
 	},
 	submitText: {
 		fontSize: Gui.screen.height * 0.023,
 		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	modalCenter: {
 		flex: 1,
