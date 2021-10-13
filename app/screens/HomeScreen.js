@@ -19,7 +19,7 @@ import gui from '../config/gui.js';
 import MapViewComponent from './MapViewComponent.js';
 import ListViewComponent from './ListViewComponent.js';
 
-import Gui from '../config/gui.js';
+import useFonts from '../config/useFonts';
 
 function HomeScreen({ navigation }) {
 	const [isReady, setIsReady] = useState(false);
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 	},
 	loading: {
-		marginTop: Gui.screen.height * 0.3,
+		marginTop: gui.screen.height * 0.3,
 	},
 });
 

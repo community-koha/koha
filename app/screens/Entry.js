@@ -12,7 +12,7 @@ import {
 	StatusBar,
 } from 'react-native';
 
-import * as Font from 'expo-font';
+import useFonts from '../config/useFonts';
 
 function Entry({ navigation }) {
 	const [isReady, setIsReady] = useState(false);

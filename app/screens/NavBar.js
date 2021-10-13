@@ -4,8 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import AppLoading from 'expo-app-loading';
 
 import Colours from '../config/colours.js';
+import useFonts from '../config/useFonts';
 
 import HomeScreen from './HomeScreen';
 import Notification from './Notification.js';
@@ -30,6 +32,11 @@ const Tab = createBottomTabNavigator();
 function NavBar({ navigation }) {
 	const [user, setUser] = useState(null);
 	const [prefix, setPrefix] = useState('My');
+
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			unsubscribe();
@@ -67,6 +74,15 @@ function NavBar({ navigation }) {
 			}),
 		[navigation]
 	);
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<Tab.Navigator
 			initialRouteName="Map View"

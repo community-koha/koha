@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
+import AppLoading from 'expo-app-loading';
 
 import {
 	View,
@@ -15,7 +16,6 @@ import {
 	ActivityIndicator,
 	Modal,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import firebase from 'firebase/app';
@@ -31,6 +31,11 @@ function CreateAccount({ navigation }) {
 	const [submitted, setSubmitted] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalText, setModalText] = useState(false);
+	const [isReady, setIsReady] = useState(false);
+
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	function ConvertDate(seconds) {
 		if (seconds == null) {
@@ -152,20 +157,18 @@ function CreateAccount({ navigation }) {
 		return true;
 	}
 
-	let icon = (
-		<MaterialCommunityIcons
-			name="arrow-left"
-			size={Gui.screen.height * 0.05}
-			color={Colours.default}
-			style={web ? styles.headerIconWeb : styles.headerIcon}
-		/>
-	);
-	if (process.env.JEST_WORKER_ID !== undefined) {
-		icon = '';
-	}
-
 	// I've blocked entering special characters in the displayname section
 	// to avoid accidental breaks with the user type definition used
+
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<View style={styles.container}>
 			<StatusBar backgroundColor={Colours.white} barStyle="dark-content" />
@@ -197,14 +200,8 @@ function CreateAccount({ navigation }) {
 				<Text style={web ? styles.headerTextWeb : styles.headerText}>
 					CREATE ACCOUNT
 				</Text>
-				<TouchableOpacity
-					onPress={() => navigation.navigate('Entry')}
-					style={styles.backButton}
-				>
-					{icon}
-				</TouchableOpacity>
 			</View>
-			<ScrollView style={styles.scroll}>
+			<ScrollView>
 				<Text style={styles.inputTitle}>Display Name</Text>
 				<TextInput
 					onChangeText={(name) =>
@@ -227,7 +224,7 @@ function CreateAccount({ navigation }) {
 						editable={!submitted}
 						customInput={
 							<TouchableOpacity
-								style={styles.date}
+								style={styles.inputText}
 								onPress={() => setShowDate(true)}
 							>
 								<Text style={styles.dateText}>{dob}</Text>
@@ -237,7 +234,7 @@ function CreateAccount({ navigation }) {
 				)}
 				{!web && (
 					<TouchableOpacity
-						style={styles.date}
+						style={styles.inputText}
 						onPress={() => setShowDate(!submitted)}
 					>
 						<Text style={styles.dateText}>{dob}</Text>
@@ -294,7 +291,6 @@ function CreateAccount({ navigation }) {
 				{submitted && (
 					<ActivityIndicator size="large" color={Colours.activityIndicator} />
 				)}
-				<View style={styles.end} />
 			</ScrollView>
 		</View>
 	);
@@ -306,43 +302,18 @@ const styles = StyleSheet.create({
 		backgroundColor: Gui.container.backgroundColor,
 		flexDirection: 'column',
 	},
-	header: {
-		flex: 1,
-		backgroundColor: Gui.container.backgroundColor,
-		flexDirection: 'row',
-		height: 0,
-	},
-	backButton: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: -Gui.screen.height * 0.05,
-		marginBottom: Gui.screen.height * 0.02,
-		height: Gui.screen.height * 0.08,
-		width: Gui.screen.width * 0.2,
-	},
-	scroll: {
-		marginTop: -Gui.screen.height * 0.02,
-	},
-	headerIconWeb: {
-		marginTop: -Gui.screen.height * 0.025,
-		marginLeft: Gui.screen.width * 0.05,
-		height: Gui.screen.height * 0.05,
-	},
-	headerIcon: {
-		marginTop: Gui.screen.height * 0.015,
-		marginLeft: Gui.screen.width * 0.05,
-		height: Gui.screen.height * 0.05,
-	},
 	headerText: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		top: Gui.screen.height * 0.02,
+		top: Gui.screen.height * 0.05,
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
 		fontWeight: 'bold',
 		flexDirection: 'row',
 		alignItems: 'center',
+		fontFamily: 'Volte',
+		color: Colours.koha_purple,
 	},
 	headerTextWeb: {
 		textAlign: 'center',
@@ -354,46 +325,38 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		flexDirection: 'row',
 		alignItems: 'center',
+		fontFamily: 'Volte',
+		color: Colours.koha_purple,
 	},
 	inputTitle: {
-		textAlign: 'left',
+		textAlign: 'right',
 		textAlignVertical: 'top',
-		marginTop: Gui.screen.height * 0.025,
+		marginTop: Gui.screen.height * 0.05,
 		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.025,
-		height: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.02,
+		height: Gui.screen.height * 0.025,
 		width: Gui.screen.width * 0.8,
-		color: Colours.default,
+		color: Colours.koha_orange,
+		fontFamily: 'Volte',
 	},
 	inputText: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
+		textAlign: 'center',
 		marginTop: Gui.screen.height * 0.005,
 		marginLeft: Gui.screen.width * 0.1,
 		fontSize: Gui.screen.height * 0.03,
-		height: Gui.screen.height * 0.05,
+		height: Gui.button.height,
 		width: Gui.screen.width * 0.8,
 		color: Colours.default,
-		borderRadius: 3,
+		borderRadius: Gui.button.borderRadius,
 		borderWidth: 1,
 		borderColor: Colours.default,
-	},
-	date: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		marginTop: Gui.screen.height * 0.005,
-		marginLeft: Gui.screen.width * 0.1,
-		fontSize: Gui.screen.height * 0.03,
-		height: Gui.screen.height * 0.05,
-		width: Gui.screen.width * 0.8,
-		color: Colours.default,
-		borderRadius: 3,
-		borderWidth: 1,
-		borderColor: Colours.default,
-		fontWeight: 'normal',
+		fontFamily: 'Volte',
 	},
 	dateText: {
 		fontSize: Gui.screen.height * 0.03,
+		marginTop: Gui.screen.height * 0.015,
+		textAlign: 'center',
+		fontFamily: 'Volte',
 	},
 	errorView: {
 		flexDirection: 'row',
@@ -401,6 +364,7 @@ const styles = StyleSheet.create({
 		marginBottom: Gui.screen.height * 0.01,
 		width: Gui.screen.width * 0.8,
 		alignContent: 'center',
+		fontFamily: 'Volte',
 	},
 	errorText: {
 		textAlign: 'center',
@@ -413,6 +377,7 @@ const styles = StyleSheet.create({
 		color: Colours.red,
 		flex: 1,
 		flexWrap: 'wrap',
+		fontFamily: 'Volte',
 	},
 	submit: {
 		marginLeft: Gui.screen.width * 0.1,
@@ -428,9 +393,6 @@ const styles = StyleSheet.create({
 	submitText: {
 		fontSize: Gui.screen.height * 0.023,
 		fontWeight: 'bold',
-	},
-	end: {
-		height: Gui.screen.height * 0.0375,
 	},
 	modalCenter: {
 		flex: 1,

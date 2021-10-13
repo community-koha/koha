@@ -4,6 +4,7 @@ import AppLoading from 'expo-app-loading';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
+import useFonts from '../config/useFonts';
 
 const ListViewComponent = (props) => {
 	const [listings] = useState(props.listing);
@@ -39,10 +40,10 @@ const ListViewComponent = (props) => {
 						}
 					>
 						<ListItem.Content>
-							<ListItem.Title style={{ fontFamily: 'Volte', }}>
+							<ListItem.Title style={{ fontFamily: 'Volte' }}>
 								Liked: {item.listingTitle}
 							</ListItem.Title>
-							<ListItem.Subtitle style={{ fontFamily: 'Volte', }}>
+							<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
 								{item.description}
 							</ListItem.Subtitle>
 						</ListItem.Content>
