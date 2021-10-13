@@ -10,6 +10,7 @@ import {
 	Platform,
 	StatusBar,
 	Modal,
+
 } from 'react-native';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
@@ -19,6 +20,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import API from '../config/api.js';
+import { FormStyle } from '../config/styles.js';
 
 function EditListingScreen({ route, navigation }) {
 	const [web, setWeb] = useState(Platform.OS === 'web');
@@ -533,10 +535,10 @@ function EditListingScreen({ route, navigation }) {
 					setModalDeleteVisible(false);
 				}}
 			>
-				<View style={styles.modalCenter}>
-					<View style={[styles.modalView, styles.modalViewDelete]}>
-						<View style={styles.modalViewText}>
-							<Text style={styles.modalText}>
+				<View style={modalStyle.modalCenter}>
+					<View style={[modalStyle.modalView, modalStyle.modalViewDelete]}>
+						<View style={modalStyle.modalViewText}>
+							<Text style={modalStyle.modalText}>
 								Are you sure you want to delete this listing?
 								<br />
 								You can't undo this action.
@@ -544,21 +546,21 @@ function EditListingScreen({ route, navigation }) {
 						</View>
 						<View style={styles.rowFlex}>
 							<TouchableOpacity
-								style={[styles.modalButton, styles.modalDeleteButton]}
+								style={[modalStyle.modalButton, modalStyle.modalDeleteButton]}
 								onPress={() => {
 									deleteListing();
 									setModalDeleteVisible(false);
 								}}
 							>
-								<Text style={styles.modalButtonText}>DELETE</Text>
+								<Text style={modalStyle.modalButtonText}>DELETE</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={[styles.modalButton, styles.modalCancelButton]}
+								style={[modalStyle.modalButton, modalStyle.modalCancelButton]}
 								onPress={() => {
 									setModalDeleteVisible(false);
 								}}
 							>
-								<Text style={styles.modalButtonCancelText}>CANCEL</Text>
+								<Text style={modalStyle.modalButtonCancelText}>CANCEL</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -572,13 +574,13 @@ function EditListingScreen({ route, navigation }) {
 					setModalVisible(false);
 				}}
 			>
-				<View style={styles.modalCenter}>
-					<View style={styles.modalView}>
-						<View style={styles.modalViewText}>
-							<Text style={styles.modalText}>{modalText}</Text>
+				<View style={modalStyle.modalCenter}>
+					<View style={modalStyle.modalView}>
+						<View style={modalStyle.modalViewText}>
+							<Text style={modalStyle.modalText}>{modalText}</Text>
 						</View>
 						<TouchableOpacity
-							style={[styles.modalButton]}
+							style={[modalStyle.modalButton]}
 							onPress={() => {
 								setModalVisible(false);
 								if (modalRedirect) {
@@ -587,47 +589,20 @@ function EditListingScreen({ route, navigation }) {
 								}
 							}}
 						>
-							<Text style={styles.modalButtonText}>OK</Text>
+							<Text style={modalStyle.modalButtonText}>OK</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
 			<ScrollView>
+				<View style={styles.header}>
+					<Text style={styles.headerTitle}>Edit Listing</Text>
+				</View>
 				{loading && (
 					<ActivityIndicator size="large" color={Colours.activityIndicator} />
 				)}
 				{!loading && (
 					<View>
-						<View style={styles.buttons}>
-							<TouchableOpacity
-								style={[styles.button, styles.cancelButton]}
-								onPress={() => {
-									navigation.goBack();
-								}}
-							>
-								<Text style={[styles.buttonText, styles.cancelText]}>
-									CANCEL
-								</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[styles.button, styles.saveButton]}
-								onPress={() => {
-									updateListing();
-								}}
-							>
-								<Text style={styles.buttonText}>SAVE</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[styles.button, styles.deleteButton]}
-								onPress={() => {
-									setModalDeleteVisible(true);
-								}}
-							>
-								<Text style={[styles.buttonText, styles.deleteText]}>
-									DELETE
-								</Text>
-							</TouchableOpacity>
-						</View>
 						<View style={styles.contentView}>
 							<Text style={styles.inputTitle}>Listing Title</Text>
 							<TextInput
@@ -672,11 +647,7 @@ function EditListingScreen({ route, navigation }) {
 									textInputContainer: styles.textInputContainer,
 									textInput: styles.textInput,
 									listView: styles.listView,
-									//separator: styles.separator,
-									//poweredContainer: styles.poweredContainer,
-									//description: styles.description,
-									//row: styles.row,
-									//powered: styles.powered,
+									
 								}}
 								zIndex={8000}
 								debounce={200}
@@ -875,6 +846,35 @@ function EditListingScreen({ route, navigation }) {
 								</View>
 							)}
 						</View>
+						
+							
+							<TouchableOpacity
+								style={[styles.submit]}
+								onPress={() => {
+									updateListing();
+								}}
+							>
+								<Text style={styles.submitText}>SAVE</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[styles.cancel, styles.cancelText]}
+								onPress={() => {
+									navigation.goBack();
+								}}
+							>
+								<Text style={[styles.buttonText, styles.cancelText]}>
+									CANCEL
+								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[styles.submit]}
+								onPress={() => {
+									setModalDeleteVisible(true);
+								}}
+							>
+								<Text style={styles.submitText}>DELETE</Text>
+							</TouchableOpacity>
+						
 					</View>
 				)}
 			</ScrollView>
@@ -882,141 +882,10 @@ function EditListingScreen({ route, navigation }) {
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colours.white,
-	},
-	contentView: {
-		marginLeft: Gui.screen.width * 0.2,
-		width: Gui.screen.width * 0.6,
-	},
-	inputTitle: {
-		textAlign: 'left',
-		textAlignVertical: 'top',
-		marginTop: Gui.screen.height * 0.025,
-		fontSize: Gui.screen.height * 0.025,
-		height: Gui.screen.height * 0.03,
-		width: Gui.screen.width * 0.6,
-		color: Colours.default,
-	},
-	inputText: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		marginTop: Gui.screen.height * 0.005,
-		fontSize: Gui.screen.height * 0.03,
-		height: Gui.screen.height * 0.05,
-		width: Gui.screen.width * 0.6,
-		color: Colours.default,
-		borderRadius: 3,
-		borderWidth: 1,
-		borderColor: Colours.default,
-	},
-	rowFlex: {
-		flexDirection: 'row',
-	},
-	buttons: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: Gui.screen.width * 1,
-		height: Gui.screen.height * 0.04,
-		backgroundColor: Colours.white,
-		marginTop: Gui.screen.height * 0.02,
-		marginBottom: Gui.screen.height * 0.02,
-	},
-	button: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: Gui.screen.width * 0.1,
-		height: Gui.screen.height * 0.04,
-		borderRadius: 5,
-		borderWidth: 3,
-		borderColor: Colours.koha_navy,
-	},
-	cancelButton: {
-		marginRight: Gui.screen.width * 0.05,
-		borderColor: Colours.koha_green,
-	},
-	saveButton: {
-		width: Gui.screen.width * 0.1,
-	},
-	deleteButton: {
-		marginLeft: Gui.screen.width * 0.05,
-		borderColor: Colours.koha_peach,
-	},
-	buttonText: {
-		textAlign: 'center',
-		fontSize: Gui.button.fontSize,
-		color: Colours.koha_navy,
-		fontWeight: 'bold',
-	},
-	deleteText: {
-		color: Colours.koha_peach,
-	},
-	cancelText: {
-		color: Colours.koha_green,
-	},
-	textInputContainer: {
-		height: Gui.screen.height * 0.055,
-		width: Gui.screen.width * 0.6,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: Colours.default,
-	},
-	textInput: {
-		textAlign: 'left',
-		textAlignVertical: 'top',
-		fontSize: Gui.screen.height * 0.03,
-		height: Gui.screen.height * 0.05,
-		color: Colours.default,
-	},
-	listView: {
-		marginTop: 1,
-		width: Gui.screen.width * 0.6,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: Colours.default,
-	},
-	poweredContainer: {
-		width: Gui.screen.width * 0.6,
-	},
-	date: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		marginTop: Gui.screen.height * 0.005,
-		fontSize: Gui.screen.height * 0.03,
-		height: Gui.screen.height * 0.05,
-		width: Gui.screen.width * 0.6,
-		color: Colours.default,
-		borderRadius: 5,
-		borderWidth: 1,
-		borderColor: Colours.default,
-		fontWeight: 'normal',
-		padding: 10,
-	},
-	dateText: {
-		marginTop: -Gui.screen.height * 0.0075,
-		fontSize: Gui.screen.height * 0.03,
-	},
-	dropDownText: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		fontSize: Gui.screen.height * 0.03,
-		backgroundColor: Colours.white,
-	},
-	dropDownPlaceholderText: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		fontSize: Gui.screen.height * 0.03,
-		color: Colours.grey,
-	},
-	dropDownBody: {
-		textAlign: 'left',
-		textAlignVertical: 'center',
-		fontSize: Gui.screen.height * 0.03,
-		width: Gui.screen.width * 0.6,
-	},
+const styles = FormStyle();
+
+const modalStyle = StyleSheet.create({
+	
 	modalCenter: {
 		flex: 1,
 		justifyContent: 'center',
