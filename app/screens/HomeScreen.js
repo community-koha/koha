@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
 		backgroundColor: gui.container.backgroundColor,
 	},
 	searchContainer: {
-		marginTop: 30,
+		marginTop: 60,
 		paddingLeft: 20,
 		paddingRight: 20,
 		zIndex: 3,

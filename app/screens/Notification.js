@@ -73,6 +73,9 @@ function Notification({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<View style={styles.header}>
+				<Text style={styles.headerTitle}>Notifications</Text>
+			</View>
 			{notifications.length > 0 && (
 				<View style={styles.buttons}>
 					<TouchableOpacity
@@ -134,6 +137,24 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colours.white,
+	},
+	header: {
+		paddingTop: 60,
+		paddingLeft: Gui.screen.width * 0.1,
+		paddingRight: Gui.screen.width * 0.1,
+		zIndex: 3,
+		backgroundColor: Gui.container.backgroundColor,
+		height: Gui.screen.height * 0.12,
+		flexDirection: 'row',
+		alignContent: 'space-between',
+	},
+	headerTitle: {
+		alignItems: 'center',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontWeight: 'bold',
+		fontSize: Gui.screen.height * 0.025,
+		marginRight: Gui.screen.width * 0.20,
 	},
 	contentView: {
 		width: Gui.screen.width * 1,
@@ -226,7 +247,7 @@ const styles = StyleSheet.create({
 		fontSize: Gui.button.fontSize,
 		color: Colours.black,
 		fontWeight: 'bold',
-		paddingTop: Gui.screen.height * 0.02,
+		paddingTop: Gui.screen.height * 0.080,
 	},
 });
 

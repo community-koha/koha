@@ -18,6 +18,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import firebase from 'firebase/app';
 import 'firebase';
+import gui from '../config/gui.js';
 
 function Profile({ navigation }) {
 	const [web, setWeb] = useState(Platform.OS == 'web');
@@ -261,7 +262,7 @@ function Profile({ navigation }) {
 			{!submitted && user != null && !editing && (
 				<View>
 					<View style={styles.header}>
-						<Text style={styles.title}>Account Information</Text>
+						<Text style={styles.headerTitle}>Account Information</Text>
 						<TouchableOpacity
 							style={[styles.button, styles.editButton]}
 							onPress={() => {
@@ -341,7 +342,7 @@ function Profile({ navigation }) {
 			{!submitted && user != null && editing && (
 				<View>
 					<View style={styles.header}>
-						<Text style={styles.title}>Editing Account Information</Text>
+						<Text style={styles.headerTitle}>Edit Account Info</Text>
 					</View>
 					<ScrollView style={styles.content}>
 						<Text style={styles.infoTitle}>Display Name</Text>
@@ -390,37 +391,59 @@ function Profile({ navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colours.white,
+		flexDirection: 'column',
 	},
+	
 	loading: {
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	header: {
-		marginTop: Gui.screen.height * 0.025,
-		marginBottom: Gui.screen.height * 0.025,
+		paddingTop: 60,
+		paddingLeft: Gui.screen.width * 0.1,
+		paddingRight: Gui.screen.width * 0.1,
+		zIndex: 3,
+		backgroundColor: Gui.container.backgroundColor,
+		height: Gui.screen.height * 0.12,
+		flexDirection: 'row',
+		alignContent: 'space-between',
 	},
 	content: {
-		marginTop: -Gui.screen.height * 0.04,
+		backgroundColor: Colours.white,
+		height: '80%'
 	},
-	title: {
+	headerTitle: {
 		alignItems: 'center',
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		fontWeight: 'bold',
 		fontSize: Gui.screen.height * 0.025,
-		marginLeft: Gui.screen.width * 0.25,
-		width: Gui.screen.width * 0.5,
-		height: Gui.screen.height * 0.1,
-		lineHeight: Gui.screen.height * 0.025,
+		marginRight: Gui.screen.width * 0.20,
+	},
+	button: {
+		fontWeight: 'bold',
+		fontSize: Gui.screen.height * 0.025,
+		marginRight: Gui.screen.width * 0.20,
+		borderColor: Colours.default,
+		borderRadius: 3,
+		borderWidth: 0,
+		marginBottom: Gui.screen.width * 0.20,
+	},
+	editButton: {
+		borderColor: Colours.default,
+		marginRight: Gui.screen.width * 0,
+		width: Gui.screen.width * 0.12,
+		borderRadius: 3,
+		borderWidth: 0,
+		borderColor: Colours.default,
+		backgroundColor: Colours.transparent,
+		borderWidth: 0,
 	},
 	headerIconWeb: {
-		marginTop: -Gui.screen.height * 0.025,
 		marginLeft: Gui.screen.width * 0,
 		height: Gui.screen.height * 0.035,
 	},
 	headerIcon: {
-		marginTop: Gui.screen.height * 0.015,
 		marginLeft: Gui.screen.width * 0,
 		height: Gui.screen.height * 0.035,
 	},
@@ -464,39 +487,26 @@ const styles = StyleSheet.create({
 	hiddenBorder: {
 		borderWidth: 0,
 	},
-	button: {
-		marginTop: Gui.screen.height * 0.075,
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: Gui.screen.width * 0.2,
-		height: Gui.screen.height * 0.1,
-		borderRadius: 3,
-		borderWidth: 0,
-		borderColor: Colours.default,
-	},
-	editButton: {
-		marginTop: -Gui.screen.height * 0.1,
-		marginLeft: Gui.screen.width * 0.85,
-		width: Gui.screen.width * 0.1,
-		height: Gui.screen.height * 0.05,
-		backgroundColor: Colours.transparent,
-		borderWidth: 0,
-	},
+	
 	emailButton: {
 		marginTop: Gui.screen.height * 0.02,
 		marginBottom: Gui.screen.height * 0.02,
-		marginLeft: Gui.screen.width * 0.35,
-		width: Gui.screen.width * 0.3,
-		height: Gui.screen.height * 0.035,
+		marginLeft: Gui.screen.width * 0.1,
+		width: Gui.screen.width * 0.8,
+		height: Gui.screen.height * 0.05,
 		backgroundColor: Colours.koha_navy,
+		padding: 12,
+		borderRadius: 10,
+		alignItems: 'center'
 	},
 	passwordButton: {
 		marginTop: 0,
 	},
 	buttonText: {
-		fontSize: Gui.screen.height * 0.015,
+		fontSize: Gui.screen.height * 0.020,
 		fontWeight: 'bold',
 		color: Colours.white,
+		borderRadius: 10,
 	},
 	modalCenter: {
 		flex: 1,

@@ -61,6 +61,9 @@ function MyKoha({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<View style={styles.header}>
+				<Text style={styles.headerTitle}>Koha History</Text>
+			</View>
 			<View style={styles.buttons}>
 				<TouchableOpacity
 					style={
@@ -198,6 +201,24 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colours.white,
 	},
+	header: {
+		paddingTop: 60,
+		paddingLeft: Gui.screen.width * 0.1,
+		paddingRight: Gui.screen.width * 0.1,
+		zIndex: 3,
+		backgroundColor: Gui.container.backgroundColor,
+		height: Gui.screen.height * 0.12,
+		flexDirection: 'row',
+		alignContent: 'space-between',
+	},
+	headerTitle: {
+		alignItems: 'center',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontWeight: 'bold',
+		fontSize: Gui.screen.height * 0.025,
+		marginRight: Gui.screen.width * 0.20,
+	},
 	contentView: {
 		width: Gui.screen.width * 1,
 		height: Gui.screen.height * 0.8,
@@ -218,12 +239,12 @@ const styles = StyleSheet.create({
 	},
 	listStyle: {
 		padding: 0,
-		marginBottom: 5,
+		marginBottom: 10,
 		borderWidth: 2,
-		borderRadius: 1,
-		borderColor: Colours.black,
-		width: Gui.screen.width * 0.75,
-		marginLeft: Gui.screen.width * 0.125,
+		borderRadius: 0.5,
+		borderColor: Colours.grey,
+		width: Gui.screen.width * 0.80,
+		marginLeft: Gui.screen.width * 0.1,
 	},
 	scroll: {
 		width: Gui.screen.width * 1,
@@ -243,7 +264,7 @@ const styles = StyleSheet.create({
 	button: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.1,
+		width: Gui.screen.width * 0.22,
 		height: Gui.screen.height * 0.04,
 		borderRadius: 5,
 		borderWidth: 3,
@@ -255,16 +276,16 @@ const styles = StyleSheet.create({
 		color: Colours.white,
 	},
 	foodButton: {
-		width: Gui.screen.width * 0.1,
+		marginLeft: Gui.screen.width * 0.02,
 	},
 	itemButton: {
-		marginLeft: Gui.screen.width * 0.05,
+		marginLeft: Gui.screen.width * 0.02,
 	},
 	eventButton: {
-		marginLeft: Gui.screen.width * 0.05,
+		marginLeft: Gui.screen.width * 0.02,
 	},
 	serviceButton: {
-		marginLeft: Gui.screen.width * 0.05,
+		marginLeft: Gui.screen.width * 0.02,
 	},
 	backButton: {
 		backgroundColor: Colours.koha_navy,
@@ -279,13 +300,13 @@ const styles = StyleSheet.create({
 	},
 	buttonText: {
 		textAlign: 'center',
-		fontSize: Gui.button.fontSize,
+		fontSize: 16,
 		color: Colours.koha_navy,
 		fontWeight: 'bold',
 	},
 	emptyText: {
 		textAlign: 'center',
-		fontSize: Gui.button.fontSize,
+		fontSize: 20,
 		color: Colours.black,
 		fontWeight: 'bold',
 	},

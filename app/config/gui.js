@@ -22,4 +22,5 @@ export default {
 		spacing: height * 0.03,
 		textColour: Colours.white,
 	},
+	
 };
