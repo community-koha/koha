@@ -14,6 +14,7 @@ import AppLoading from 'expo-app-loading';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
+import { FormStyle } from '../config/styles.js';
 
 var web = Platform.OS === 'web';
 
@@ -140,6 +141,9 @@ function ListingDetailScreen({ route, navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<View style={styles.header}>
+				<Text style={styles.headerTitle}>Listing Details</Text>
+			</View>
 			<View style={styles.buttons}>
 				<TouchableOpacity
 					style={[styles.button, styles.backButton]}
@@ -184,23 +188,20 @@ function ListingDetailScreen({ route, navigation }) {
 								}}
 							/>
 						)}
-						<ListItem>
-							<ListItem.Content>
-								<ListItem.Title>{listing.listingTitle}</ListItem.Title>
-								<ListItem.Subtitle>{listing.description}</ListItem.Subtitle>
-								<ListItem.Subtitle>
-									Location: {listing.location['name']} (
-									{listing.location['lat']},{listing.location['lng']})
+						<ListItem style={styles.list} bottomDivider>
+							<ListItem.Content style={styles.content}>
+								<ListItem.Title style={styles.contentTitle}>{listing.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle style={styles.contentText}>{listing.description}</ListItem.Subtitle>
+								<ListItem.Subtitle style={styles.contentText}>
+									Location: {listing.location['name']} 
 								</ListItem.Subtitle>
-								<ListItem.Subtitle>
+								<ListItem.Subtitle style={styles.contentText}>
 									Quantity: {listing.quantity}
 								</ListItem.Subtitle>
-								<ListItem.Subtitle>
+								<ListItem.Subtitle style={styles.contentText}>
 									Collection Method: {listing.collectionMethod}
 								</ListItem.Subtitle>
-								<ListItem.Subtitle>
-									Category: {listing.category}
-								</ListItem.Subtitle>
+								
 							</ListItem.Content>
 						</ListItem>
 					</View>
@@ -214,6 +215,24 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colours.white,
+	},
+	header: {
+		paddingTop: Platform.OS === 'ios' ? 50 : 0,
+		paddingLeft: Gui.screen.width * 0.1,
+		paddingRight: Gui.screen.width * 0.1,
+		zIndex: 3,
+		backgroundColor: Gui.container.backgroundColor,
+		height: Gui.screen.height * 0.12,
+		flexDirection: 'row',
+		alignContent: 'space-between',
+	},
+	headerTitle: {
+		alignItems: 'center',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontFamily: 'Volte',
+		fontSize: Gui.screen.height * 0.05,
+		color: Colours.koha_purple,
 	},
 	scroll: {
 		width: Gui.screen.width * 1,
@@ -253,6 +272,23 @@ const styles = StyleSheet.create({
 		marginLeft: Gui.screen.width * 0.5 - (web ? 500 : 250) / 2,
 		width: web ? 500 : 250,
 		height: web ? 500 : 250,
+	},
+	list: {
+		width: Gui.screen.width,
+	},
+	content: {
+		padding: 12,
+	},
+	contentTitle: {
+		fontFamily: 'Volte',
+		fontSize: 28,
+		paddingBottom: 8,
+	},
+	contentText: {
+		fontFamily: 'Volte',
+		fontSize: 24,
+		paddingBottom: 8,
+		lineHeight: 30,
 	},
 });
 export default ListingDetailScreen;

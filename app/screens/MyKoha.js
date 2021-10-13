@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 	},
 	header: {
+		paddingTop: Platform.OS === 'ios' ? 50 : 0,
 		paddingLeft: Gui.screen.width * 0.1,
 		paddingRight: Gui.screen.width * 0.1,
 		zIndex: 3,
@@ -231,7 +232,6 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 		fontFamily: 'Volte',
 		fontSize: Gui.screen.height * 0.05,
-		marginRight: Gui.screen.width * 0.2,
 		color: Colours.koha_purple,
 	},
 	contentView: {

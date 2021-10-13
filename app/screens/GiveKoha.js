@@ -5,6 +5,7 @@ import roles from '../config/roles.js';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import AppLoading from 'expo-app-loading';
+import { FormStyle } from '../config/styles.js';
 
 function ShowBusinessOptions({ navigation }) {
 	const userType = firebase.auth().currentUser.displayName[0];
@@ -12,16 +13,16 @@ function ShowBusinessOptions({ navigation }) {
 		return (
 			<View>
 				<TouchableOpacity
-					style={styles.button}
+					style={buttonStyle.button}
 					onPress={() => navigation.navigate('NewEventListing')}
 				>
-					<Text style={styles.buttonText}>Event</Text>
+					<Text style={buttonStyle.buttonText}>Event</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.button}
+					style={buttonStyle.button}
 					onPress={() => navigation.navigate('NewServiceListing')}
 				>
-					<Text style={styles.buttonText}>Services</Text>
+					<Text style={buttonStyle.buttonText}>Services</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -47,57 +48,37 @@ function GiveKoha({ navigation }) {
 			<View style={styles.header}>
 				<Text style={styles.headerTitle}>Give Koha</Text>
 			</View>
-			<View style={styles.buttonContainer}>
+			<View style={buttonStyle.buttonContainer}>
 				<TouchableOpacity
-					style={styles.buttonPurple}
+					style={buttonStyle.buttonPurple}
 					onPress={() => navigation.navigate('NewFoodListing')}
 				>
-					<Text style={styles.buttonText}>Food</Text>
+					<Text style={buttonStyle.buttonText}>Food</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.buttonPurple}
+					style={buttonStyle.buttonPurple}
 					onPress={() => navigation.navigate('NewEssentialListing')}
 				>
-					<Text style={styles.buttonText}>Essentials</Text>
+					<Text style={buttonStyle.buttonText}>Essentials</Text>
 				</TouchableOpacity>
 
 				{ShowBusinessOptions({ navigation })}
 			</View>
 			<View>
 				<TouchableOpacity
-					style={styles.button}
+					style={buttonStyle.button}
 					onPress={() => navigation.goBack()}
 				>
-					<Text style={styles.buttonText}>Go Back</Text>
+					<Text style={buttonStyle.buttonText}>Go Back</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colours.white,
-	},
-	header: {
-		paddingLeft: Gui.screen.width * 0.1,
-		paddingRight: Gui.screen.width * 0.1,
-		zIndex: 3,
-		backgroundColor: Gui.container.backgroundColor,
-		height: Gui.screen.height * 0.12,
-		flexDirection: 'row',
-		alignContent: 'space-between',
-	},
-	headerTitle: {
-		alignItems: 'center',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		fontFamily: 'Volte',
-		fontSize: Gui.screen.height * 0.05,
-		marginRight: Gui.screen.width * 0.2,
-		color: Colours.koha_purple,
-	},
+const styles = FormStyle();
+const buttonStyle = StyleSheet.create({
+	
 	buttonContainer: {
 		paddingTop: Gui.screen.height * 0.1,
 	},

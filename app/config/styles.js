@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Gui from './gui';
 import Colours from './colours';
 
@@ -13,6 +13,7 @@ export function FormStyle() {
 			padding: 20,
 		},
 		header: {
+            paddingTop: Platform.OS === 'ios' ? 60 : 0,
 			paddingLeft: Gui.screen.width * 0.1,
 			paddingRight: Gui.screen.width * 0.1,
 			zIndex: 3,
