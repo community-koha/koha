@@ -106,7 +106,9 @@ function NewEventListing({ navigation }) {
 	function ShowSuccess() {
 		return (
 			<View style={styles.message}>
-				<Text style={{ color: Colours.white, fontSize: 20 }}>
+				<Text
+					style={{ color: Colours.white, fontSize: 20, fontFamily: 'Volte' }}
+				>
 					Success! New event listing has been created.
 				</Text>
 			</View>
