@@ -10,7 +10,6 @@ import {
 	Platform,
 	StatusBar,
 	Modal,
-
 } from 'react-native';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
@@ -539,12 +538,19 @@ function EditListingScreen({ route, navigation }) {
 					<View style={[modalStyle.modalView, modalStyle.modalViewDelete]}>
 						<View style={modalStyle.modalViewText}>
 							<Text style={modalStyle.modalText}>
-								Are you sure you want to delete this listing?
-								<br />
-								You can't undo this action.
+								Are you sure you want to delete this listing? You can't undo
+								this action.
 							</Text>
 						</View>
-						<View style={styles.rowFlex}>
+						<View style={{ flexDirection: 'row' }}>
+							<TouchableOpacity
+								style={[modalStyle.modalButton, modalStyle.modalCancelButton]}
+								onPress={() => {
+									setModalDeleteVisible(false);
+								}}
+							>
+								<Text style={modalStyle.modalButtonCancelText}>CANCEL</Text>
+							</TouchableOpacity>
 							<TouchableOpacity
 								style={[modalStyle.modalButton, modalStyle.modalDeleteButton]}
 								onPress={() => {
@@ -553,14 +559,6 @@ function EditListingScreen({ route, navigation }) {
 								}}
 							>
 								<Text style={modalStyle.modalButtonText}>DELETE</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[modalStyle.modalButton, modalStyle.modalCancelButton]}
-								onPress={() => {
-									setModalDeleteVisible(false);
-								}}
-							>
-								<Text style={modalStyle.modalButtonCancelText}>CANCEL</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -647,7 +645,6 @@ function EditListingScreen({ route, navigation }) {
 									textInputContainer: styles.textInputContainer,
 									textInput: styles.textInput,
 									listView: styles.listView,
-									
 								}}
 								zIndex={8000}
 								debounce={200}
@@ -846,35 +843,31 @@ function EditListingScreen({ route, navigation }) {
 								</View>
 							)}
 						</View>
-						
-							
-							<TouchableOpacity
-								style={[styles.submit]}
-								onPress={() => {
-									updateListing();
-								}}
-							>
-								<Text style={styles.submitText}>SAVE</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[styles.cancel, styles.cancelText]}
-								onPress={() => {
-									navigation.goBack();
-								}}
-							>
-								<Text style={[styles.buttonText, styles.cancelText]}>
-									CANCEL
-								</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[styles.submit]}
-								onPress={() => {
-									setModalDeleteVisible(true);
-								}}
-							>
-								<Text style={styles.submitText}>DELETE</Text>
-							</TouchableOpacity>
-						
+
+						<TouchableOpacity
+							style={[styles.submit]}
+							onPress={() => {
+								updateListing();
+							}}
+						>
+							<Text style={styles.submitText}>SAVE</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.cancel, styles.cancelText]}
+							onPress={() => {
+								navigation.goBack();
+							}}
+						>
+							<Text style={[styles.buttonText, styles.cancelText]}>CANCEL</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.submit]}
+							onPress={() => {
+								setModalDeleteVisible(true);
+							}}
+						>
+							<Text style={styles.submitText}>DELETE</Text>
+						</TouchableOpacity>
 					</View>
 				)}
 			</ScrollView>
@@ -885,7 +878,6 @@ function EditListingScreen({ route, navigation }) {
 const styles = FormStyle();
 
 const modalStyle = StyleSheet.create({
-	
 	modalCenter: {
 		flex: 1,
 		justifyContent: 'center',
@@ -909,7 +901,7 @@ const modalStyle = StyleSheet.create({
 		elevation: 24,
 	},
 	modalViewDelete: {
-		backgroundColor: Colours.koha_pink,
+		backgroundColor: Colours.koha_background,
 	},
 	modalViewText: {
 		justifyContent: 'center',
@@ -927,28 +919,26 @@ const modalStyle = StyleSheet.create({
 		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
-		borderWidth: 2,
-		borderColor: Colours.koha_navy,
-		backgroundColor: Colours.koha_navy,
+		backgroundColor: Colours.koha_purple,
 	},
 	modalButtonText: {
-		fontSize: Gui.screen.height * 0.25 * 0.12,
+		fontSize: Gui.screen.height * 0.25 * 0.1,
 		color: Colours.white,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	modalDeleteButton: {
-		width: Gui.screen.width * 0.2,
-		backgroundColor: Colours.koha_peach,
-		borderColor: Colours.koha_peach,
-		marginRight: Gui.screen.width * 0.05,
+		width: Gui.screen.width * 0.3,
+		backgroundColor: Colours.koha_navy,
+		marginLeft: 5,
 	},
 	modalCancelButton: {
-		width: Gui.screen.width * 0.4,
+		width: Gui.screen.width * 0.3,
+		marginRight: 5,
 	},
 	modalButtonCancelText: {
-		fontSize: Gui.screen.height * 0.25 * 0.12,
+		fontSize: Gui.screen.height * 0.25 * 0.1,
 		color: Colours.white,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 });
 export default EditListingScreen;

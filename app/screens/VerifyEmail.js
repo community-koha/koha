@@ -121,10 +121,8 @@ function VerifyEmail({ navigation }) {
 				<Text style={styles.mainText}>
 					We've sent an email to <Text style={styles.emailText}>{email}</Text>.
 					Follow the instructions in the email to verify your email address,
-					activate your account, and enable your access to the application.
-					<br />
-					<br />
-					If you haven't received an email from us, click the button below to
+					activate your account, and enable your access to the application. If
+					you haven't received an email from us, click the button below to
 					resend the verification email.
 				</Text>
 				{submitted && (
