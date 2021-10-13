@@ -36,7 +36,7 @@ function NewFoodListing({ navigation }) {
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [category, setCategory] = useState(null);
-	const [allergen, setAllergen] = useState(null);
+	const [allergen, setAllergen] = useState([]);
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
@@ -59,6 +59,7 @@ function NewFoodListing({ navigation }) {
 	]);
 
 	const [categoryAllergen, _3] = useState([
+		{ value: 'none', label: 'None' },
 		{ value: 'gluten', label: 'Gluten' },
 		{ value: 'peanuts', label: 'Peanuts' },
 		{ value: 'seafood', label: 'Seafood' },
@@ -388,11 +389,15 @@ function NewFoodListing({ navigation }) {
 				<DropDownPicker
 					open={openAllergenType}
 					items={categoryAllergen}
+					
 					value={allergen}
 					setOpen={(val) => allergenOpened(val)}
 					setValue={(val) => setAllergen(val)}
 					showArrowIcon={!web}
-					showTickIcon={false}
+					multiple={true}
+					min={0}
+					max={5}
+					showTickIcon={true}
 					zIndex={3000}
 					placeholder="Select..."
 					placeholderStyle={styles.dropDownPlaceholderText}
