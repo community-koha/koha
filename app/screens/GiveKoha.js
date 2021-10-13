@@ -12,16 +12,16 @@ function ShowBusinessOptions({ navigation }) {
 		return (
 			<View>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewEventListing')}
 				>
-					<Text style={styles.buttonText}>Event</Text>
+					<Text style={styles.submitText}>Event</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewServiceListing')}
 				>
-					<Text style={styles.buttonText}>Services</Text>
+					<Text style={styles.submitText}>Services</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -49,13 +49,13 @@ function GiveKoha({ navigation }) {
 			</View>
 			<View style={styles.buttonContainer}>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.buttonPurple}
 					onPress={() => navigation.navigate('NewFoodListing')}
 				>
 					<Text style={styles.buttonText}>Food</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.buttonPurple}
 					onPress={() => navigation.navigate('NewEssentialListing')}
 				>
 					<Text style={styles.buttonText}>Essentials</Text>
@@ -115,6 +115,17 @@ const styles = StyleSheet.create({
 		width: Gui.screen.width * 0.8,
 		height: Gui.screen.height * 0.07,
 		backgroundColor: Colours.koha_navy,
+		padding: 12,
+		borderRadius: 10,
+		alignItems: 'center',
+	},
+	buttonPurple: {
+		marginTop: Gui.screen.height * 0.02,
+		marginBottom: Gui.screen.height * 0.02,
+		marginLeft: Gui.screen.width * 0.1,
+		width: Gui.screen.width * 0.8,
+		height: Gui.screen.height * 0.07,
+		backgroundColor: Colours.koha_purple,
 		padding: 12,
 		borderRadius: 10,
 		alignItems: 'center',

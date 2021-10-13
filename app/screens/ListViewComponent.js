@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Platform, ScrollView, View, Text } from 'react-native';
+import { StyleSheet, Platform, ScrollView, View, Text, } from 'react-native';
 import AppLoading from 'expo-app-loading';
-import { ListItem } from 'react-native-elements';
+import { ListItem,} from 'react-native-elements';
 import Colours from '../config/colours.js';
 import gui from '../config/gui.js';
 import useFonts from '../config/useFonts';
+
+
 
 const ListViewComponent = (props) => {
 	const [listings, setListings] = useState(props.listing);
@@ -36,6 +38,7 @@ const ListViewComponent = (props) => {
 	
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
+			
 			{
 				!searching
 				&&
@@ -51,12 +54,16 @@ const ListViewComponent = (props) => {
 								})
 							}
 						>
+							
 							<ListItem.Content>
-								<ListItem.Title style={{ fontFamily: 'Volte' }}>
+								<ListItem.Title style={styles.contentTitle}>
 									Watching: {item.listingTitle}
 								</ListItem.Title>
-								<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
+								<ListItem.Subtitle style={styles.contentText}>
 									{item.description}
+								</ListItem.Subtitle>
+								<ListItem.Subtitle style={styles.contentText}>
+									{item.location.name}
 								</ListItem.Subtitle>
 							</ListItem.Content>
 						</ListItem>
@@ -78,10 +85,11 @@ const ListViewComponent = (props) => {
 									listingId: item.key,
 								})
 							}
-						>
-							<ListItem.Content>
-								<ListItem.Title>{item.listingTitle}</ListItem.Title>
-								<ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+						>	
+							<ListItem.Content style={styles.content}>
+								<ListItem.Title style={styles.contentTitle}>{item.listingTitle}</ListItem.Title>
+								<ListItem.Subtitle style={styles.contentText}>{item.description}</ListItem.Subtitle>
+								<ListItem.Subtitle style={styles.contentText}>{item.location.name}</ListItem.Subtitle>
 							</ListItem.Content>
 						</ListItem>
 					);
@@ -119,8 +127,21 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		width: gui.screen.width,
-		fontFamily: 'Volte',
 	},
+	content:{
+		padding: 12,
+	},
+	contentTitle:{
+		fontFamily: "Volte" ,
+		fontSize: 20,
+		paddingBottom: 5
+	},
+	contentText:{
+		fontFamily: "Volte" ,
+		fontSize: 16,
+		paddingBottom: 5,
+		lineHeight: 20
+	}
 });
 
 export default ListViewComponent;

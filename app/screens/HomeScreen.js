@@ -19,6 +19,7 @@ import MapViewComponent from './MapViewComponent.js';
 import ListViewComponent from './ListViewComponent.js';
 
 import useFonts from '../config/useFonts';
+import { TouchableOpacity } from 'react-native';
 
 function HomeScreen({ navigation }) {
 	const [isReady, setIsReady] = useState(false);
@@ -180,7 +181,7 @@ function HomeScreen({ navigation }) {
 						/>
 					)}
 				</View>
-				<View style={styles.topBar}>
+				<View style={styles.topBar} pointerEvents={'box-none'}>
 					<View style={styles.searchContainer}>
 						<View style={styles.searchBar}>
 							<TextInput
@@ -215,7 +216,11 @@ function HomeScreen({ navigation }) {
 								mode="BADGE"
 								style={{
 									borderWidth: 0,
-									width: '50%',
+									width: '70%',
+								}}
+								dropDownContainerStyle={{
+									borderWidth: 0,
+									width: '70%',
 								}}
 								textStyle={{
 									fontFamily: 'Volte',
@@ -227,20 +232,23 @@ function HomeScreen({ navigation }) {
 								}}
 								onChangeValue={(value) => FilterListingType(value)}
 							/>
-							<MaterialCommunityIcons
-								name="view-list-outline"
-								size={30}
-								style={{ padding: 25, marginRight: 25 }}
-								color={view === 'List' ? Colours.koha_orange : Colours.black}
+							<TouchableOpacity
 								onPress={() => setView('List')}
-							/>
-							<MaterialCommunityIcons
-								name="map-marker"
-								size={30}
-								style={{ padding: 25 }}
-								color={view === 'Map' ? Colours.koha_orange : Colours.black}
-								onPress={() => setView('Map')}
-							/>
+								style={{ padding: 25, marginRight: 45 }}
+							>
+								<MaterialCommunityIcons
+									name="view-list-outline"
+									size={35}
+									color={view === 'List' ? Colours.koha_orange : Colours.black}
+								/>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={() => setView('Map')}>
+								<MaterialCommunityIcons
+									name="map-marker"
+									size={35}
+									color={view === 'Map' ? Colours.koha_orange : Colours.black}
+								/>
+							</TouchableOpacity>
 						</View>
 					</View>
 				</View>
@@ -256,13 +264,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		backgroundColor: gui.container.backgroundColor,
 	},
-	topBar: { top: -150 },
+	topBar: { top: -140, zIndex: 100 },
 	searchContainer: {
-		marginTop: 60,
+		marginTop: 20,
 		paddingLeft: 20,
 		paddingRight: 20,
-		zIndex: 3,
-		elevation: 3,
 	},
 	searchBar: {
 		flexDirection: 'row',
@@ -282,26 +288,22 @@ const styles = StyleSheet.create({
 	filterContainer: {
 		marginTop: 10,
 		marginBottom: 20,
-		zIndex: 5,
-		elevation: 5,
 	},
 	filterBar: {
-		marginLeft: 50,
-		marginRight: 40,
+		marginLeft: 60,
+		marginRight: 70,
 		flexDirection: 'row',
-		justifyContent: 'space-around',
+		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		top: -220,
-		elevation: 3,
 		minHeight: 500,
 	},
 	main: {
 		height: gui.screen.height - 200,
-		bottom: 120,
+		bottom: 140,
 		width: gui.screen.width,
 		position: 'absolute',
-		zIndex: 4,
-		elevation: 4,
+		zIndex: 1,
 	},
 	calloutText: {
 		fontSize: 16,
