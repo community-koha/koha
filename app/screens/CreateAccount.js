@@ -305,12 +305,10 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		textAlign: 'center',
-		textAlignVertical: 'center',
 		top: Gui.screen.height * 0.05,
-		fontSize: Gui.screen.height * 0.03,
+		fontSize: Gui.screen.height * 0.04,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
-		fontWeight: 'bold',
 		flexDirection: 'row',
 		alignItems: 'center',
 		fontFamily: 'Volte',
@@ -323,7 +321,6 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
-		fontWeight: 'bold',
 		flexDirection: 'row',
 		alignItems: 'center',
 		fontFamily: 'Volte',
@@ -394,7 +391,6 @@ const styles = StyleSheet.create({
 	},
 	submitText: {
 		fontSize: Gui.screen.height * 0.023,
-		fontWeight: 'bold',
 		fontFamily: 'Volte',
 	},
 	modalCenter: {
@@ -426,7 +422,6 @@ const styles = StyleSheet.create({
 	},
 	modalText: {
 		textAlign: 'center',
-		fontWeight: 'bold',
 		fontSize: Gui.screen.height * 0.275 * 0.1,
 	},
 	modalButton: {
@@ -442,7 +437,6 @@ const styles = StyleSheet.create({
 	modalButtonText: {
 		fontSize: Gui.screen.height * 0.25 * 0.12,
 		color: Colours.white,
-		fontWeight: 'bold',
 	},
 });
 

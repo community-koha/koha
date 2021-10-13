@@ -106,7 +106,7 @@ function HomeScreen({ navigation }) {
 			if (item.listingTitle.includes(keyword)) {
 				filteredList.push(item);
 			}
-			if (item.description.includes(keyword)) {
+			else if (item.description.includes(keyword)) {
 				filteredList.push(item);
 			}
 		});
@@ -217,7 +217,7 @@ function HomeScreen({ navigation }) {
 							placeholderStyle={{
 								color: Colours.black,
 							}}
-							onChangeItem={(item) => FilterListingType(item.value)}
+							onChangeValue={(value) => FilterListingType(value)}
 						/>
 						<MaterialCommunityIcons
 							name="view-list-outline"

@@ -117,7 +117,6 @@ function NewFoodListing({ navigation }) {
 	}
 
 	function CheckInput(
-		listingType,
 		listingTitle,
 		description,
 		location,

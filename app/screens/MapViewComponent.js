@@ -93,8 +93,8 @@ const MapViewComponent = (props) => {
 					<MapView.Marker
 						key={i}
 						coordinate={{
-							latitude: item.location.lat,
-							longitude: item.location.lng,
+							latitude: item.location.lat ? item.location.lat : 0,
+							longitude: item.location.lng ? item.location.lng : 0,
 						}}
 						title={item.listingTitle}
 						description={item.description}
