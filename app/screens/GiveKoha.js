@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import roles from '../config/roles.js';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
+import { FormStyle } from '../config/styles.js';
 
 function ShowBusinessOptions({ navigation }) {
 	const userType = firebase.auth().currentUser.displayName[0];
@@ -12,16 +13,16 @@ function ShowBusinessOptions({ navigation }) {
 			<View>
 				
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewEventListing')}
 				>
-					<Text style={styles.buttonText}>Event</Text>
+					<Text style={styles.submitText}>Event</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewServiceListing')}
 				>
-					<Text style={styles.buttonText}>Services</Text>
+					<Text style={styles.submitText}>Services</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -36,74 +37,32 @@ function GiveKoha({ navigation }) {
 			</View>
 			<View style={styles.buttonContainer}>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewFoodListing')}
 				>
-					<Text style={styles.buttonText}>Food</Text>
+					<Text style={styles.submitText}>Food</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={styles.button}
+					style={styles.submit}
 					onPress={() => navigation.navigate('NewEssentialListing')}
 				>
-					<Text style={styles.buttonText}>Essentials</Text>
+					<Text style={styles.submitText}>Essentials</Text>
 				</TouchableOpacity>
 				
 				{ShowBusinessOptions({ navigation })}
 			</View>
-			<View>
-			<TouchableOpacity
-					style={styles.button}
+			<View style={{marginTop: 100}}>
+				<TouchableOpacity
+					style={styles.cancel}
 					onPress={() => navigation.goBack()}
 				>
-					<Text style={styles.buttonText}>Go Back</Text>
+					<Text style={styles.cancelText}>Go Back</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colours.white,
-	},
-	header: {
-		paddingTop: 60,
-		paddingLeft: Gui.screen.width * 0.1,
-		paddingRight: Gui.screen.width * 0.1,
-		zIndex: 3,
-		backgroundColor: Gui.container.backgroundColor,
-		height: Gui.screen.height * 0.12,
-		flexDirection: 'row',
-		alignContent: 'space-between',
-	},
-	headerTitle: {
-		alignItems: 'center',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		fontWeight: 'bold',
-		fontSize: Gui.screen.height * 0.025,
-		marginRight: Gui.screen.width * 0.20,
-	},
-	buttonContainer: {
-		paddingTop: Gui.screen.height * 0.1,
-	},
-	buttonText:{
-		fontSize: Gui.screen.height * 0.020,
-		fontWeight: 'bold',
-		color: Colours.white,
-		borderRadius: 10,
-	},
-	button:{
-		marginTop: Gui.screen.height * 0.02,
-		marginBottom: Gui.screen.height * 0.02,
-		marginLeft: Gui.screen.width * 0.1,
-		width: Gui.screen.width * 0.8,
-		height: Gui.screen.height * 0.05,
-		backgroundColor: Colours.koha_navy,
-		padding: 12,
-		borderRadius: 10,
-		alignItems: 'center'}
-});
+const styles = FormStyle();
 
 export default GiveKoha;
