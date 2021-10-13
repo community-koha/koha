@@ -20,7 +20,7 @@ import DatePicker from 'react-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import API from '../config/api.js';
 
-function ListingDetailScreen({ route, navigation }) {
+function EditListingScreen({ route, navigation }) {
 	const [web, setWeb] = useState(Platform.OS === 'web');
 	const [listingId, setListingId] = useState(route.params.listingId);
 	const [loading, setLoading] = useState(true);
@@ -1082,7 +1082,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 });
-export default ListingDetailScreen;
+export default EditListingScreen;
 
 async function sendPushNotification(expoPushToken, title, body) {
 	const message = {
