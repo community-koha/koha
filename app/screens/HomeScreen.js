@@ -20,6 +20,7 @@ import ListViewComponent from './ListViewComponent.js';
 
 import useFonts from '../config/useFonts';
 import { TouchableOpacity } from 'react-native';
+import { Platform } from 'react-native';
 
 function HomeScreen({ navigation }) {
 	const [isReady, setIsReady] = useState(false);
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		backgroundColor: gui.container.backgroundColor,
 	},
-	topBar: { top: -140, zIndex: 100 },
+	topBar: { top: Platform.OS === 'ios' ? -180 : -140, zIndex: 100 },
 	searchContainer: {
 		marginTop: 20,
 		paddingLeft: 20,
