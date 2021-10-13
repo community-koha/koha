@@ -15,7 +15,7 @@ import {
 	Modal,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import AppLoading from 'expo-app-loading';
 import firebase from 'firebase/app';
 import 'firebase';
 import gui from '../config/gui.js';
@@ -37,6 +37,11 @@ function Profile({ navigation }) {
 	const [name, setName] = useState('');
 	const [originalEmail, setOriginalEmail] = useState('');
 	const [email, setEmail] = useState('');
+
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	function saveInfo(name, email) {
 		if (name != originalName) {
@@ -178,7 +183,15 @@ function Profile({ navigation }) {
 	if (process.env.JEST_WORKER_ID !== undefined) {
 		icon = '';
 	}
-
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<View style={styles.container}>
 			<View>
@@ -393,13 +406,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'column',
 	},
-	
+
 	loading: {
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	header: {
-		paddingTop: 60,
 		paddingLeft: Gui.screen.width * 0.1,
 		paddingRight: Gui.screen.width * 0.1,
 		zIndex: 3,
@@ -410,26 +422,28 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		backgroundColor: Colours.white,
-		height: '80%'
+		height: '80%',
 	},
 	headerTitle: {
 		alignItems: 'center',
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		fontWeight: 'bold',
-		fontSize: Gui.screen.height * 0.025,
-		marginRight: Gui.screen.width * 0.20,
+		fontFamily: 'Volte',
+		fontSize: Gui.screen.height * 0.031,
+		marginRight: Gui.screen.width * 0.2,
+		color: Colours.koha_purple,
 	},
 	button: {
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 		fontSize: Gui.screen.height * 0.025,
-		marginRight: Gui.screen.width * 0.20,
+		marginRight: Gui.screen.width * 0.2,
 		borderColor: Colours.default,
 		borderRadius: 3,
 		borderWidth: 0,
-		marginBottom: Gui.screen.width * 0.20,
+		marginBottom: Gui.screen.width * 0.2,
 	},
 	editButton: {
+		paddingTop: 30,
 		borderColor: Colours.default,
 		marginRight: Gui.screen.width * 0,
 		width: Gui.screen.width * 0.12,
@@ -463,7 +477,7 @@ const styles = StyleSheet.create({
 	infoTitle: {
 		textAlign: 'left',
 		textAlignVertical: 'top',
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 		marginTop: Gui.screen.height * 0.02,
 		marginLeft: Gui.screen.width * 0.1,
 		fontSize: Gui.screen.height * 0.025,
@@ -483,28 +497,29 @@ const styles = StyleSheet.create({
 		borderRadius: 3,
 		borderWidth: 1,
 		borderColor: Colours.default,
+		fontFamily: 'Volte',
 	},
 	hiddenBorder: {
 		borderWidth: 0,
 	},
-	
+
 	emailButton: {
 		marginTop: Gui.screen.height * 0.02,
 		marginBottom: Gui.screen.height * 0.02,
 		marginLeft: Gui.screen.width * 0.1,
 		width: Gui.screen.width * 0.8,
 		height: Gui.screen.height * 0.05,
-		backgroundColor: Colours.koha_navy,
+		backgroundColor: Colours.koha_purple,
 		padding: 12,
 		borderRadius: 10,
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	passwordButton: {
 		marginTop: 0,
 	},
 	buttonText: {
-		fontSize: Gui.screen.height * 0.020,
-		fontWeight: 'bold',
+		fontSize: Gui.screen.height * 0.02,
+		fontFamily: 'Volte',
 		color: Colours.white,
 		borderRadius: 10,
 	},
@@ -537,7 +552,7 @@ const styles = StyleSheet.create({
 	},
 	modalText: {
 		textAlign: 'center',
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 		fontSize: Gui.screen.height * 0.275 * 0.1,
 	},
 	modalResetCenter: {
@@ -573,14 +588,12 @@ const styles = StyleSheet.create({
 		width: Gui.screen.width * 0.5,
 		height: Gui.button.height,
 		borderRadius: Gui.button.borderRadius,
-		borderWidth: 2,
-		borderColor: Colours.koha_navy,
-		backgroundColor: Colours.koha_navy,
+		backgroundColor: Colours.koha_purple,
 	},
 	modalButtonText: {
 		fontSize: Gui.screen.height * 0.25 * 0.12,
 		color: Colours.white,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 });
 

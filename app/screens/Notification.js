@@ -12,11 +12,16 @@ import {
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import firebase from 'firebase/app';
+import AppLoading from 'expo-app-loading';
 
 function Notification({ navigation }) {
 	const [loading, setLoading] = useState(true);
 	const [notifications, setNotifications] = useState([]);
 	const [user, setUser] = useState(null);
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
@@ -71,6 +76,15 @@ function Notification({ navigation }) {
 		return () => subscriber();
 	}, [user]);
 
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
@@ -139,7 +153,6 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 	},
 	header: {
-		paddingTop: 60,
 		paddingLeft: Gui.screen.width * 0.1,
 		paddingRight: Gui.screen.width * 0.1,
 		zIndex: 3,
@@ -152,9 +165,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		fontWeight: 'bold',
-		fontSize: Gui.screen.height * 0.025,
-		marginRight: Gui.screen.width * 0.20,
+		fontFamily: 'Volte',
+		fontSize: Gui.screen.height * 0.05,
+		marginRight: Gui.screen.width * 0.2,
+		color: Colours.koha_purple,
 	},
 	contentView: {
 		width: Gui.screen.width * 1,
@@ -237,7 +251,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: Gui.button.fontSize,
 		color: Colours.white,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	clearItemText: {
 		fontSize: Gui.button.fontSize * 0.85,
@@ -246,8 +260,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: Gui.button.fontSize,
 		color: Colours.black,
-		fontWeight: 'bold',
-		paddingTop: Gui.screen.height * 0.080,
+		fontFamily: 'Volte',
+		paddingTop: Gui.screen.height * 0.08,
 	},
 });
 

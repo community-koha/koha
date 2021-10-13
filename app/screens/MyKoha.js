@@ -11,6 +11,7 @@ import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
 import firebase from 'firebase/app';
+import AppLoading from 'expo-app-loading';
 
 function MyKoha({ navigation }) {
 	const [loading, setLoading] = useState(true);
@@ -20,6 +21,10 @@ function MyKoha({ navigation }) {
 	const [showItem, setShowItem] = useState(true);
 	const [showService, setShowService] = useState(true);
 	const [showEvent, setShowEvent] = useState(true);
+	const [isReady, setIsReady] = useState(false);
+	const LoadFonts = async () => {
+		await useFonts();
+	};
 
 	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
@@ -59,6 +64,15 @@ function MyKoha({ navigation }) {
 		return () => subscriber();
 	}, [user, showFood, showItem, showService, showEvent]);
 
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={LoadFonts}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		);
+	}
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
@@ -202,7 +216,6 @@ const styles = StyleSheet.create({
 		backgroundColor: Colours.white,
 	},
 	header: {
-		paddingTop: 60,
 		paddingLeft: Gui.screen.width * 0.1,
 		paddingRight: Gui.screen.width * 0.1,
 		zIndex: 3,
@@ -215,9 +228,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		fontWeight: 'bold',
-		fontSize: Gui.screen.height * 0.025,
-		marginRight: Gui.screen.width * 0.20,
+		fontFamily: 'Volte',
+		fontSize: Gui.screen.height * 0.05,
+		marginRight: Gui.screen.width * 0.2,
+		color: Colours.koha_purple,
 	},
 	contentView: {
 		width: Gui.screen.width * 1,
@@ -243,7 +257,7 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderRadius: 0.5,
 		borderColor: Colours.grey,
-		width: Gui.screen.width * 0.80,
+		width: Gui.screen.width * 0.8,
 		marginLeft: Gui.screen.width * 0.1,
 	},
 	scroll: {
@@ -302,13 +316,13 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 16,
 		color: Colours.koha_navy,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	emptyText: {
 		textAlign: 'center',
 		fontSize: 20,
 		color: Colours.black,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 	},
 	backButtonText: {
 		color: Colours.white,

@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		backgroundColor: gui.container.backgroundColor,
 	},
-	topBar: { top: -140 },
+	topBar: { top: -150 },
 	searchContainer: {
 		marginTop: 60,
 		paddingLeft: 20,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
 	},
 	main: {
 		height: gui.screen.height - 200,
-		bottom: 135,
+		bottom: 120,
 		width: gui.screen.width,
 		position: 'absolute',
 		zIndex: 4,
