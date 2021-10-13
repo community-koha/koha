@@ -20,9 +20,13 @@ const MapViewComponent = (props) => {
 	// states and modifiers
 	const [hasLocationPermissions, setLocationPermission] = useState(false);
 	const [mapRegion, setRegion] = useState(null);
-	const [listings] = useState(props.listing);
+	const [listings, setListings] = useState(props.listing);
 	const [navigation] = useState(props.nav);
 	// do after render
+	useEffect(() => {
+		setListings(props.listing);
+	}, [props])
+
 	useEffect(() => {
 		const getLocationAsync = async () => {
 			// check permissions

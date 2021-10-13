@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Platform, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { ListItem } from 'react-native-elements';
@@ -7,14 +7,21 @@ import gui from '../config/gui.js';
 import useFonts from '../config/useFonts';
 
 const ListViewComponent = (props) => {
-	const [listings] = useState(props.listing);
-	const [watchedListings] = useState(props.watched);
-	const [noResults] = useState(props.results);
+	const [listings, setListings] = useState(props.listing);
+	const [watchedListings, setWatching] = useState(props.watched);
+	const [noResults, setResults] = useState(props.results);
 	const [isReady, setIsReady] = useState(false);
 	const [navigation] = useState(props.nav);
 	const LoadFonts = async () => {
 		await useFonts();
 	};
+
+	useEffect(() => {
+		setListings(props.listing);
+		setWatching(props.watched);
+		setResults(props.results);
+	}, [props]);
+
 	if (!isReady) {
 		return (
 			<AppLoading
