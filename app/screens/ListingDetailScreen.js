@@ -195,12 +195,50 @@ function ListingDetailScreen({ route, navigation }) {
 								<ListItem.Subtitle style={styles.contentText}>
 									Location: {listing.location['name']} 
 								</ListItem.Subtitle>
-								<ListItem.Subtitle style={styles.contentText}>
-									Quantity: {listing.quantity}
-								</ListItem.Subtitle>
-								<ListItem.Subtitle style={styles.contentText}>
-									Collection Method: {listing.collectionMethod == "pick_up" ? "Pick up" : "Delivery"}
-								</ListItem.Subtitle>
+								{ listing.listingType == 'food' ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Allergen: { listing.allergen }
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.listingType == 'essentialItem' ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Condition: { listing.condition }
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.category ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Category: { listing.category }
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.quantity ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Quantity: {listing.quantity}
+								</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.collectionMethod ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Collection Method: {listing.collectionMethod == "pick_up" ? "Pick up" : "Delivery"}
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.eventDate ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Date: {listing.eventDate}
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								{ listing.capacity ?
+									<ListItem.Subtitle style={styles.contentText}>
+										Event Capacity: {listing.capacity}
+									</ListItem.Subtitle> :
+									<View></View>
+								}
+								
+								
 								
 							</ListItem.Content>
 						</ListItem>
