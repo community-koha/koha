@@ -185,7 +185,9 @@ function NewFoodListing({ navigation }) {
 	function ShowSuccess() {
 		return (
 			<View style={styles.message}>
-				<Text style={{ color: Colours.white, fontSize: 20 }}>
+				<Text
+					style={{ color: Colours.white, fontSize: 20, fontFamily: 'Volte' }}
+				>
 					Success! New food listing has been created.
 				</Text>
 			</View>

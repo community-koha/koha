@@ -150,7 +150,9 @@ function NewEssentialListing({ navigation }) {
 	function ShowSuccess() {
 		return (
 			<View style={styles.message}>
-				<Text style={{ color: Colours.white, fontSize: 20 }}>
+				<Text
+					style={{ color: Colours.white, fontSize: 20, fontFamily: 'Volte' }}
+				>
 					Success! New essential item listing has been created.
 				</Text>
 			</View>
