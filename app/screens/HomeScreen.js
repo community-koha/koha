@@ -169,69 +169,6 @@ function HomeScreen({ navigation }) {
 			onPress={() => (Keyboard.dismiss, setOpen(false))}
 		>
 			<View style={styles.container}>
-				<View style={styles.searchContainer}>
-					<View style={styles.searchBar}>
-						<TextInput
-							style={styles.searchInput}
-							value={keyword}
-							placeholder="Search listings"
-							placeholderTextColor={Colours.black}
-							onChangeText={(val) => {
-								setKeyword(val);
-								keyword
-									? Search(keyword, listings)
-									: FilterListingType(
-											value
-												? value
-												: ['food', 'essentialItem', 'event', 'service']
-									  );
-							}}
-							returnKeyType="search"
-						/>
-						<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
-					</View>
-				</View>
-				<View style={styles.filterContainer}>
-					<View style={styles.filterBar}>
-						<DropDownPicker
-							style={styles.dropdown}
-							open={open}
-							items={items}
-							value={value}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							mode="BADGE"
-							style={{
-								borderWidth: 0,
-								width: 150,
-							}}
-							textStyle={{
-								fontFamily: 'Volte',
-								fontSize: 16,
-							}}
-							placeholder="All"
-							placeholderStyle={{
-								color: Colours.black,
-							}}
-							onChangeValue={(value) => FilterListingType(value)}
-						/>
-						<MaterialCommunityIcons
-							name="view-list-outline"
-							size={30}
-							color={view === 'List' ? Colours.koha_orange : Colours.black}
-							style={{ marginRight: 60 }}
-							onPress={() => setView('List')}
-						/>
-						<MaterialCommunityIcons
-							name="map-marker"
-							size={30}
-							color={view === 'Map' ? Colours.koha_orange : Colours.black}
-							onPress={() => setView('Map')}
-							style={{ marginRight: 60 }}
-						/>
-					</View>
-				</View>
 				<View style={styles.main}>
 					{view === 'Map' && (
 						<MapViewComponent listing={listings} nav={navigation} />
@@ -245,6 +182,70 @@ function HomeScreen({ navigation }) {
 						/>
 					)}
 				</View>
+				<View style={styles.topBar}>
+					<View style={styles.searchContainer}>
+						<View style={styles.searchBar}>
+							<TextInput
+								style={styles.searchInput}
+								value={keyword}
+								placeholder="Search listings"
+								placeholderTextColor={Colours.black}
+								onChangeText={(val) => {
+									setKeyword(val);
+									keyword
+										? Search(keyword, listings)
+										: FilterListingType(
+												value
+													? value
+													: ['food', 'essentialItem', 'event', 'service']
+										  );
+								}}
+								returnKeyType="search"
+							/>
+							<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
+						</View>
+					</View>
+					<View style={styles.filterContainer}>
+						<View style={styles.filterBar}>
+							<DropDownPicker
+								open={open}
+								items={items}
+								value={value}
+								setOpen={setOpen}
+								setValue={setValue}
+								setItems={setItems}
+								mode="BADGE"
+								style={{
+									borderWidth: 0,
+									width: '40%',
+								}}
+								textStyle={{
+									fontFamily: 'Volte',
+									fontSize: 16,
+								}}
+								placeholder="All"
+								placeholderStyle={{
+									color: Colours.black,
+								}}
+								onChangeValue={(value) => FilterListingType(value)}
+							/>
+							<MaterialCommunityIcons
+								name="view-list-outline"
+								size={30}
+								style={{ padding: 25, marginRight: 25 }}
+								color={view === 'List' ? Colours.koha_orange : Colours.black}
+								onPress={() => setView('List')}
+							/>
+							<MaterialCommunityIcons
+								name="map-marker"
+								size={30}
+								style={{ padding: 25 }}
+								color={view === 'Map' ? Colours.koha_orange : Colours.black}
+								onPress={() => setView('Map')}
+							/>
+						</View>
+					</View>
+				</View>
 			</View>
 		</TouchableWithoutFeedback>
 	);
@@ -254,21 +255,22 @@ const styles = StyleSheet.create({
 	container: {
 		minHeight: gui.screen.height,
 		flexDirection: 'column',
-		justifyContent: 'center',
+		justifyContent: 'space-around',
 		backgroundColor: gui.container.backgroundColor,
 	},
+	topBar: { top: -140 },
 	searchContainer: {
-		marginTop: 30,
+		marginTop: 20,
 		paddingLeft: 20,
 		paddingRight: 20,
 		zIndex: 3,
+		elevation: 3,
 	},
 	searchBar: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderRadius: 10,
-		width: gui.screen.width * 0.9,
 		backgroundColor: Colours.white,
 	},
 	searchInput: {
@@ -276,33 +278,33 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		padding: 12,
 		borderRadius: 10,
-		borderColor: Colours.grey,
 		borderWidth: 0,
 		width: '85%',
 	},
 	filterContainer: {
-		paddingLeft: 20,
-		paddingRight: 20,
+		marginTop: 10,
+		marginBottom: 20,
+		zIndex: 3,
+		elevation: 3,
 	},
 	filterBar: {
+		marginLeft: 50,
+		marginRight: 40,
 		flexDirection: 'row',
-		justifyContent: 'space-evenly',
+		justifyContent: 'space-around',
 		alignItems: 'center',
-		width: gui.screen.width * 0.9,
+		top: -220,
+		elevation: 3,
+		zIndex: 3,
 		minHeight: 500,
-		marginTop: -210,
-		marginLeft: 30,
-		padding: 15,
-		zIndex: 2,
-	},
-	dropdown: {
-		width: '40%',
 	},
 	main: {
-		height: gui.screen.height - 210,
-		justifyContent: 'flex-end',
-		marginBottom: 80,
-		marginTop: -200,
+		height: gui.screen.height - 200,
+		bottom: 135,
+		width: gui.screen.width,
+		position: 'absolute',
+		zIndex: 0,
+		elevation: 0,
 	},
 	calloutText: {
 		fontSize: 16,
