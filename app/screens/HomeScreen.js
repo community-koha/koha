@@ -29,7 +29,7 @@ function HomeScreen({ navigation }) {
 	const [loading, setLoading] = useState(true); // Set loading to true on component mount
 	const [watchedListings, setWatchedListings] = useState([]); // Initial empty array of users
 	const [view, setView] = useState('Map');
-	const [noResults, setNoResults] = useState(false);
+	const [searching, setSearching] = useState(false);
 
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState(null);
@@ -99,6 +99,7 @@ function HomeScreen({ navigation }) {
 	}, []);
 
 	function Search(keyword, listings) {
+		setSearching(true);
 		//create new array
 		const filteredList = [];
 		//check each listings title and description
@@ -113,12 +114,11 @@ function HomeScreen({ navigation }) {
 		if (filteredList.length != 0) {
 			//if there are matches, update listing
 			setListings(filteredList);
-		} else {
-			setNoResults(true);
 		}
 	}
 
 	function FilterListingType(type) {
+		setSearching(false);
 		firebase
 			.firestore()
 			.collection('listings')
@@ -144,7 +144,6 @@ function HomeScreen({ navigation }) {
 					setListings(filteredList);
 				}
 			});
-		setNoResults(false);
 	}
 
 	if (loading) {
@@ -243,8 +242,8 @@ function HomeScreen({ navigation }) {
 						<ListViewComponent
 							listing={listings}
 							watched={watchedListings}
-							results={noResults}
 							nav={navigation}
+							searching={searching}
 						/>
 					)}
 				</View>

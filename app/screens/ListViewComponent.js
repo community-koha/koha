@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Platform, ScrollView, View, Text } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
@@ -10,6 +10,7 @@ const ListViewComponent = (props) => {
 	const [listings, setListings] = useState(props.listing);
 	const [watchedListings, setWatching] = useState(props.watched);
 	const [noResults, setResults] = useState(props.results);
+	const [searching, setSearching] = useState(props.searching);
 	const [isReady, setIsReady] = useState(false);
 	const [navigation] = useState(props.nav);
 	const LoadFonts = async () => {
@@ -20,6 +21,7 @@ const ListViewComponent = (props) => {
 		setListings(props.listing);
 		setWatching(props.watched);
 		setResults(props.results);
+		setSearching(props.searching);
 	}, [props]);
 
 	if (!isReady) {
@@ -31,33 +33,36 @@ const ListViewComponent = (props) => {
 			/>
 		);
 	}
-
+	
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>
-			{watchedListings.map((item, i) => {
-				return (
-					<ListItem
-						style={styles.list}
-						key={i}
-						bottomDivider
-						onPress={() =>
-							navigation.navigate('ListingDetailScreen', {
-								listingId: item.key,
-							})
-						}
-					>
-						<ListItem.Content>
-							<ListItem.Title style={{ fontFamily: 'Volte' }}>
-								Liked: {item.listingTitle}
-							</ListItem.Title>
-							<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
-								{item.description}
-							</ListItem.Subtitle>
-						</ListItem.Content>
-					</ListItem>
-				);
+			{
+				!searching
+				&&
+				watchedListings.map((item, i) => {
+					return (
+						<ListItem
+							style={styles.list}
+							key={i}
+							bottomDivider
+							onPress={() =>
+								navigation.navigate('ListingDetailScreen', {
+									listingId: item.key,
+								})
+							}
+						>
+							<ListItem.Content>
+								<ListItem.Title style={{ fontFamily: 'Volte' }}>
+									Watching: {item.listingTitle}
+								</ListItem.Title>
+								<ListItem.Subtitle style={{ fontFamily: 'Volte' }}>
+									{item.description}
+								</ListItem.Subtitle>
+							</ListItem.Content>
+						</ListItem>
+					);
 			})}
-			{noResults ? (
+			{listings.length <= 0 ? (
 				<View>
 					<Text style={styles.noListings}>No listings found.</Text>
 				</View>
