@@ -205,8 +205,8 @@ function HomeScreen({ navigation }) {
 							<MaterialIcons name="search" size={26} style={{ padding: 12 }} />
 						</View>
 					</View>
-					<View style={styles.filterContainer}>
-						<View style={styles.filterBar}>
+					<View style={styles.filterContainer} pointerEvents={'box-none'}>
+						<View style={styles.filterBar} pointerEvents={'box-none'}>
 							<DropDownPicker
 								open={open}
 								items={items}
@@ -217,7 +217,7 @@ function HomeScreen({ navigation }) {
 								mode="BADGE"
 								style={{
 									borderWidth: 0,
-									width: '40%',
+									width: '50%',
 								}}
 								textStyle={{
 									fontFamily: 'Volte',
@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
 	filterContainer: {
 		marginTop: 10,
 		marginBottom: 20,
-		zIndex: 3,
-		elevation: 3,
+		zIndex: 5,
+		elevation: 5,
 	},
 	filterBar: {
 		marginLeft: 50,
@@ -295,7 +295,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		top: -220,
 		elevation: 3,
-		zIndex: 3,
 		minHeight: 500,
 	},
 	main: {
@@ -303,8 +302,8 @@ const styles = StyleSheet.create({
 		bottom: 135,
 		width: gui.screen.width,
 		position: 'absolute',
-		zIndex: 0,
-		elevation: 0,
+		zIndex: 4,
+		elevation: 4,
 	},
 	calloutText: {
 		fontSize: 16,
