@@ -36,7 +36,7 @@ function NewFoodListing({ navigation }) {
 	const [description, setDescription] = useState(null);
 	const [location, setLocation] = useState({ lat: 0, lng: 0, name: '' });
 	const [category, setCategory] = useState(null);
-	const [allergen, setAllergen] = useState([]);
+	const [allergen, setAllergen] = useState(null);
 	const [quantity, setQuantity] = useState(null);
 	const [expiryDate, setExpiryDate] = useState(ConvertDate(Date.now()));
 	const [collectionMethod, setCollectionMethod] = useState(null);
@@ -394,10 +394,7 @@ function NewFoodListing({ navigation }) {
 					setOpen={(val) => allergenOpened(val)}
 					setValue={(val) => setAllergen(val)}
 					showArrowIcon={!web}
-					multiple={true}
-					min={0}
-					max={5}
-					showTickIcon={true}
+					showTickIcon={false}
 					zIndex={3000}
 					placeholder="Select..."
 					placeholderStyle={styles.dropDownPlaceholderText}
