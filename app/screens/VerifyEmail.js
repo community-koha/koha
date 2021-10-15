@@ -34,9 +34,9 @@ function VerifyEmail({ navigation }) {
 			var id = setInterval(() => {
 				if (user.emailVerified) {
 					console.log('User has verified their email.');
-					navigation.navigate('UserType');
 					clearInterval(id);
 					unsubscribe();
+					navigation.navigate('Splash');
 				} else {
 					user.reload();
 				}
@@ -126,7 +126,7 @@ function VerifyEmail({ navigation }) {
 					resend the verification email.
 				</Text>
 				{submitted && (
-					<View style={styles.buttons}>
+					<View>
 						<ActivityIndicator
 							size="large"
 							color={Colours.activityIndicator}
@@ -143,7 +143,7 @@ function VerifyEmail({ navigation }) {
 							resendEmail();
 						}}
 					>
-						<Text style={styles.emailText}>RESEND VERIFICATION EMAIL</Text>
+						<Text style={styles.buttonText}>RESEND VERIFICATION EMAIL</Text>
 					</TouchableOpacity>
 				)}
 			</ScrollView>
@@ -189,9 +189,9 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 0.95,
-		fontWeight: 'bold',
 		flexDirection: 'row',
 		alignItems: 'center',
+		fontFamily: 'Volte',
 	},
 	headerTextWeb: {
 		textAlign: 'center',
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.03,
 		height: Gui.screen.height * 0.05,
 		width: Gui.screen.width * 1,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
@@ -212,6 +212,15 @@ const styles = StyleSheet.create({
 		fontSize: Gui.screen.height * 0.025,
 		width: Gui.screen.width * 0.5,
 		color: Colours.default,
+		fontFamily: 'Volte',
+	},
+	buttonText: {
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontSize: Gui.screen.height * 0.025,
+		width: Gui.screen.width * 0.5,
+		color: Colours.white,
+		fontFamily: 'Volte',
 	},
 	email: {
 		textAlign: 'center',
@@ -224,19 +233,19 @@ const styles = StyleSheet.create({
 		color: Colours.default,
 	},
 	resend: {
-		marginLeft: Gui.screen.width * 0.25,
+		marginLeft: Gui.screen.width * 0.2,
 		marginTop: Gui.screen.height * 0.1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Gui.screen.width * 0.5,
+		width: Gui.screen.width * 0.6,
 		height: Gui.screen.height * 0.075,
-		borderRadius: 3,
-		borderWidth: 1,
-		borderColor: Colours.default,
+		borderRadius: 10,
+		backgroundColor: Colours.koha_purple,
 	},
 	emailText: {
 		fontSize: Gui.screen.height * 0.023,
-		fontWeight: 'bold',
+		fontFamily: 'Volte',
+		color: Colours.koha_purple,
 	},
 	hideBorder: {
 		borderWidth: 0,

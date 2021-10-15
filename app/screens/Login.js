@@ -298,24 +298,28 @@ function Login({ navigation }) {
 							<Text style={styles.buttonText}>FORGOT PASSWORD</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							disabled={!fbRequest}
-							style={[styles.button, styles.fbButton, styles.buttonFirst]}
+							disabled={true}
+							style={[styles.button, styles.fbButton, styles.disabledButton]}
 							onPress={() => {
 								setSubmitted(true);
 								fbPromptAsync();
 							}}
 						>
-							<Text style={styles.buttonText}>LOGIN WITH FACEBOOK</Text>
+							<Text style={styles.disabledText}>LOGIN WITH FACEBOOK</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							disabled={!gRequest}
-							style={[styles.button, styles.googleButton]}
+							disabled={true}
+							style={[
+								styles.button,
+								styles.googleButton,
+								styles.disabledButton,
+							]}
 							onPress={() => {
 								setSubmitted(true);
 								gPromptAsync();
 							}}
 						>
-							<Text style={styles.buttonText}>LOGIN WITH GOOGLE</Text>
+							<Text style={styles.disabledText}>LOGIN WITH GOOGLE</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -364,6 +368,9 @@ const styles = StyleSheet.create({
 	googleButton: {
 		backgroundColor: Colours.koha_orange,
 	},
+	disabledButton: {
+		backgroundColor: Colours.grey,
+	},
 	backButton: {
 		backgroundColor: Colours.koha_lightblue,
 	},
@@ -371,6 +378,12 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		color: Gui.button.textColour,
 		fontFamily: 'Volte',
+	},
+	disabledText: {
+		textAlign: 'center',
+		color: Gui.button.textColour,
+		fontFamily: 'Volte',
+		textDecorationLine: 'line-through',
 	},
 	inputText: {
 		textAlign: 'center',

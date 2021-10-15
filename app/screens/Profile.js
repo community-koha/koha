@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Colours from '../config/colours.js';
 import Gui from '../config/gui.js';
+import Roles from '../config/roles.js';
 
 import {
 	View,
@@ -303,7 +304,11 @@ function Profile({ navigation }) {
 						/>
 						<Text style={styles.infoTitle}>Account Type</Text>
 						<TextInput
-							value={user.displayName[0] ? 'Individual/Family' : 'Business'}
+							value={
+								user.displayName[0] == Roles.donateBusiness
+									? 'Business'
+									: 'Individual/Family'
+							}
 							placeholder="Account Type"
 							editable={false}
 							style={[styles.infoText, styles.hiddenBorder]}
