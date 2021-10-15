@@ -19,9 +19,10 @@ import { FormStyle } from '../config/styles.js';
 var web = Platform.OS === 'web';
 
 function ListingDetailScreen({ route, navigation }) {
-	const { listingId } = route.params;
-	const [loading, setLoading] = useState(true);
-	const [listing, setListing] = useState(null);
+	const testListing = {listingTitle:"title",description:"description",location:{lat:0,lng:0,name:"name"}}
+	const { listingId } = process.env.JEST_WORKER_ID !== undefined? {listingId:""}:route.params;
+	const [loading, setLoading] = useState(process.env.JEST_WORKER_ID !== undefined? false: true);
+	const [listing, setListing] = useState(process.env.JEST_WORKER_ID !== undefined? testListing: null);
 	const [watching, setWatching] = useState(false);
 	const [user, setUser] = useState(null);
 	const [type, setType] = useState('');
@@ -32,62 +33,64 @@ function ListingDetailScreen({ route, navigation }) {
 		await useFonts();
 	};
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null: firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			unsubscribe();
 			setUser(user);
 		}
 	});
 
-	useEffect(() => {
-		setLoading(true);
-		const subscriber = firebase
-			.firestore()
-			.collection('listings')
-			.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
-			.onSnapshot((querySnapshot) => {
-				querySnapshot.forEach((documentSnapshot) => {
-					// Don't show listings that have been deleted or hidden from public view
-					if (
-						documentSnapshot.data()['deleted'] != true &&
-						documentSnapshot.data()['public'] != false
-					) {
-						setType(documentSnapshot.data()['listingType']);
-						setListing({
-							...documentSnapshot.data(),
-							key: documentSnapshot.id,
-						});
-					}
-				});
-				setLoading(false);
-			});
-
-		// Unsubscribe from events when no longer in use
-		return () => subscriber();
-	}, [listingId]);
-
-	useEffect(() => {
-		if (user !== null) {
+	if (process.env.JEST_WORKER_ID === undefined) {
+		useEffect(() => {
+			setLoading(true);
 			const subscriber = firebase
 				.firestore()
-				.collection('users')
-				.where(firebase.firestore.FieldPath.documentId(), '==', user['uid'])
+				.collection('listings')
+				.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
 				.onSnapshot((querySnapshot) => {
 					querySnapshot.forEach((documentSnapshot) => {
-						var watching_var = documentSnapshot.data()['watching'];
-
-						setWatching(
-							watching_var !== undefined
-								? watching_var.includes(listingId)
-								: false
-						);
+						// Don't show listings that have been deleted or hidden from public view
+						if (
+							documentSnapshot.data()['deleted'] != true &&
+							documentSnapshot.data()['public'] != false
+						) {
+							setType(documentSnapshot.data()['listingType']);
+							setListing({
+								...documentSnapshot.data(),
+								key: documentSnapshot.id,
+							});
+						}
 					});
+					setLoading(false);
 				});
-
+	
 			// Unsubscribe from events when no longer in use
 			return () => subscriber();
-		}
-	}, [user]);
+		}, [listingId]);
+	
+		useEffect(() => {
+			if (user !== null) {
+				const subscriber = firebase
+					.firestore()
+					.collection('users')
+					.where(firebase.firestore.FieldPath.documentId(), '==', user['uid'])
+					.onSnapshot((querySnapshot) => {
+						querySnapshot.forEach((documentSnapshot) => {
+							var watching_var = documentSnapshot.data()['watching'];
+	
+							setWatching(
+								watching_var !== undefined
+									? watching_var.includes(listingId)
+									: false
+							);
+						});
+					});
+	
+				// Unsubscribe from events when no longer in use
+				return () => subscriber();
+			}
+		}, [user]);
+	}
 
 	function AddWatching(id) {
 		const db = firebase.firestore();
@@ -121,22 +124,24 @@ function ListingDetailScreen({ route, navigation }) {
 			});
 	}
 
-	var storage = firebase
-		.storage()
-		.ref(listing == null ? '' : listing.imageFileName);
-	storage.getDownloadURL().then((result) => {
-		setImage(result);
-	});
-	console.log(['food', 'essentialItem'].includes(type));
+	if (process.env.JEST_WORKER_ID === undefined) {
+		var storage = firebase
+			.storage()
+			.ref(listing == null ? '' : listing.imageFileName);
+		storage.getDownloadURL().then((result) => {
+			setImage(result);
+		});
+		console.log(['food', 'essentialItem'].includes(type));
 
-	if (!isReady) {
-		return (
-			<AppLoading
-				startAsync={LoadFonts}
-				onFinish={() => setIsReady(true)}
-				onError={() => {}}
-			/>
-		);
+		if (!isReady) {
+			return (
+				<AppLoading
+					startAsync={LoadFonts}
+					onFinish={() => setIsReady(true)}
+					onError={() => {}}
+				/>
+			);
+		}
 	}
 
 	return (

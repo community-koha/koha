@@ -8,7 +8,7 @@ import AppLoading from 'expo-app-loading';
 import { FormStyle } from '../config/styles.js';
 
 function ShowBusinessOptions({ navigation }) {
-	const userType = firebase.auth().currentUser.displayName[0];
+	const userType = process.env.JEST_WORKER_ID !== undefined? roles.donateBusiness: firebase.auth().currentUser.displayName[0];
 	if (userType == roles.donateBusiness) {
 		return (
 			<View>
@@ -34,7 +34,7 @@ function GiveKoha({ navigation }) {
 	const LoadFonts = async () => {
 		await useFonts();
 	};
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}

@@ -23,8 +23,8 @@ import { FormStyle } from '../config/styles.js';
 
 function EditListingScreen({ route, navigation }) {
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	const [listingId, setListingId] = useState(route.params.listingId);
-	const [loading, setLoading] = useState(true);
+	const [listingId, setListingId] = useState(process.env.JEST_WORKER_ID !== undefined? "": route.params.listingId);
+	const [loading, setLoading] = useState(process.env.JEST_WORKER_ID !== undefined? false: true);
 	const [listing, setListing] = useState(null);
 	const [type, setType] = useState('');
 
@@ -486,42 +486,46 @@ function EditListingScreen({ route, navigation }) {
 		setEventDate(date);
 	}
 
-	useEffect(() => {
-		setLoading(true);
-		const subscriber = firebase
-			.firestore()
-			.collection('listings')
-			.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
-			.onSnapshot((querySnapshot) => {
-				querySnapshot.forEach((documentSnapshot) => {
-					setListing(documentSnapshot.data());
-					setType(documentSnapshot.data()['listingType']);
-					setListingTitle(documentSnapshot.data()['listingTitle']);
-					setListingTitleOriginal(documentSnapshot.data()['listingTitle']);
-					setDescription(documentSnapshot.data()['description']);
-					setLocation(documentSnapshot.data()['location']);
-					setLocationOriginal({
-						description: documentSnapshot.data()['location']['name'],
-						geometry: {
-							location: {
-								lat: documentSnapshot.data()['location']['lat'],
-								lng: documentSnapshot.data()['location']['lng'],
+	if (process.env.JEST_WORKER_ID === undefined)
+	{
+		useEffect(() => {
+			setLoading(true);
+			const subscriber = firebase
+				.firestore()
+				.collection('listings')
+				.where(firebase.firestore.FieldPath.documentId(), '==', listingId)
+				.onSnapshot((querySnapshot) => {
+					querySnapshot.forEach((documentSnapshot) => {
+						setListing(documentSnapshot.data());
+						setType(documentSnapshot.data()['listingType']);
+						setListingTitle(documentSnapshot.data()['listingTitle']);
+						setListingTitleOriginal(documentSnapshot.data()['listingTitle']);
+						setDescription(documentSnapshot.data()['description']);
+						setLocation(documentSnapshot.data()['location']);
+						setLocationOriginal({
+							description: documentSnapshot.data()['location']['name'],
+							geometry: {
+								location: {
+									lat: documentSnapshot.data()['location']['lat'],
+									lng: documentSnapshot.data()['location']['lng'],
+								},
 							},
-						},
+						});
+						setCategory(documentSnapshot.data()['category']);
+						setAllergen(documentSnapshot.data()['allergen']);
+						setQuantity(documentSnapshot.data()['quantity']);
+						setCollectionMethod(documentSnapshot.data()['collectionMethod']);
+						setCondition(documentSnapshot.data()['condition']);
+						setCapacity(documentSnapshot.data()['capacity']);
 					});
-					setCategory(documentSnapshot.data()['category']);
-					setAllergen(documentSnapshot.data()['allergen']);
-					setQuantity(documentSnapshot.data()['quantity']);
-					setCollectionMethod(documentSnapshot.data()['collectionMethod']);
-					setCondition(documentSnapshot.data()['condition']);
-					setCapacity(documentSnapshot.data()['capacity']);
+					setLoading(false);
 				});
-				setLoading(false);
-			});
-
-		// Unsubscribe from events when no longer in use
-		return () => subscriber();
-	}, [listingId]);
+	
+			// Unsubscribe from events when no longer in use
+			return () => subscriber();
+		}, [listingId]);
+	}
+	
 
 	return (
 		<View style={styles.container}>

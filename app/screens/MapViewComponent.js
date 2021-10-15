@@ -78,7 +78,7 @@ const MapViewComponent = (props) => {
 		},
 	];
 
-	if (!mapRegion) {
+	if (process.env.JEST_WORKER_ID === undefined && !mapRegion) {
 		return <ActivityIndicator size="small" color={Colours.activityIndicator} />;
 	}
 

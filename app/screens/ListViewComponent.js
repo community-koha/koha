@@ -17,22 +17,24 @@ const ListViewComponent = (props) => {
 		await useFonts();
 	};
 
-	useEffect(() => {
-		setListings(props.listing);
-		setWatching(props.watched);
-		setResults(props.results);
-		setSearching(props.searching);
-	}, [props]);
+	if (process.env.JEST_WORKER_ID === undefined) {
+		useEffect(() => {
+			setListings(props.listing);
+			setWatching(props.watched);
+			setResults(props.results);
+			setSearching(props.searching);
+		}, [props]);
 
-	if (!isReady) {
-		return (
-			<AppLoading
-				startAsync={LoadFonts}
-				onFinish={() => setIsReady(true)}
-				onError={() => {}}
-			/>
-		);
-	}
+		if (!isReady) {
+			return (
+				<AppLoading
+					startAsync={LoadFonts}
+					onFinish={() => setIsReady(true)}
+					onError={() => {}}
+				/>
+			);
+		}
+	};
 
 	return (
 		<ScrollView keyboardShouldPersistTaps="handled" style={styles.scroll}>

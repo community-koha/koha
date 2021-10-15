@@ -19,7 +19,6 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-datepicker';
 import firebase from 'firebase/app';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 function CreateAccount({ navigation }) {
 	const [web, _] = useState(Platform.OS === 'web');

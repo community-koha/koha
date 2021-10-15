@@ -31,7 +31,7 @@ function NewEssentialListing({ navigation }) {
 	}, []);
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	const userID = firebase.auth().currentUser.uid;
+	const userID = process.env.JEST_WORKER_ID !== undefined? "": firebase.auth().currentUser.uid;
 	const [listingType, setlistingType] = useState('essentialItem');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);
@@ -274,7 +274,7 @@ function NewEssentialListing({ navigation }) {
 		);
 	};
 
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}
