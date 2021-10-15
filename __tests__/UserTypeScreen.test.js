@@ -24,7 +24,6 @@ describe('<UserTypeScreen />', () => {
 		expect(tree.children[1].type).toEqual('Text');
 		expect(tree.children[2].type).toEqual('View');
 
-		console.log(tree.children[2].children)
 		expect(tree.children[2].children[0].children[0].children[0]).toEqual('IN NEED');
 		expect(tree.children[2].children[1].children[0].children[0]).toEqual('DONATING');
 		expect(tree.children[2].children[2].children[0].children[0]).toEqual('DONATING AS A BUSINESS');
