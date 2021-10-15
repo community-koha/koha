@@ -6,6 +6,7 @@ import {
 	ActivityIndicator,
 	ScrollView,
 	TouchableOpacity,
+	Platform,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Colours from '../config/colours.js';
@@ -255,19 +256,19 @@ const styles = StyleSheet.create({
 	list: {
 		width: Gui.screen.width,
 	},
-	content:{
+	content: {
 		padding: 12,
 	},
-	contentTitle:{
-		fontFamily: "Volte" ,
+	contentTitle: {
+		fontFamily: 'Volte',
 		fontSize: 20,
-		paddingBottom: 5
+		paddingBottom: 5,
 	},
-	contentText:{
-		fontFamily: "Volte" ,
+	contentText: {
+		fontFamily: 'Volte',
 		fontSize: 16,
 		paddingBottom: 5,
-		lineHeight: 20
+		lineHeight: 20,
 	},
 	scroll: {
 		width: Gui.screen.width * 1,

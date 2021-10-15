@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	ActivityIndicator,
+	Platform,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import firebase from 'firebase/app';
