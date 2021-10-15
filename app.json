@@ -5,13 +5,14 @@
 		"slug": "koha",
 		"version": "2.0.0",
 		"orientation": "portrait",
-		"icon": "./app/assets/icon.png",
+		"icon": "./app/assets/icon-android.png",
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"bundleIdentifier": "com.communitykoha.koha"
 		},
 		"androidNavigationBar": {
 			"barStyle": "dark-content",
