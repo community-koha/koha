@@ -25,15 +25,17 @@ function UserTypeScreen({ navigation }) {
 		await useFonts();
 	};
 
-	React.useEffect(
-		() =>
-			navigation.addListener('beforeRemove', (e) => {
-				e.preventDefault();
-			}),
-		[navigation]
-	);
+	if (process.env.JEST_WORKER_ID === undefined) {
+		React.useEffect(
+			() =>
+				navigation.addListener('beforeRemove', (e) => {
+					e.preventDefault();
+				}),
+			[navigation]
+		);
+	}	
 
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}

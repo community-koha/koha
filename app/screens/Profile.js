@@ -159,7 +159,7 @@ function Profile({ navigation }) {
 		return true;
 	}
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null: firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			unsubscribe();
 			setUser(user);
@@ -184,7 +184,7 @@ function Profile({ navigation }) {
 	if (process.env.JEST_WORKER_ID !== undefined) {
 		icon = '';
 	}
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}

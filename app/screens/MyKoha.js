@@ -27,45 +27,47 @@ function MyKoha({ navigation }) {
 		await useFonts();
 	};
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null: firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			setUser(user);
 			unsubscribe();
 		}
 	});
 
-	useEffect(() => {
-		setLoading(true);
-		const db = firebase.firestore();
-		const subscriber = db
-			.collection('listings')
-			.where('user', '==', user == null ? '' : db.doc('users/' + user.uid))
-			.onSnapshot((querySnapshot) => {
-				const listings = [];
-
-				querySnapshot.forEach((documentSnapshot) => {
-					var index = ['food', 'essentialItem', 'service', 'event'].indexOf(
-						documentSnapshot.data().listingType
-					);
-
-					if (
-						[showFood, showItem, showService, showEvent][index] &&
-						documentSnapshot.data()['deleted'] != true
-					) {
-						listings.push({
-							...documentSnapshot.data(),
-							key: documentSnapshot.id,
-						});
-					}
+	if (process.env.JEST_WORKER_ID === undefined) {
+		useEffect(() => {
+			setLoading(true);
+			const db = firebase.firestore();
+			const subscriber = db
+				.collection('listings')
+				.where('user', '==', user == null ? '' : db.doc('users/' + user.uid))
+				.onSnapshot((querySnapshot) => {
+					const listings = [];
+	
+					querySnapshot.forEach((documentSnapshot) => {
+						var index = ['food', 'essentialItem', 'service', 'event'].indexOf(
+							documentSnapshot.data().listingType
+						);
+	
+						if (
+							[showFood, showItem, showService, showEvent][index] &&
+							documentSnapshot.data()['deleted'] != true
+						) {
+							listings.push({
+								...documentSnapshot.data(),
+								key: documentSnapshot.id,
+							});
+						}
+					});
+	
+					setListings(listings);
+					setLoading(false);
 				});
+			return () => subscriber();
+		}, [user, showFood, showItem, showService, showEvent]);
+	}
 
-				setListings(listings);
-				setLoading(false);
-			});
-		return () => subscriber();
-	}, [user, showFood, showItem, showService, showEvent]);
-
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}

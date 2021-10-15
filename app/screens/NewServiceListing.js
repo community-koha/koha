@@ -27,7 +27,7 @@ function NewEventListing({ navigation }) {
 	}, []);
 
 	const [web, setWeb] = useState(Platform.OS === 'web');
-	const userID = firebase.auth().currentUser.uid;
+	const userID = process.env.JEST_WORKER_ID !== undefined? "": firebase.auth().currentUser.uid;
 	const [listingType, setlistingType] = useState('service');
 	const [listingTitle, setListingTitle] = useState(null);
 	const [description, setDescription] = useState(null);

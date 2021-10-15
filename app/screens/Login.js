@@ -38,7 +38,7 @@ function Login({ navigation }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
-	const [isReady, setIsReady] = useState(false);
+	const [isReady, setIsReady] = useState(process.env.JEST_WORKER_ID !== undefined? true: false);
 	const LoadFonts = async () => {
 		await useFonts();
 	};
@@ -120,13 +120,13 @@ function Login({ navigation }) {
 	}
 
 	// useProxy = true;
-	const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
+	const [fbRequest, fbResponse, fbPromptAsync] = process.env.JEST_WORKER_ID !== undefined? [null,null,null]: Facebook.useAuthRequest({
 		clientId: '388216366196238',
 		responseType: ResponseType.Token,
 		// redirectUri: 'https://auth.expo.io/@needsadjustment/koha',
 	});
 
-	const [gRequest, gResponse, gPromptAsync] = Google.useIdTokenAuthRequest({
+	const [gRequest, gResponse, gPromptAsync] = process.env.JEST_WORKER_ID !== undefined? [null,null,null]: Google.useIdTokenAuthRequest({
 		clientId:
 			'244543529302-p6dkdutiid2tv6e0l0ncq8tve8sfrom2.apps.googleusercontent.com',
 	});

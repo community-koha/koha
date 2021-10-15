@@ -6,7 +6,7 @@
 		"ios": "expo start --ios",
 		"web": "expo start:web --https",
 		"eject": "expo eject",
-		"test": "jest --verbose --detectOpenHandles"
+		"test": "jest"
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^12.0.5",

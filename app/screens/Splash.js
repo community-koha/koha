@@ -24,7 +24,7 @@ function Splash({ navigation }) {
 		});
 	}
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null:firebase.auth().onAuthStateChanged((user) => {
 		var navigationTarget = 'Entry';
 		if (user) {
 			navigationTarget = 'UserType';

@@ -17,7 +17,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 
 function VerifyEmail({ navigation }) {
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState(process.env.JEST_WORKER_ID !== undefined? 'example@email.com': '');
 	const [web, setWeb] = useState(true);
 	const [user, setUser] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -25,7 +25,7 @@ function VerifyEmail({ navigation }) {
 	const [submitted, setSubmitted] = useState(false);
 	const [buttonDisabled, setButtonDisabled] = useState(false);
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null: firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			console.log(user.email + ' - ' + user.emailVerified);
 			setUser(user);

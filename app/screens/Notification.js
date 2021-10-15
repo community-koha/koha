@@ -16,7 +16,7 @@ import firebase from 'firebase/app';
 import AppLoading from 'expo-app-loading';
 
 function Notification({ navigation }) {
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(process.env.JEST_WORKER_ID !== undefined?false: true);
 	const [notifications, setNotifications] = useState([]);
 	const [user, setUser] = useState(null);
 	const [isReady, setIsReady] = useState(false);
@@ -24,7 +24,7 @@ function Notification({ navigation }) {
 		await useFonts();
 	};
 
-	var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+	var unsubscribe = process.env.JEST_WORKER_ID !== undefined? null: firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
 			setUser(user);
 			unsubscribe();
@@ -57,27 +57,29 @@ function Notification({ navigation }) {
 		console.log('Successfully deleted all notifications!');
 	}
 
-	useEffect(() => {
-		setLoading(true);
-		const db = firebase.firestore();
-		const subscriber = db
-			.collection('notifications')
-			.where('uid', '==', user == null ? '' : user.uid)
-			.onSnapshot((querySnapshot) => {
-				const notifications = [];
-				querySnapshot.forEach((documentSnapshot) => {
-					notifications.push({
-						...documentSnapshot.data(),
-						key: documentSnapshot.id,
+	if (process.env.JEST_WORKER_ID === undefined) {
+		useEffect(() => {
+			setLoading(true);
+			const db = firebase.firestore();
+			const subscriber = db
+				.collection('notifications')
+				.where('uid', '==', user == null ? '' : user.uid)
+				.onSnapshot((querySnapshot) => {
+					const notifications = [];
+					querySnapshot.forEach((documentSnapshot) => {
+						notifications.push({
+							...documentSnapshot.data(),
+							key: documentSnapshot.id,
+						});
 					});
+					setNotifications(notifications);
+					setLoading(false);
 				});
-				setNotifications(notifications);
-				setLoading(false);
-			});
-		return () => subscriber();
-	}, [user]);
+			return () => subscriber();
+		}, [user]);
+	}	
 
-	if (!isReady) {
+	if (process.env.JEST_WORKER_ID === undefined && !isReady) {
 		return (
 			<AppLoading
 				startAsync={LoadFonts}
