@@ -6,7 +6,7 @@
 		"ios": "expo start --ios",
 		"web": "expo start:web --https",
 		"eject": "expo eject",
-		"test": "jest"
+		"test": "jest --collectCoverage"
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^12.0.5",
@@ -71,6 +71,11 @@
 		"automock": false,
 		"setupFilesAfterEnv": [
 			"./jest.setup.js"
+		],
+		"coverageReporters": [
+			"text",
+			"html",
+			"xml"
 		]
 	}
 }
