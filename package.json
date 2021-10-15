@@ -1,74 +1,76 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start:web --https",
-    "eject": "expo eject",
-    "test": "jest --verbose --detectOpenHandles"
-  },
-  "dependencies": {
-    "@expo/vector-icons": "^12.0.5",
-    "@material-ui/core": "^4.12.3",
-    "@react-native-community/datetimepicker": "^3.5.2",
-    "@react-native-community/masked-view": "0.1.10",
-    "@react-navigation/bottom-tabs": "^6.0.5",
-    "@react-navigation/material-bottom-tabs": "^6.0.5",
-    "@react-navigation/native": "^6.0.2",
-    "@react-navigation/stack": "^6.0.7",
-    "expo": "~42.0.1",
-    "expo-app-loading": "^1.1.2",
-    "expo-auth-session": "^3.3.1",
-    "expo-constants": "~11.0.1",
-    "expo-font": "^9.2.1",
-    "expo-image-picker": "~10.2.2",
-    "expo-location": "~12.1.2",
-    "expo-notifications": "^0.12.3",
-    "expo-permissions": "~12.1.1",
-    "expo-random": "^11.2.0",
-    "expo-status-bar": "~1.0.4",
-    "expo-web-browser": "^9.2.0",
-    "firebase": "8.2.3",
-    "react": "16.13.1",
-    "react-datepicker": "^3.8.0",
-    "react-dom": "16.13.1",
-    "react-google-maps": "^9.4.5",
-    "react-google-places-autocomplete": "^3.3.2",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
-    "react-native-animation-library": "0.0.8",
-    "react-native-dropdown-picker": "^5.1.25",
-    "react-native-elements": "^3.4.2",
-    "react-native-gesture-handler": "~1.10.2",
-    "react-native-google-maps-places-autocomplete": "^1.0.2",
-    "react-native-google-places-autocomplete": "^2.4.1",
-    "react-native-maps": "0.28.0",
-    "react-native-paper": "^4.9.2",
-    "react-native-reanimated": "~2.2.0",
-    "react-native-safe-area-context": "3.2.0",
-    "react-native-screens": "~3.4.0",
-    "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "^0.17.1",
-    "react-native-web-maps": "^0.3.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@expo/webpack-config": "^0.14.0",
-    "jest": "^26.5.0",
-    "jest-expo": "^42.1.0",
-    "jest-fetch-mock": "^3.0.3",
-    "react-native-testing-library": "^6.0.0",
-    "react-test-renderer": "^16.14.0"
-  },
-  "private": true,
-  "jest": {
-    "preset": "jest-expo",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|@react-native|react-native|@expo/vector-icons|datetimepicker|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
-    ],
-    "automock": false,
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
-    ]
-  }
+	"main": "node_modules/expo/AppEntry.js",
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"web": "expo start:web --https",
+		"eject": "expo eject",
+		"test": "jest --verbose --detectOpenHandles"
+	},
+	"dependencies": {
+		"@expo/vector-icons": "^12.0.5",
+		"@material-ui/core": "^4.12.3",
+		"@react-native-community/datetimepicker": "^3.5.2",
+		"@react-native-community/masked-view": "0.1.10",
+		"@react-navigation/bottom-tabs": "^6.0.5",
+		"@react-navigation/material-bottom-tabs": "^6.0.5",
+		"@react-navigation/native": "^6.0.2",
+		"@react-navigation/stack": "^6.0.7",
+		"@testing-library/react": "^12.1.2",
+		"expo": "~42.0.1",
+		"expo-app-loading": "^1.1.2",
+		"expo-auth-session": "^3.3.1",
+		"expo-constants": "~11.0.1",
+		"expo-font": "^9.2.1",
+		"expo-image-picker": "~10.2.2",
+		"expo-location": "~12.1.2",
+		"expo-notifications": "^0.12.3",
+		"expo-permissions": "~12.1.1",
+		"expo-random": "^11.2.0",
+		"expo-status-bar": "~1.0.4",
+		"expo-web-browser": "^9.2.0",
+		"firebase": "8.2.3",
+		"react": "16.13.1",
+		"react-datepicker": "^3.8.0",
+		"react-dom": "16.13.1",
+		"react-google-maps": "^9.4.5",
+		"react-google-places-autocomplete": "^3.3.2",
+		"react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+		"react-native-animation-library": "0.0.8",
+		"react-native-dropdown-picker": "^5.1.25",
+		"react-native-elements": "^3.4.2",
+		"react-native-gesture-handler": "~1.10.2",
+		"react-native-google-maps-places-autocomplete": "^1.0.2",
+		"react-native-google-places-autocomplete": "^2.4.1",
+		"react-native-maps": "0.28.0",
+		"react-native-paper": "^4.9.2",
+		"react-native-reanimated": "~2.2.0",
+		"react-native-safe-area-context": "3.2.0",
+		"react-native-screens": "~3.4.0",
+		"react-native-vector-icons": "^8.1.0",
+		"react-native-web": "^0.17.1",
+		"react-native-web-maps": "^0.3.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.9.0",
+		"@expo/webpack-config": "^0.14.0",
+		"jest": "^26.5.0",
+		"jest-expo": "^42.1.0",
+		"jest-fetch-mock": "^3.0.3",
+		"react-native-testing-library": "^6.0.0",
+		"react-test-renderer": "^16.14.0"
+	},
+	"private": true,
+	"jest": {
+		"preset": "jest-expo",
+		"testEnvironment": "jsdom",
+		"transformIgnorePatterns": [
+			"node_modules/(?!(jest-)?react-native|@react-native|react-native|@expo/vector-icons|datetimepicker|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+		],
+		"automock": false,
+		"setupFilesAfterEnv": [
+			"./jest.setup.js"
+		]
+	}
 }
